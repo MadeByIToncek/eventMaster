@@ -1,0 +1,6 @@
+name: Construction
+version: '${project.version}'
+main: space.itoncek.eventmaster.construction.Construction
+api-version: '1.19'
+commands:
+  construction:

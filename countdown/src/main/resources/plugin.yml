@@ -1,0 +1,11 @@
+name: countdown
+version: '${project.version}'
+main: space.itoncek.csyt.countdown.Countdown
+api-version: '1.19'
+prefix: CD
+depend: [ WorldEdit ]
+authors: [ IToncek ]
+description: Plugin using WorldEdit to modify a countdown
+commands:
+  timer:
+  autotimer:
