@@ -25,16 +25,18 @@ public class BuildPlace {
      * Color of the team, owning this BuildPlace
      */
     public final TeamColor color;
-
+    public final boolean display;
     /**
      * @param markerLocation Location of orientation defining block (top of BuildPlace)
      * @param orientation    Orientation of BuildPlace (NORTH if markerLocation is at the north [neg z] side of BuildPlace)
      * @param color          Color of the team, owning this BuildPlace
+     * @param display        Mark BuildPlace as DisplayPlace
      */
-    public BuildPlace(Location markerLocation, Orientation orientation, TeamColor color) {
+    public BuildPlace(Location markerLocation, Orientation orientation, TeamColor color, boolean display) {
         this.markerLocation = markerLocation;
         this.orientation = orientation;
         this.color = color;
+        this.display = display;
     }
 
     public static List<BuildPlace> deserialize(JSONArray place) {
@@ -43,6 +45,7 @@ public class BuildPlace {
             JSONObject obj = (JSONObject) o;
             Orientation ori = obj.getEnum(Orientation.class, "orientation");
             TeamColor tc = obj.getEnum(TeamColor.class, "color");
+            boolean disp = obj.getBoolean("display");
 
             JSONObject locObj = obj.getJSONObject("loc");
             Location loc = new Location(Bukkit.getWorld(locObj.getString("world")),
@@ -50,7 +53,7 @@ public class BuildPlace {
                     locObj.getInt("y"),
                     locObj.getInt("z"));
 
-            out.add(new BuildPlace(loc, ori, tc));
+            out.add(new BuildPlace(loc, ori, tc, disp));
         }
         return out;
     }
@@ -70,6 +73,7 @@ public class BuildPlace {
             obj.put("orientation", place.orientation);
             obj.put("loc", loc);
             obj.put("color", place.color);
+            obj.put("display", place.display);
 
             out.put(obj);
         }
@@ -82,13 +86,39 @@ public class BuildPlace {
         return false;
     }
 
-    public Location getLocations() {
-        return switch (orientation) {
+    public List<Location> getLocations() {
+        switch (orientation) {
             case NORTH -> markerLocation.clone().add(0, 0, 1);
             case EAST -> markerLocation.clone().add(-1, 0, 0);
             case SOUTH -> markerLocation.clone().add(0, 0, -1);
             case WEST -> markerLocation.clone().add(1, 0, 0);
-        };
+        }
+        List<Location> res = new ArrayList<>();
+
+        for (int x = 0; x <= 5; x++) {
+            for (int z = 0; z <= 5; z++) {
+                switch (orientation) {
+                    case NORTH -> res.add(new Location(markerLocation.getWorld(),
+                            markerLocation.getBlockX() + (x - 2),
+                            markerLocation.getBlockY(),
+                            markerLocation.getBlockZ() + z));
+                    case EAST -> res.add(new Location(markerLocation.getWorld(),
+                            markerLocation.getBlockX() + x,
+                            markerLocation.getBlockY(),
+                            markerLocation.getBlockZ() - (z - 2)));
+                    case SOUTH -> res.add(new Location(markerLocation.getWorld(),
+                            markerLocation.getBlockX() + (x - 2),
+                            markerLocation.getBlockY(),
+                            markerLocation.getBlockZ() - z));
+                    case WEST -> res.add(new Location(markerLocation.getWorld(),
+                            markerLocation.getBlockX() + x,
+                            markerLocation.getBlockY(),
+                            markerLocation.getBlockZ() + (z - 2)));
+                }
+            }
+        }
+
+        return res;
     }
 }
 

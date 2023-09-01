@@ -45,7 +45,7 @@ public class ConstructionCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 2 && sender.isOp()) {
+        if (args.length == 3 && sender.isOp()) {
             switch (args[0]) {
                 case "define" -> {
                     if (sender instanceof Player) {
@@ -56,7 +56,7 @@ public class ConstructionCommand implements CommandExecutor {
                         TeamColor color = TeamColor.valueOf(args[1]);
                         buildPlaces.add(new BuildPlace(l,
                                 ori,
-                                color));
+                                color, Boolean.parseBoolean(args[2])));
                         sender.sendMessage(ChatColor.GREEN + "Added team place of " + color.name() + " team.");
                         sender.sendMessage(ChatColor.GREEN + "Saved config in " + savePlaces(buildPlaces) + "ms");
                     }

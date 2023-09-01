@@ -39,6 +39,13 @@ public class ConstructionAutofill implements TabCompleter {
                     yield List.of();
                 }
             }
+            case 3 -> {
+                if (args[0].equalsIgnoreCase("define")) {
+                    yield List.of("true", "false");
+                } else {
+                    yield List.of();
+                }
+            }
             default -> List.of();
         };
     }
