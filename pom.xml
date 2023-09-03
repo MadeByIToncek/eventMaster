@@ -19,4 +19,6 @@
         <module>Construction</module>
         <module>PatternSaver</module>
     </modules>
+
+    <dependencies></dependencies>
 </project>

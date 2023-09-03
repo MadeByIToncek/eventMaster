@@ -165,7 +165,9 @@ public class BuildPlace {
 
     //TODO
     public void reward(Player player) {
-        String cmd = "/ptsadd " + player.getName() + " 200";
+        String cmd = "ptsadd " + player.getName() + " 200";
+
+
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
         player.getLocation().getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 60);
         for (Player nearbyPlayer : player.getLocation().getNearbyPlayers(20)) {
@@ -182,7 +184,6 @@ public class BuildPlace {
     public void setPattern(int i) {
         this.pattern = patterns.get(i).pattern();
         this.patternID = i;
-        this.active = true;
         clr();
         if (this.display) {
             int x = 0;
@@ -195,6 +196,7 @@ public class BuildPlace {
                 x++;
             }
         }
+        this.active = true;
     }
 }
 
