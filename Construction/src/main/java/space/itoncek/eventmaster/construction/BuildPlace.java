@@ -12,6 +12,8 @@ import space.itoncek.eventmaster.construction.utils.TeamColor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static space.itoncek.eventmaster.construction.Construction.patterns;
+
 public class BuildPlace {
 
     /**
@@ -26,7 +28,7 @@ public class BuildPlace {
      * Color of the team, owning this BuildPlace
      */
     public final TeamColor color;
-    public boolean ticking;
+    public boolean active;
     public List<List<Material>> pattern;
     public final boolean display;
     /**
@@ -40,7 +42,7 @@ public class BuildPlace {
         this.orientation = orientation;
         this.color = color;
         this.display = display;
-        this.ticking = true;
+        this.active = true;
     }
 
     public static List<BuildPlace> deserialize(JSONArray place) {
@@ -166,6 +168,21 @@ public class BuildPlace {
     public void reward(Player player) {
         String cmd = "/ptsadd " + player.getName() + " 200";
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
+    }
+
+    public void setPattern(int i) {
+        this.pattern = patterns.get(i).pattern();
+        if (this.display) {
+            int x = 0;
+            for (List<Material> materials : pattern) {
+                int z = 0;
+                for (Material material : materials) {
+                    getRelLoc(x, z).getBlock().setType(material);
+                    z++;
+                }
+                x++;
+            }
+        }
     }
 }
 

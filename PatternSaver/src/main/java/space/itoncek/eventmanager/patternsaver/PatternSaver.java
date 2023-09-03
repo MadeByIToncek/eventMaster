@@ -19,7 +19,7 @@ public final class PatternSaver extends JavaPlugin {
         new File("./patterns/").delete();
         // Plugin startup logic
         List<List<List<Material>>> superList = new ArrayList<>();
-        for (int y = 110; y <= 182; y += 4) {
+        for (int y = 110; y <= 186; y += 4) {
             List<List<Material>> pseudolist = new ArrayList<>();
             for (int x = -119; x <= -115; x++) {
                 List<Material> supraList = new ArrayList<>();

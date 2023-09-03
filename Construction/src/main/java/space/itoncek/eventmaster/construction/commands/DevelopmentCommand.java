@@ -17,7 +17,7 @@ import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
 import static space.itoncek.eventmaster.construction.Construction.particles;
 import static space.itoncek.eventmaster.construction.config.ConfigManager.savePlaces;
 
-public class ConstructionCommand implements CommandExecutor {
+public class DevelopmentCommand implements CommandExecutor {
     @NotNull
     private static Orientation getOrientation(Player p) {
         Orientation ori;

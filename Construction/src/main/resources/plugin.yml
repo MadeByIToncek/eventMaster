@@ -4,3 +4,4 @@ main: space.itoncek.eventmaster.construction.Construction
 api-version: '1.19'
 commands:
   development:
+  constGame:

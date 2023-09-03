@@ -2,7 +2,8 @@ package space.itoncek.eventmaster.construction;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
-import space.itoncek.eventmaster.construction.commands.ConstructionCommand;
+import space.itoncek.eventmaster.construction.commands.DevelopmentCommand;
+import space.itoncek.eventmaster.construction.commands.GameCommand;
 import space.itoncek.eventmaster.construction.commands.autofill.ConstructionAutofill;
 import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
@@ -26,8 +27,9 @@ public final class Construction extends JavaPlugin {
         // Plugin startup logic
         buildPlaces = loadPlaces();
         //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
+        Objects.requireNonNull(getCommand("constGame")).setExecutor(new GameCommand());
         //getServer().getPluginManager().registerEvents(new MoveListener(), this);
-        Objects.requireNonNull(getCommand("development")).setExecutor(new ConstructionCommand());
+        Objects.requireNonNull(getCommand("development")).setExecutor(new DevelopmentCommand());
         Objects.requireNonNull(getCommand("development")).setTabCompleter(new ConstructionAutofill());
         particles.runTaskTimer(this, 5L, 5L);
 
@@ -40,12 +42,8 @@ public final class Construction extends JavaPlugin {
         for (BuildPlace buildPlace : buildPlaces) {
             if (!teams.containsKey(buildPlace.color))
                 teams.put(buildPlace.color, new TeamAssets(null, new ArrayList<>()));
-
-            if (buildPlace.display) {
-                teams.get(buildPlace.color).setDisplay(buildPlace);
-            } else {
-                teams.get(buildPlace.color).addPlace(buildPlace);
-            }
+            if (buildPlace.display) teams.get(buildPlace.color).setDisplay(buildPlace);
+            else teams.get(buildPlace.color).addPlace(buildPlace);
         }
         patterns = loadPatterns();
     }

@@ -22,17 +22,17 @@ public class BlockPlaceListener implements Listener {
             return;
         }
 
-        if (buildPlace.ticking) {
+        if (buildPlace.active) {
             if (buildPlace.matchPattern()) {
                 for (Location location : buildPlace.getLocations()) {
                     location.getBlock().setType(Material.AIR);
                 }
-                buildPlace.ticking = false;
+                buildPlace.active = false;
                 buildPlace.reward(event.getPlayer());
 
                 boolean finish = true;
                 for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
-                    if (place.ticking) {
+                    if (place.active) {
                         finish = false;
                         break;
                     }

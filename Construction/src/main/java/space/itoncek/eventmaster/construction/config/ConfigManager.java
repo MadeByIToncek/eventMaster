@@ -6,10 +6,11 @@ import org.json.JSONArray;
 import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.Pattern;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -72,13 +73,23 @@ public class ConfigManager {
 
                     pat.add(line);
                 }
-                Pattern pattern1 = new Pattern(pattern.toPath().getFileName().toString(), pat);
+                Pattern pattern1 = new Pattern(Integer.parseInt(pattern.toPath().getFileName().toString().substring(0, 1)), pat);
                 output.add(pattern1);
             } catch (FileNotFoundException e) {
                 Bukkit.getLogger().throwing("ConfigManager", "loadPatterns()", e);
             }
         }
         if (output.isEmpty()) {
+            try (Scanner sc = new Scanner(new URL("https://cdn.itoncek.space/patterns/maxfile.txt").openStream())) {
+                int max = sc.nextInt();
+                for (int i = 1; i <= max; i++) {
+                    InputStream in = new URL("https://cdn.itoncek.space/patterns/" + i + ".csv").openStream();
+                    Files.copy(in, Paths.get("./plugins/construction/patterns/" + i + ".csv"), StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Bukkit.getLogger().info("Patterns downloaded in " + (System.currentTimeMillis() - start) + "ms, parsing");
             return loadPatterns();
         } else {
             Bukkit.getLogger().info("Patterns loaded in " + (System.currentTimeMillis() - start) + "ms");
