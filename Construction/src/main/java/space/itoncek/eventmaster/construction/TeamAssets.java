@@ -1,21 +1,15 @@
 package space.itoncek.eventmaster.construction;
 
-import org.bukkit.Material;
-
 import java.util.List;
 import java.util.Objects;
 
 public final class TeamAssets {
     private BuildPlace display;
-    private List<BuildPlace> buildPlaces;
+    private final List<BuildPlace> buildPlaces;
 
     public TeamAssets(BuildPlace display, List<BuildPlace> buildPlaces) {
         this.display = display;
         this.buildPlaces = buildPlaces;
-    }
-
-    public void setPattern(List<List<Material>> pattern) {
-
     }
 
     public BuildPlace display() {
@@ -55,4 +49,7 @@ public final class TeamAssets {
                 "buildPlaces=" + buildPlaces + ']';
     }
 
+    //todo
+    public void recycle() {
+    }
 }

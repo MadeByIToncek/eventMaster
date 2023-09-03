@@ -10,6 +10,7 @@ import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.SimpleLocation;
 
 import static space.itoncek.eventmaster.construction.Construction.locationHash;
+import static space.itoncek.eventmaster.construction.Construction.teams;
 
 public class BlockPlaceListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -27,9 +28,20 @@ public class BlockPlaceListener implements Listener {
                     location.getBlock().setType(Material.AIR);
                 }
                 buildPlace.ticking = false;
-                buildPlace.reward();
+                buildPlace.reward(event.getPlayer());
+
+                boolean finish = true;
+                for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
+                    if (place.ticking) {
+                        finish = false;
+                        break;
+                    }
+                }
+
+                if (finish) {
+                    teams.get(buildPlace.color).recycle();
+                }
             }
-            ;
         }
     }
 }

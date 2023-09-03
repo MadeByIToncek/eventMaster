@@ -3,6 +3,7 @@ package space.itoncek.eventmaster.construction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import space.itoncek.eventmaster.construction.utils.Orientation;
@@ -162,8 +163,9 @@ public class BuildPlace {
     }
 
     //TODO
-    public void reward() {
-
+    public void reward(Player player) {
+        String cmd = "/ptsadd " + player.getName() + " 200";
+        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
     }
 }
 

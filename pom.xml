@@ -17,5 +17,6 @@
     <modules>
         <module>countdown</module>
         <module>Construction</module>
+        <module>PatternSaver</module>
     </modules>
 </project>

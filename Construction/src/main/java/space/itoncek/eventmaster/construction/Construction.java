@@ -10,6 +10,7 @@ import space.itoncek.eventmaster.construction.utils.TeamColor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static space.itoncek.eventmaster.construction.config.ConfigManager.loadPlaces;
 import static space.itoncek.eventmaster.construction.config.ConfigManager.savePlaces;
@@ -27,8 +28,8 @@ public final class Construction extends JavaPlugin {
         buildPlaces = loadPlaces();
         //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
         //getServer().getPluginManager().registerEvents(new MoveListener(), this);
-        getCommand("construction").setExecutor(new ConstructionCommand());
-        getCommand("construction").setTabCompleter(new ConstructionAutofill());
+        Objects.requireNonNull(getCommand("construction")).setExecutor(new ConstructionCommand());
+        Objects.requireNonNull(getCommand("construction")).setTabCompleter(new ConstructionAutofill());
         particles.runTaskTimer(this, 5L, 5L);
 
         for (BuildPlace place : buildPlaces) {
