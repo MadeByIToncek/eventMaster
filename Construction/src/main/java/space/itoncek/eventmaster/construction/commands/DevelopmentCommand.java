@@ -112,9 +112,7 @@ public class DevelopmentCommand implements CommandExecutor {
                         case "clr" -> {
                             try {
                                 for (BuildPlace buildPlace : buildPlaces) {
-                                    for (Location location : buildPlace.getLocations()) {
-                                        location.getBlock().setType(Material.AIR);
-                                    }
+                                    buildPlace.clr();
                                 }
                             } catch (IllegalArgumentException e) {
                                 sender.sendMessage("Unable, not found material " + args[2]);

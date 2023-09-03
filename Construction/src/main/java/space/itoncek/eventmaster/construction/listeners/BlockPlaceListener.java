@@ -2,6 +2,8 @@ package space.itoncek.eventmaster.construction.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,7 +20,7 @@ public class BlockPlaceListener implements Listener {
         BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
         if (buildPlace == null) {
-            event.setCancelled(false);
+            event.setCancelled(true);
             return;
         }
 
@@ -39,6 +41,9 @@ public class BlockPlaceListener implements Listener {
                 }
 
                 if (finish) {
+                    for (Player p : event.getPlayer().getLocation().getNearbyPlayers(20)) {
+                        p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+                    }
                     teams.get(buildPlace.color).recycle();
                 }
             }

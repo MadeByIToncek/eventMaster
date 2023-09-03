@@ -1,8 +1,6 @@
 package space.itoncek.eventmaster.construction;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +28,7 @@ public class BuildPlace {
     public final TeamColor color;
     public boolean active;
     public List<List<Material>> pattern;
+    public int patternID;
     public final boolean display;
     /**
      * @param markerLocation Location of orientation defining block (top of BuildPlace)
@@ -168,10 +167,23 @@ public class BuildPlace {
     public void reward(Player player) {
         String cmd = "/ptsadd " + player.getName() + " 200";
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
+        player.getLocation().getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 60);
+        for (Player nearbyPlayer : player.getLocation().getNearbyPlayers(20)) {
+            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10f, 1f);
+        }
+    }
+
+    public void clr() {
+        for (Location location : getLocations()) {
+            location.getBlock().setType(Material.AIR);
+        }
     }
 
     public void setPattern(int i) {
         this.pattern = patterns.get(i).pattern();
+        this.patternID = i;
+        this.active = true;
+        clr();
         if (this.display) {
             int x = 0;
             for (List<Material> materials : pattern) {

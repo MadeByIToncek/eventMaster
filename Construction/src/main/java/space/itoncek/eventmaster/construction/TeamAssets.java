@@ -3,6 +3,8 @@ package space.itoncek.eventmaster.construction;
 import java.util.List;
 import java.util.Objects;
 
+import static space.itoncek.eventmaster.construction.Construction.patterns;
+
 public final class TeamAssets {
     private BuildPlace display;
     private final List<BuildPlace> buildPlaces;
@@ -51,5 +53,17 @@ public final class TeamAssets {
 
     //todo
     public void recycle() {
+        int nextID = display.patternID + 1;
+        if (nextID > patterns.size() - 1) {
+            display.active = false;
+            for (BuildPlace buildPlace : buildPlaces) {
+                buildPlace.active = false;
+            }
+        } else {
+            display.setPattern(nextID);
+            for (BuildPlace buildPlace : buildPlaces) {
+                buildPlace.setPattern(nextID);
+            }
+        }
     }
 }
