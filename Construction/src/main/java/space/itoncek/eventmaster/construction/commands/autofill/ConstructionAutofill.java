@@ -1,5 +1,6 @@
 package space.itoncek.eventmaster.construction.commands.autofill;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -27,25 +28,30 @@ public class ConstructionAutofill implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return switch (args.length) {
-            case 1 -> List.of("define");
-            case 2 -> {
-                if (args[0].equalsIgnoreCase("define")) {
+            case 1 -> List.of("define", "debug");
+            case 2 -> switch (args[0].toLowerCase()) {
+                case "define" -> {
                     List<String> teams = new ArrayList<>();
                     for (TeamColor value : TeamColor.values()) {
                         teams.add(value.name());
                     }
                     yield teams;
-                } else {
-                    yield List.of();
                 }
-            }
-            case 3 -> {
-                if (args[0].equalsIgnoreCase("define")) {
-                    yield List.of("true", "false");
-                } else {
-                    yield List.of();
+                case "debug" -> List.of("replaceAll", "replaceDisplay", "replaceBuild", "clr", "toggleParticles");
+                default -> List.of();
+            };
+            case 3 -> switch (args[0].toLowerCase()) {
+                case "define" -> List.of("true", "false");
+                case "debug" -> {
+                    List<String> ret = new ArrayList<>();
+                    for (Material value : Material.values()) {
+                        ret.add(value.name());
+                    }
+                    yield ret;
                 }
-            }
+                default -> List.of();
+            };
+
             default -> List.of();
         };
     }

@@ -25,6 +25,8 @@ public class BuildPlace {
      * Color of the team, owning this BuildPlace
      */
     public final TeamColor color;
+    public boolean ticking;
+    public List<List<Material>> pattern;
     public final boolean display;
     /**
      * @param markerLocation Location of orientation defining block (top of BuildPlace)
@@ -37,6 +39,7 @@ public class BuildPlace {
         this.orientation = orientation;
         this.color = color;
         this.display = display;
+        this.ticking = true;
     }
 
     public static List<BuildPlace> deserialize(JSONArray place) {
@@ -81,9 +84,15 @@ public class BuildPlace {
         return out;
     }
 
-    public boolean matchPattern(List<List<Material>> expected) {
-
-        return false;
+    public boolean matchPattern() {
+        boolean out = true;
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                Material expect = pattern.get(x).get(z);
+                if (!isMaterial(x, z, expect)) out = false;
+            }
+        }
+        return out;
     }
 
     public List<Location> getLocations() {
@@ -95,23 +104,23 @@ public class BuildPlace {
         }
         List<Location> res = new ArrayList<>();
 
-        for (int x = 0; x <= 5; x++) {
-            for (int z = 0; z <= 5; z++) {
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
                 switch (orientation) {
                     case NORTH -> res.add(new Location(markerLocation.getWorld(),
                             markerLocation.getBlockX() + (x - 2),
                             markerLocation.getBlockY(),
-                            markerLocation.getBlockZ() + z));
+                            markerLocation.getBlockZ() + z + 1));
                     case EAST -> res.add(new Location(markerLocation.getWorld(),
-                            markerLocation.getBlockX() + x,
+                            markerLocation.getBlockX() - x - 1,
                             markerLocation.getBlockY(),
                             markerLocation.getBlockZ() - (z - 2)));
                     case SOUTH -> res.add(new Location(markerLocation.getWorld(),
                             markerLocation.getBlockX() + (x - 2),
                             markerLocation.getBlockY(),
-                            markerLocation.getBlockZ() - z));
+                            markerLocation.getBlockZ() - z - 1));
                     case WEST -> res.add(new Location(markerLocation.getWorld(),
-                            markerLocation.getBlockX() + x,
+                            markerLocation.getBlockX() + x + 1,
                             markerLocation.getBlockY(),
                             markerLocation.getBlockZ() + (z - 2)));
                 }
@@ -119,6 +128,42 @@ public class BuildPlace {
         }
 
         return res;
+    }
+
+    public Location getRelLoc(int x, int z) {
+        if (x < 0 || x > 4 || z < 0 || z > 4) {
+            return null;
+        } else {
+            return switch (orientation) {
+                case NORTH -> new Location(markerLocation.getWorld(),
+                        markerLocation.getBlockX() + (x - 2),
+                        markerLocation.getBlockY(),
+                        markerLocation.getBlockZ() + z + 1);
+                case EAST -> new Location(markerLocation.getWorld(),
+                        markerLocation.getBlockX() - x - 1,
+                        markerLocation.getBlockY(),
+                        markerLocation.getBlockZ() - (z - 2));
+                case SOUTH -> new Location(markerLocation.getWorld(),
+                        markerLocation.getBlockX() + (x - 2),
+                        markerLocation.getBlockY(),
+                        markerLocation.getBlockZ() - z - 1);
+                case WEST -> new Location(markerLocation.getWorld(),
+                        markerLocation.getBlockX() + x + 1,
+                        markerLocation.getBlockY(),
+                        markerLocation.getBlockZ() + (z - 2));
+            };
+        }
+    }
+
+
+    public boolean isMaterial(int x, int z, Material mat) {
+        Location loc = getRelLoc(x, z);
+        return mat.equals(loc.getBlock().getType());
+    }
+
+    //TODO
+    public void reward() {
+
     }
 }
 

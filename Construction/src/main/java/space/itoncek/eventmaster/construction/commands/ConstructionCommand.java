@@ -1,7 +1,9 @@
 package space.itoncek.eventmaster.construction.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +14,7 @@ import space.itoncek.eventmaster.construction.utils.Orientation;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
 import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
+import static space.itoncek.eventmaster.construction.Construction.particles;
 import static space.itoncek.eventmaster.construction.config.ConfigManager.savePlaces;
 
 public class ConstructionCommand implements CommandExecutor {
@@ -59,6 +62,66 @@ public class ConstructionCommand implements CommandExecutor {
                                 color, Boolean.parseBoolean(args[2])));
                         sender.sendMessage(ChatColor.GREEN + "Added team place of " + color.name() + " team.");
                         sender.sendMessage(ChatColor.GREEN + "Saved config in " + savePlaces(buildPlaces) + "ms");
+                    }
+                }
+                case "debug" -> {
+                    switch (args[1]) {
+                        case "replaceAll" -> {
+                            try {
+                                Material material = Material.valueOf(args[2].toUpperCase());
+                                for (BuildPlace buildPlace : buildPlaces) {
+                                    for (Location location : buildPlace.getLocations()) {
+                                        location.getBlock().setType(material);
+                                    }
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage("Unable, not found material " + args[2]);
+                                Bukkit.getLogger().throwing("ConstructionCommand", args[0] + " --> " + args[1] + "?" + args[2], e);
+                            }
+                        }
+                        case "replaceDisplay" -> {
+                            try {
+                                Material material = Material.valueOf(args[2].toUpperCase());
+                                for (BuildPlace buildPlace : buildPlaces) {
+                                    if (buildPlace.display) {
+                                        for (Location location : buildPlace.getLocations()) {
+                                            location.getBlock().setType(material);
+                                        }
+                                    }
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage("Unable, not found material " + args[2]);
+                                Bukkit.getLogger().throwing("ConstructionCommand", args[0] + " --> " + args[1] + "?" + args[2], e);
+                            }
+                        }
+                        case "replaceBuild" -> {
+                            try {
+                                Material material = Material.valueOf(args[2].toUpperCase());
+                                for (BuildPlace buildPlace : buildPlaces) {
+                                    if (!buildPlace.display) {
+                                        for (Location location : buildPlace.getLocations()) {
+                                            location.getBlock().setType(material);
+                                        }
+                                    }
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage("Unable, not found material " + args[2]);
+                                Bukkit.getLogger().throwing("ConstructionCommand", args[0] + " --> " + args[1] + "?" + args[2], e);
+                            }
+                        }
+                        case "clr" -> {
+                            try {
+                                for (BuildPlace buildPlace : buildPlaces) {
+                                    for (Location location : buildPlace.getLocations()) {
+                                        location.getBlock().setType(Material.AIR);
+                                    }
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage("Unable, not found material " + args[2]);
+                                Bukkit.getLogger().throwing("ConstructionCommand", args[0] + " --> " + args[1] + "?" + args[2], e);
+                            }
+                        }
+                        case "toggleParticles" -> particles.enabled = !particles.enabled;
                     }
                 }
                 default -> {

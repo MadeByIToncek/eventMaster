@@ -8,8 +8,10 @@ import space.itoncek.eventmaster.construction.BuildPlace;
 import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
 
 public class ParticleRunnable extends BukkitRunnable {
+    public boolean enabled = true;
     @Override
     public void run() {
+        if (!enabled) return;
         for (BuildPlace buildPlace : buildPlaces) {
             for (Location location : buildPlace.getLocations()) {
                 location.getWorld().spawnParticle(Particle.BLOCK_MARKER,
