@@ -12,15 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static space.itoncek.eventmaster.construction.config.ConfigManager.loadPlaces;
-import static space.itoncek.eventmaster.construction.config.ConfigManager.savePlaces;
+import static space.itoncek.eventmaster.construction.config.ConfigManager.*;
 
 public final class Construction extends JavaPlugin {
 
     public static List<BuildPlace> buildPlaces;
     public static HashMap<SimpleLocation, BuildPlace> locationHash = new HashMap<>();
     public static ParticleRunnable particles = new ParticleRunnable();
-
+    public static List<Pattern> patterns = new ArrayList<>();
     public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
     @Override
     public void onEnable() {
@@ -28,8 +27,8 @@ public final class Construction extends JavaPlugin {
         buildPlaces = loadPlaces();
         //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
         //getServer().getPluginManager().registerEvents(new MoveListener(), this);
-        Objects.requireNonNull(getCommand("construction")).setExecutor(new ConstructionCommand());
-        Objects.requireNonNull(getCommand("construction")).setTabCompleter(new ConstructionAutofill());
+        Objects.requireNonNull(getCommand("development")).setExecutor(new ConstructionCommand());
+        Objects.requireNonNull(getCommand("development")).setTabCompleter(new ConstructionAutofill());
         particles.runTaskTimer(this, 5L, 5L);
 
         for (BuildPlace place : buildPlaces) {
@@ -48,7 +47,9 @@ public final class Construction extends JavaPlugin {
                 teams.get(buildPlace.color).addPlace(buildPlace);
             }
         }
+        patterns = loadPatterns();
     }
+
 
     @Override
     public void onDisable() {
