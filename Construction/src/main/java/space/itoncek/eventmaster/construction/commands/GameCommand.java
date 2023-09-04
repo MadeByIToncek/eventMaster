@@ -20,9 +20,7 @@ public class GameCommand implements CommandExecutor {
             }
             case "stop" -> {
                 for (BuildPlace place : buildPlaces) {
-                    place.clr();
-                    place.active = false;
-
+                    place.end();
                 }
             }
         }

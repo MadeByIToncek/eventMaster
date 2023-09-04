@@ -182,7 +182,7 @@ public class BuildPlace {
         for (Map.Entry<Player, Integer> e : map.entrySet()) {
             int finalPoints = partPTS * e.getValue();
             String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
-            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
+            sendCmd(cmd);
         }
 
         markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);
@@ -197,10 +197,25 @@ public class BuildPlace {
         }
     }
 
+    public void setTeamBlock() {
+        for (Location location : getLocations()) {
+            location.getBlock().setType(color.material);
+        }
+    }
+
+    public void end() {
+        setTeamBlock();
+        active = false;
+        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
+            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "sparkle", 20f, 1f);
+        }
+    }
+
     public void setPattern(int i) {
         this.pattern = patterns.get(i).pattern();
         this.patternID = i;
         clr();
+        sendCmd("minigame_construction_clear " + color.name().toLowerCase());
         if (this.display) {
             int x = 0;
             for (List<Material> materials : pattern) {
@@ -213,6 +228,13 @@ public class BuildPlace {
             }
         }
         this.active = true;
+        for (Material material : patterns.get(i).materials()) {
+            sendCmd("minigame_construction_give " + color.name().toLowerCase() + " " + material.name().toLowerCase());
+        }
+    }
+
+    private void sendCmd(String cmd) {
+        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
     }
 }
 
