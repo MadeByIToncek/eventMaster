@@ -9,24 +9,30 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.SimpleLocation;
 
-import static space.itoncek.eventmaster.construction.Construction.locationHash;
-import static space.itoncek.eventmaster.construction.Construction.teams;
+import static space.itoncek.eventmaster.construction.Construction.*;
 
 public class BlockPlaceListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
-        BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+        new BukkitRunnable() {
 
-        if (buildPlace == null) {
-            event.setCancelled(true);
-            return;
-        }
+            @Override
+            public void run() {
+                BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-        common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+                if (buildPlace == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+            }
+        }.runTaskLater(pl, 5L);
     }
 
     @EventHandler(ignoreCancelled = true)

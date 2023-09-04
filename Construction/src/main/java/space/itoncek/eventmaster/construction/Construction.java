@@ -23,8 +23,10 @@ public final class Construction extends JavaPlugin {
     public static ParticleRunnable particles = new ParticleRunnable();
     public static List<Pattern> patterns = new ArrayList<>();
     public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
+    public static Construction pl;
     @Override
     public void onEnable() {
+        pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
