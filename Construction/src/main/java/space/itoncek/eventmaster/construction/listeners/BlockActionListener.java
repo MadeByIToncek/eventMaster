@@ -57,6 +57,7 @@ public class BlockActionListener implements Listener {
                     }
                     buildPlace.active = false;
                     buildPlace.reward();
+                    logOutput.add("BF;" + buildPlace.color.name() + ";" + buildPlace.patternID);
 
                     boolean finish = true;
                     for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
