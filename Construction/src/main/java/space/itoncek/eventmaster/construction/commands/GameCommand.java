@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.eventmaster.construction.BuildPlace;
 
+import static space.itoncek.eventmaster.construction.Construction.active;
 import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
 
 public class GameCommand implements CommandExecutor {
@@ -14,12 +15,12 @@ public class GameCommand implements CommandExecutor {
         if (args.length == 0 || !sender.isOp()) return true;
         switch (args[0]) {
             case "start" -> {
-                for (BuildPlace place : buildPlaces) {
+                if (!active) for (BuildPlace place : buildPlaces) {
                     place.setPattern(0);
                 }
             }
             case "stop" -> {
-                for (BuildPlace place : buildPlaces) {
+                if (active) for (BuildPlace place : buildPlaces) {
                     place.end();
                 }
             }

@@ -45,6 +45,7 @@ public class BuildPlace {
         this.color = color;
         this.display = display;
         this.active = true;
+        clr();
     }
 
     public static List<BuildPlace> deserialize(JSONArray place) {
@@ -170,25 +171,17 @@ public class BuildPlace {
         return mat.equals(loc.getBlock().getType());
     }
 
-    public void reward() {
-        int totalPTS = 200;
-        HashMap<Player, Integer> map = new HashMap<>();
-        int partPTS = totalPTS / locationPlayerHashMap.size();
-
-        for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
-            map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
+    public static List<List<Material>> rotate90Degrees(List<List<Material>> input) {
+        List<List<Material>> output = new ArrayList<>();
+        for (int i = 0; i < input.size(); i++) {
+            List<Material> row = input.get(i);
+            List<Material> rotatedRow = new ArrayList<>();
+            for (int j = row.size() - 1; j >= 0; j--) {
+                rotatedRow.add(row.get(j));
+            }
+            output.add(rotatedRow);
         }
-
-        for (Map.Entry<Player, Integer> e : map.entrySet()) {
-            int finalPoints = partPTS * e.getValue();
-            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
-            sendCmd(cmd);
-        }
-
-        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);
-        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
-            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 20f, 1f);
-        }
+        return output;
     }
 
     public void clr() {
@@ -203,16 +196,36 @@ public class BuildPlace {
         }
     }
 
+    public void reward() {
+        int totalPTS = 200;
+        HashMap<Player, Integer> map = new HashMap<>();
+        int partPTS = totalPTS / locationPlayerHashMap.size();
+
+        for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
+            map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
+        }
+        for (Map.Entry<Player, Integer> e : map.entrySet()) {
+            int finalPoints = partPTS * e.getValue();
+            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
+            sendCmd(cmd);
+        }
+
+        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);
+        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
+            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 20f, 1f);
+        }
+    }
+
     public void end() {
         setTeamBlock();
         active = false;
         for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
-            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "sparkle", 20f, 1f);
+            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "shine", 20f, 1f);
         }
     }
 
     public void setPattern(int i) {
-        this.pattern = patterns.get(i).pattern();
+        this.pattern = rotate(patterns.get(i).pattern());
         this.patternID = i;
         clr();
         sendCmd("minigame_construction_clear " + color.name().toLowerCase());
@@ -235,6 +248,20 @@ public class BuildPlace {
 
     private void sendCmd(String cmd) {
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
+    }
+
+    private List<List<Material>> rotate(List<List<Material>> pattern) {
+        int rot = switch (orientation) {
+            case WEST -> 0;
+            case NORTH -> 3;
+            case EAST -> 2;
+            case SOUTH -> 1;
+        };
+        List<List<Material>> output = pattern;
+        if (rot > 0) for (int i = 0; i < rot; i++) {
+            pattern = rotate90Degrees(pattern);
+        }
+        return output;
     }
 }
 

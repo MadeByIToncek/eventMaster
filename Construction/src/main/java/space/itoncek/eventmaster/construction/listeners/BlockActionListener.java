@@ -1,5 +1,6 @@
 package space.itoncek.eventmaster.construction.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,32 +20,38 @@ import static space.itoncek.eventmaster.construction.Construction.*;
 public class BlockActionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
-        new BukkitRunnable() {
+        if (event.getBlock().getWorld() == Bukkit.getWorld("construction") && active) {
+            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-            @Override
-            public void run() {
-                BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
-
-                if (buildPlace == null) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+            if (buildPlace == null) {
+                event.setCancelled(true);
+                return;
             }
-        }.runTaskLater(pl, 5L);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+                }
+            }.runTaskLater(pl, 5L);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(@NotNull BlockBreakEvent event) {
-        BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+        if (event.getBlock().getWorld() == Bukkit.getWorld("construction") && active) {
+            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-        if (buildPlace == null) {
-            event.setCancelled(true);
-            return;
+            if (buildPlace == null) {
+                event.setCancelled(true);
+                return;
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+                }
+            }.runTaskLater(pl, 5L);
         }
-
-        common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
     }
 
     public void common(@NotNull BuildPlace buildPlace, Player player, Location loc) {

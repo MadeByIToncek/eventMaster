@@ -8,7 +8,7 @@ import space.itoncek.eventmaster.construction.BuildPlace;
 import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
 
 public class ParticleRunnable extends BukkitRunnable {
-    public boolean enabled = true;
+    public boolean enabled = false;
     @Override
     public void run() {
         if (!enabled) return;

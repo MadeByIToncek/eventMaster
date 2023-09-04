@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,9 +13,30 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 public final class PatternSaver extends JavaPlugin {
+
+    @NotNull
+    private static JSONObject getJsonObject(List<List<Material>> lists, List<Material> materialsRequired, int i) {
+        JSONArray arr = new JSONArray();
+        for (Material material : materialsRequired) {
+            arr.put(material.name());
+        }
+        JSONArray pattern = new JSONArray();
+        for (List<Material> materials : lists) {
+            JSONArray row = new JSONArray();
+            for (Material material : materials) {
+                row.put(material.name());
+            }
+            pattern.put(row);
+        }
+
+        JSONObject object = new JSONObject();
+        object.put("id", i);
+        object.put("materials", arr);
+        object.put("pattern", pattern);
+        return object;
+    }
 
     @Override
     public void onEnable() {
@@ -33,25 +55,8 @@ public final class PatternSaver extends JavaPlugin {
             superList.add(pseudolist);
         }
 
-        int i = 1;
+        int i = 0;
         new File("./patterns/").mkdirs();
-        for (List<List<Material>> pattern : superList) {
-            try (FileWriter fw = new FileWriter("./patterns/" + i + ".csv")) {
-                //fw.write("sep=;\n");
-                for (List<Material> materials : pattern) {
-                    StringJoiner joiner = new StringJoiner(",");
-                    for (Material material : materials) {
-                        joiner.add(material.name());
-                    }
-                    fw.write(joiner.toString());
-                    fw.write("\n");
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            i++;
-        }
-        i = 1;
         try (FileWriter fw = new FileWriter("./patterns/index.json")) {
             JSONArray arrout = new JSONArray();
             for (List<List<Material>> lists : superList) {
@@ -63,20 +68,11 @@ public final class PatternSaver extends JavaPlugin {
                         }
                     }
                 }
-                JSONArray arr = new JSONArray();
-                for (Material material : materialsRequired) {
-                    arr.put(material.name());
-                }
-                JSONObject object = new JSONObject();
-                object.put("id", i);
-                object.put("materials", arr);
+                JSONObject object = getJsonObject(lists, materialsRequired, i);
                 arrout.put(object);
                 i++;
             }
-            JSONObject output = new JSONObject();
-            output.put("maxFile", i - 1);
-            output.put("materials", arrout);
-            fw.write(output.toString(4));
+            fw.write(arrout.toString(4));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

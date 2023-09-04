@@ -24,6 +24,7 @@ public final class Construction extends JavaPlugin {
     public static List<Pattern> patterns = new ArrayList<>();
     public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
     public static Construction pl;
+    public static boolean active = false;
     @Override
     public void onEnable() {
         pl = this;
@@ -56,6 +57,9 @@ public final class Construction extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        for (BuildPlace buildPlace : buildPlaces) {
+            buildPlace.clr();
+        }
         savePlaces(buildPlaces);
     }
 }
