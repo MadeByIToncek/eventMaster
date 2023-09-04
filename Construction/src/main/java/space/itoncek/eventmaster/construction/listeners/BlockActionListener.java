@@ -20,7 +20,6 @@ public class BlockActionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
         new BukkitRunnable() {
-
             @Override
             public void run() {
                 BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
@@ -37,14 +36,17 @@ public class BlockActionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(@NotNull BlockBreakEvent event) {
-        BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
-
-        if (buildPlace == null) {
-            event.setCancelled(true);
-            return;
-        }
-
-        common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+                if (buildPlace == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+                common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+            }
+        }.runTaskLater(pl, 5L);
     }
 
     public void common(@NotNull BuildPlace buildPlace, Player player, Location loc) {
