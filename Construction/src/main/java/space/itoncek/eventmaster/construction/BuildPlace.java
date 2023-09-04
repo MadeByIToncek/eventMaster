@@ -7,12 +7,10 @@ import org.json.JSONObject;
 import space.itoncek.eventmaster.construction.utils.Orientation;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static space.itoncek.eventmaster.construction.Construction.patterns;
+import static space.itoncek.eventmaster.construction.Construction.ptsOutput;
 
 public class BuildPlace {
 
@@ -178,11 +176,14 @@ public class BuildPlace {
         for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
             map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
         }
-
+        StringJoiner js = new StringJoiner(";");
+        js.add("PTS");
         for (Map.Entry<Player, Integer> e : map.entrySet()) {
             int finalPoints = partPTS * e.getValue();
             String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
-            sendCmd(cmd);
+            js.add(e.getKey().getName() + "|" + finalPoints);
+            ptsOutput.add(cmd);
+            //sendCmd(cmd);
         }
 
         markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);

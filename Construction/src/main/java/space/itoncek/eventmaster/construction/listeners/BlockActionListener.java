@@ -13,10 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.SimpleLocation;
 
-import static space.itoncek.eventmaster.construction.Construction.locationHash;
-import static space.itoncek.eventmaster.construction.Construction.teams;
+import static space.itoncek.eventmaster.construction.Construction.*;
 
-public class BlockPlaceListener implements Listener {
+public class BlockActionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
         BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
@@ -51,6 +50,7 @@ public class BlockPlaceListener implements Listener {
                     }
                     buildPlace.active = false;
                     buildPlace.reward();
+                    logOutput.add("BF;" + buildPlace.color.name() + ";" + buildPlace.patternID);
 
                     boolean finish = true;
                     for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
