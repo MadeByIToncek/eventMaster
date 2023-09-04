@@ -1,5 +1,6 @@
 package space.itoncek.eventmaster.construction.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,34 +20,38 @@ import static space.itoncek.eventmaster.construction.Construction.*;
 public class BlockActionListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+        if (event.getBlock().getWorld() == Bukkit.getWorld("construction") && active) {
+            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-                if (buildPlace == null) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+            if (buildPlace == null) {
+                event.setCancelled(true);
+                return;
             }
-        }.runTaskLater(pl, 5L);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+                }
+            }.runTaskLater(pl, 5L);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(@NotNull BlockBreakEvent event) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
-                if (buildPlace == null) {
-                    event.setCancelled(true);
-                    return;
-                }
-                common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+        if (event.getBlock().getWorld() == Bukkit.getWorld("construction") && active) {
+            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+
+            if (buildPlace == null) {
+                event.setCancelled(true);
+                return;
             }
-        }.runTaskLater(pl, 5L);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    common(buildPlace, event.getPlayer(), event.getBlock().getLocation());
+                }
+            }.runTaskLater(pl, 5L);
+        }
     }
 
     public void common(@NotNull BuildPlace buildPlace, Player player, Location loc) {
@@ -59,7 +64,6 @@ public class BlockActionListener implements Listener {
                     }
                     buildPlace.active = false;
                     buildPlace.reward();
-                    logOutput.add("BF;" + buildPlace.color.name() + ";" + buildPlace.patternID);
 
                     boolean finish = true;
                     for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {

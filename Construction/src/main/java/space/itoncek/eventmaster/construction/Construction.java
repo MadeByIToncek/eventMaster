@@ -1,7 +1,5 @@
 package space.itoncek.eventmaster.construction;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.itoncek.eventmaster.construction.commands.DevelopmentCommand;
@@ -11,9 +9,10 @@ import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
 import space.itoncek.eventmaster.construction.listeners.BlockActionListener;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import static space.itoncek.eventmaster.construction.config.ConfigManager.*;
 
@@ -24,9 +23,8 @@ public final class Construction extends JavaPlugin {
     public static ParticleRunnable particles = new ParticleRunnable();
     public static List<Pattern> patterns = new ArrayList<>();
     public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
-    public static StringJoiner logOutput = new StringJoiner("\n");
-    public static StringJoiner ptsOutput = new StringJoiner("\n");
     public static Construction pl;
+    public static boolean active = false;
     @Override
     public void onEnable() {
         pl = this;
@@ -59,16 +57,9 @@ public final class Construction extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        savePlaces(buildPlaces);
-        long start = System.currentTimeMillis();
-        try (FileWriter fw = new FileWriter("./log.data");
-             FileWriter fwa = new FileWriter("./pts.data")) {
-            fw.write(logOutput.toString());
-            fwa.write(ptsOutput.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            Bukkit.getLogger().info(ChatColor.GREEN + "Log saved in " + (System.currentTimeMillis() - start) + "ms");
+        for (BuildPlace buildPlace : buildPlaces) {
+            buildPlace.clr();
         }
+        savePlaces(buildPlaces);
     }
 }
