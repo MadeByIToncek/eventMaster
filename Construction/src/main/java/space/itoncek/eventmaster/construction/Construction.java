@@ -6,7 +6,7 @@ import space.itoncek.eventmaster.construction.commands.DevelopmentCommand;
 import space.itoncek.eventmaster.construction.commands.GameCommand;
 import space.itoncek.eventmaster.construction.commands.autofill.ConstructionAutofill;
 import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
-import space.itoncek.eventmaster.construction.listeners.BlockPlaceListener;
+import space.itoncek.eventmaster.construction.listeners.BlockActionListener;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public final class Construction extends JavaPlugin {
         pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();
-        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockActionListener(), this);
         //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
         Objects.requireNonNull(getCommand("constGame")).setExecutor(new GameCommand());
         //getServer().getPluginManager().registerEvents(new MoveListener(), this);
