@@ -8,7 +8,9 @@ import space.itoncek.eventmaster.construction.utils.Orientation;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static space.itoncek.eventmaster.construction.Construction.patterns;
 
@@ -28,6 +30,7 @@ public class BuildPlace {
     public final TeamColor color;
     public boolean active;
     public List<List<Material>> pattern;
+    public HashMap<Location, Player> locationPlayerHashMap = new HashMap<>(25);
     public int patternID;
     public final boolean display;
     /**
@@ -132,6 +135,10 @@ public class BuildPlace {
         return res;
     }
 
+    public void addPlayerBlockPoints(Player p, Location loc) {
+        locationPlayerHashMap.put(loc, p);
+    }
+
     public Location getRelLoc(int x, int z) {
         if (x < 0 || x > 4 || z < 0 || z > 4) {
             return null;
@@ -163,15 +170,24 @@ public class BuildPlace {
         return mat.equals(loc.getBlock().getType());
     }
 
-    //TODO
-    public void reward(Player player) {
-        String cmd = "ptsadd " + player.getName() + " 200";
+    public void reward() {
+        int totalPTS = 200;
+        HashMap<Player, Integer> map = new HashMap<>();
+        int partPTS = totalPTS / locationPlayerHashMap.size();
 
+        for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
+            map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
+        }
 
-        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
-        player.getLocation().getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 60);
-        for (Player nearbyPlayer : player.getLocation().getNearbyPlayers(20)) {
-            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10f, 1f);
+        for (Map.Entry<Player, Integer> e : map.entrySet()) {
+            int finalPoints = partPTS * e.getValue();
+            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
+            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
+        }
+
+        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);
+        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
+            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 20f, 1f);
         }
     }
 

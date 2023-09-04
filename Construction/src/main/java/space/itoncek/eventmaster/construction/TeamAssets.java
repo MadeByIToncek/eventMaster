@@ -1,5 +1,8 @@
 package space.itoncek.eventmaster.construction;
 
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +66,10 @@ public final class TeamAssets {
             display.setPattern(nextID);
             for (BuildPlace buildPlace : buildPlaces) {
                 buildPlace.setPattern(nextID);
+            }
+
+            for (Player p : display.getRelLoc(2, 2).getNearbyPlayers(20)) {
+                p.playSound(display.getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
             }
         }
     }

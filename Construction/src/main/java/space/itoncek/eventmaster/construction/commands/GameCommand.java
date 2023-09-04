@@ -18,6 +18,13 @@ public class GameCommand implements CommandExecutor {
                     place.setPattern(0);
                 }
             }
+            case "stop" -> {
+                for (BuildPlace place : buildPlaces) {
+                    place.clr();
+                    place.active = false;
+
+                }
+            }
         }
         return true;
     }
