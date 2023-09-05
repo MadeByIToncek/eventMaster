@@ -2,6 +2,7 @@ package space.itoncek.eventmaster.construction;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONArray;
 import space.itoncek.eventmaster.construction.commands.DevelopmentCommand;
 import space.itoncek.eventmaster.construction.commands.GameCommand;
 import space.itoncek.eventmaster.construction.commands.autofill.ConstructionAutofill;
@@ -9,6 +10,10 @@ import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
 import space.itoncek.eventmaster.construction.listeners.BlockActionListener;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +29,11 @@ public final class Construction extends JavaPlugin {
     public static List<Pattern> patterns = new ArrayList<>();
     public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
     public static Construction pl;
+    public static JSONArray output = new JSONArray();
     public static boolean active = false;
+    public static boolean blocking = false;
+    public static float mutliplier = 1.0F;
+
     @Override
     public void onEnable() {
         pl = this;
@@ -57,6 +66,11 @@ public final class Construction extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        try (FileWriter fw = new FileWriter("./balance-" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + ".json")) {
+            fw.write(output.toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for (BuildPlace buildPlace : buildPlaces) {
             buildPlace.clr();
         }

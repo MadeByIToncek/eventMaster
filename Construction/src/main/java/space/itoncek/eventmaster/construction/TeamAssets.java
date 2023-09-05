@@ -1,8 +1,12 @@
 package space.itoncek.eventmaster.construction;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,8 +14,9 @@ import static space.itoncek.eventmaster.construction.Construction.patterns;
 
 public final class TeamAssets {
     private BuildPlace display;
+    public List<Player> players = new ArrayList<>();
     private final List<BuildPlace> buildPlaces;
-
+    private int currentID = -1;
     public TeamAssets(BuildPlace display, List<BuildPlace> buildPlaces) {
         this.display = display;
         this.buildPlaces = buildPlaces;
@@ -54,23 +59,39 @@ public final class TeamAssets {
                 "buildPlaces=" + buildPlaces + ']';
     }
 
+    public static ItemStack enchant(Material mat) {
+        ItemStack itemStack = new ItemStack(mat);
+        itemStack.addEnchantment(Enchantment.SILK_TOUCH, 1);
+        itemStack.addUnsafeEnchantment(Enchantment.DIG_SPEED, 100);
+        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
+        return itemStack;
+    }
+
     //todo
     public void recycle() {
-        int nextID = display.patternID + 1;
-        if (nextID > patterns.size() - 1) {
-            display.active = false;
-            for (BuildPlace buildPlace : buildPlaces) {
-                buildPlace.active = false;
-            }
-        } else {
-            display.setPattern(nextID);
-            for (BuildPlace buildPlace : buildPlaces) {
-                buildPlace.setPattern(nextID);
-            }
+        int nextID = currentID + 1;
+        display.setPattern(nextID);
 
-            for (Player p : display.getRelLoc(2, 2).getNearbyPlayers(20)) {
-                p.playSound(display.getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+        for (BuildPlace buildPlace : buildPlaces) {
+            buildPlace.setPattern(nextID);
+        }
+
+        for (Player player : players) {
+            player.getInventory().clear();
+            player.getInventory().addItem(enchant(Material.DIAMOND_PICKAXE));
+            player.getInventory().addItem(enchant(Material.DIAMOND_AXE));
+            player.getInventory().addItem(enchant(Material.DIAMOND_SHOVEL));
+        }
+
+        for (Material material : patterns.get(nextID).materials()) {
+            for (Player player : players) {
+                player.getInventory().addItem(new ItemStack(material, 64));
             }
         }
+
+        for (Player p : display.getRelLoc(2, 2).getNearbyPlayers(20)) {
+            p.playSound(display.getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+        }
+        currentID = nextID;
     }
 }
