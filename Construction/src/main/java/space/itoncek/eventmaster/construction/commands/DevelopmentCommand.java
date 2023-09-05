@@ -13,8 +13,7 @@ import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.utils.Orientation;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
-import static space.itoncek.eventmaster.construction.Construction.buildPlaces;
-import static space.itoncek.eventmaster.construction.Construction.particles;
+import static space.itoncek.eventmaster.construction.Construction.*;
 import static space.itoncek.eventmaster.construction.config.ConfigManager.savePlaces;
 
 public class DevelopmentCommand implements CommandExecutor {
@@ -119,6 +118,7 @@ public class DevelopmentCommand implements CommandExecutor {
                                 Bukkit.getLogger().throwing("ConstructionCommand", args[0] + " --> " + args[1] + "?" + args[2], e);
                             }
                         }
+                        case "toggleRestrictions" -> blocking = !blocking;
                         case "toggleParticles" -> particles.enabled = !particles.enabled;
                     }
                 }

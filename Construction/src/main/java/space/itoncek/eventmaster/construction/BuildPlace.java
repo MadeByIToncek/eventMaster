@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static space.itoncek.eventmaster.construction.Construction.mutliplier;
 import static space.itoncek.eventmaster.construction.Construction.patterns;
 
 public class BuildPlace {
@@ -32,6 +33,7 @@ public class BuildPlace {
     public List<List<Material>> pattern;
     public HashMap<Location, Player> locationPlayerHashMap = new HashMap<>(25);
     public int patternID;
+    public long patternStart;
     public final boolean display;
     /**
      * @param markerLocation Location of orientation defining block (top of BuildPlace)
@@ -173,12 +175,9 @@ public class BuildPlace {
 
     public static List<List<Material>> rotate90Degrees(List<List<Material>> input) {
         List<List<Material>> output = new ArrayList<>();
-        for (int i = 0; i < input.size(); i++) {
-            List<Material> row = input.get(i);
+        for (List<Material> row : input) {
             List<Material> rotatedRow = new ArrayList<>();
-            for (int j = row.size() - 1; j >= 0; j--) {
-                rotatedRow.add(row.get(j));
-            }
+            for (int j = row.size() - 1; j >= 0; j--) rotatedRow.add(row.get(j));
             output.add(rotatedRow);
         }
         return output;
@@ -204,13 +203,25 @@ public class BuildPlace {
         for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
             map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
         }
+
+        JSONArray points = new JSONArray();
         for (Map.Entry<Player, Integer> e : map.entrySet()) {
             int finalPoints = partPTS * e.getValue();
-            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints;
+            points.put(new JSONObject().put("name", e.getKey().getName()).put("pts", e.getValue()));
+            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints * mutliplier;
             sendCmd(cmd);
         }
+        JSONObject output = new JSONObject();
+        output.put("time", new JSONObject()
+                .put("start", patternStart)
+                .put("duration", System.currentTimeMillis() - patternStart)
+                .put("end", System.currentTimeMillis()));
+        output.put("patternid", patternID);
+        output.put("team", color.name());
+        output.put("playershare", points);
 
-        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 1, 0), 60, 1, 1, 1);
+        Construction.output.put(output);
+        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 3, 0), 200, 2.5, 2.5, 2.5);
         for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
             nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 20f, 1f);
         }
@@ -228,7 +239,6 @@ public class BuildPlace {
         this.pattern = rotate(patterns.get(i).pattern());
         this.patternID = i;
         clr();
-        sendCmd("minigame_construction_clear " + color.name().toLowerCase());
         if (this.display) {
             int x = 0;
             for (List<Material> materials : pattern) {
@@ -241,9 +251,7 @@ public class BuildPlace {
             }
         }
         this.active = true;
-        for (Material material : patterns.get(i).materials()) {
-            sendCmd("minigame_construction_give " + color.name().toLowerCase() + " " + material.name().toLowerCase());
-        }
+        patternStart = System.currentTimeMillis();
     }
 
     private void sendCmd(String cmd) {
