@@ -35,20 +35,23 @@ public class GameCommand implements CommandExecutor {
                 }
             }
             case "stop" -> {
-                if (active) for (BuildPlace place : buildPlaces) {
-                    place.end();
-                    active = false;
-                    String filename = "./balance-" + System.currentTimeMillis() + ".json";
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.getInventory().clear();
+                String filename = "./balance-" + System.currentTimeMillis() + ".json";
+                if (active) {
+                    for (BuildPlace place : buildPlaces) {
+                        place.end();
+                        active = false;
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            p.getInventory().clear();
+                        }
+
                     }
-                    try (FileWriter fw = new FileWriter(filename)) {
-                        fw.write(output.toString());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } finally {
-                        output.clear();
-                    }
+                }
+                try (FileWriter fw = new FileWriter(filename)) {
+                    fw.write(output.toString(4));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    output.clear();
                 }
             }
             case "fetchteam" -> {
