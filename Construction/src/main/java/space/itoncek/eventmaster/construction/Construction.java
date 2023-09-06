@@ -10,10 +10,6 @@ import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
 import space.itoncek.eventmaster.construction.listeners.BlockActionListener;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,11 +62,6 @@ public final class Construction extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        try (FileWriter fw = new FileWriter("./balance-" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + ".json")) {
-            fw.write(output.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         for (BuildPlace buildPlace : buildPlaces) {
             buildPlace.clr();
         }

@@ -19,7 +19,6 @@ import java.util.StringJoiner;
 
 public class ConfigManager {
     private static final File placesConfig = new File("./plugins/construction/places.json");
-    private static final File patternFolder = new File("./plugins/construction/patterns/");
 
     public static List<BuildPlace> loadPlaces() {
         long start = System.currentTimeMillis();
@@ -99,6 +98,5 @@ public class ConfigManager {
                 Bukkit.getLogger().throwing("ConfigManager", "folderStuff()", e);
             }
         }
-        if (!patternFolder.exists()) patternFolder.mkdirs();
     }
 }

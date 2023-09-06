@@ -10,6 +10,8 @@ import space.itoncek.eventmaster.construction.BuildPlace;
 import space.itoncek.eventmaster.construction.TeamAssets;
 import space.itoncek.eventmaster.construction.utils.TeamColor;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -22,6 +24,10 @@ public class GameCommand implements CommandExecutor {
         switch (args[0].toLowerCase()) {
             case "start" -> {
                 if (!active) {
+                    for (Map.Entry<TeamColor, TeamAssets> e : teams.entrySet()) {
+                        e.getValue().players.clear();
+                        sendCmd("minigame_construction_fetchteam " + e.getKey().name().toLowerCase());
+                    }
                     for (Map.Entry<TeamColor, TeamAssets> entry : teams.entrySet()) {
                         entry.getValue().recycle();
                     }
@@ -32,6 +38,17 @@ public class GameCommand implements CommandExecutor {
                 if (active) for (BuildPlace place : buildPlaces) {
                     place.end();
                     active = false;
+                    String filename = "./balance-" + System.currentTimeMillis() + ".json";
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.getInventory().clear();
+                    }
+                    try (FileWriter fw = new FileWriter(filename)) {
+                        fw.write(output.toString());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        output.clear();
+                    }
                 }
             }
             case "fetchteam" -> {
