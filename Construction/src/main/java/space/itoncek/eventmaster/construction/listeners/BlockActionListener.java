@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.eventmaster.construction.BuildPlace;
@@ -28,38 +27,34 @@ public class BlockActionListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (buildPlace.active) {
-                        if (!buildPlace.display) {
-                            buildPlace.addPlayerBlockPoints(event.getPlayer(), event.getBlock().getLocation());
-                            if (buildPlace.matchPattern()) {
-                                for (Location location : buildPlace.getLocations()) {
-                                    location.getBlock().setType(Material.AIR);
-                                }
-                                buildPlace.active = false;
-                                buildPlace.reward();
 
-                                boolean finish = true;
-                                for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
-                                    if (place.active) {
-                                        finish = false;
-                                        break;
-                                    }
-                                }
+            if (buildPlace.active) {
+                if (!buildPlace.display) {
+                    buildPlace.addPlayerBlockPoints(event.getPlayer(), event.getBlock().getLocation());
+                    if (buildPlace.matchPattern()) {
+                        for (Location location : buildPlace.getLocations()) {
+                            location.getBlock().setType(Material.AIR);
+                        }
+                        buildPlace.deactivate();
+                        buildPlace.reward();
 
-                                if (finish) {
-                                    for (Player p : event.getPlayer().getLocation().getNearbyPlayers(20)) {
-                                        p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
-                                    }
-                                    teams.get(buildPlace.color).recycle();
-                                }
+                        boolean finish = true;
+                        for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
+                            if (place.active) {
+                                finish = false;
+                                break;
                             }
+                        }
+
+                        if (finish) {
+                            for (Player p : event.getPlayer().getLocation().getNearbyPlayers(20)) {
+                                p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+                            }
+                            teams.get(buildPlace.color).recycle();
                         }
                     }
                 }
-            }.runTaskLater(pl, 1L);
+            }
         }
     }
 
@@ -82,7 +77,7 @@ public class BlockActionListener implements Listener {
                                 for (Location location : buildPlace.getLocations()) {
                                     location.getBlock().setType(Material.AIR);
                                 }
-                                buildPlace.active = false;
+                                buildPlace.deactivate();
                                 buildPlace.reward();
 
                                 boolean finish = true;
@@ -98,11 +93,6 @@ public class BlockActionListener implements Listener {
                                         p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
                                     }
                                     teams.get(buildPlace.color).recycle();
-                                } else {
-                                    if (event.isDropItems()) {
-                                        event.getPlayer().getInventory().addItem(event.getBlock().getDrops().toArray(new ItemStack[0]));
-                                        event.setDropItems(false);
-                                    }
                                 }
                             }
                         }

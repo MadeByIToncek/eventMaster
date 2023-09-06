@@ -211,6 +211,7 @@ public class BuildPlace {
             String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints * mutliplier;
             sendCmd(cmd);
         }
+
         JSONObject output = new JSONObject();
         output.put("time", new JSONObject()
                 .put("start", patternStart)
@@ -218,6 +219,8 @@ public class BuildPlace {
                 .put("end", System.currentTimeMillis()));
         output.put("patternid", patternID);
         output.put("team", color.name());
+        output.put("totalPTS", totalPTS);
+        output.put("partPTS", partPTS);
         output.put("playershare", points);
 
         Construction.output.put(output);
@@ -230,9 +233,9 @@ public class BuildPlace {
     public void end() {
         setTeamBlock();
         active = false;
-        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
-            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "shine", 20f, 1f);
-        }
+//        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
+//            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "shine", 20f, 1f);
+//        }
     }
 
     public void setPattern(int i) {
@@ -270,6 +273,13 @@ public class BuildPlace {
             pattern = rotate90Degrees(pattern);
         }
         return output;
+    }
+
+    public void deactivate() {
+        active = false;
+        for (Location location : getLocations()) {
+            location.getBlock().setType(color.material);
+        }
     }
 }
 
