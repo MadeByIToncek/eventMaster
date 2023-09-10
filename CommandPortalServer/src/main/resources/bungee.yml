@@ -1,0 +1,3 @@
+name: CommandPortalServer
+version: '${project.version}'
+main: space.itoncek.eventmanager.commandportalserver.CommandPortalServer

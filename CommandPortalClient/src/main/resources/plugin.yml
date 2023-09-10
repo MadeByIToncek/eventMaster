@@ -1,0 +1,4 @@
+name: CommandPortalClient
+version: '${project.version}'
+main: space.itoncek.eventmanager.commandportalclient.CommandPortalClient
+api-version: '1.19'
