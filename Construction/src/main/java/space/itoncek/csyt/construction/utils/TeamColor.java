@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction.utils;
+package space.itoncek.csyt.construction.utils;
 
 import org.bukkit.Material;
 

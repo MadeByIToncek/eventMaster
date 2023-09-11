@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction.commands;
+package space.itoncek.csyt.construction.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -6,16 +6,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import space.itoncek.eventmaster.construction.BuildPlace;
-import space.itoncek.eventmaster.construction.TeamAssets;
-import space.itoncek.eventmaster.construction.utils.TeamColor;
+import space.itoncek.csyt.construction.BuildPlace;
+import space.itoncek.csyt.construction.TeamAssets;
+import space.itoncek.csyt.construction.utils.TeamColor;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
-import static space.itoncek.eventmaster.construction.Construction.*;
+import static space.itoncek.csyt.construction.Construction.*;
 
 public class GameCommand implements CommandExecutor {
     @Override

@@ -1,19 +1,19 @@
-package space.itoncek.eventmaster.construction;
+package space.itoncek.csyt.construction;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import space.itoncek.eventmaster.construction.utils.Orientation;
-import space.itoncek.eventmaster.construction.utils.TeamColor;
+import space.itoncek.csyt.construction.utils.Orientation;
+import space.itoncek.csyt.construction.utils.TeamColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static space.itoncek.eventmaster.construction.Construction.mutliplier;
-import static space.itoncek.eventmaster.construction.Construction.patterns;
+import static space.itoncek.csyt.construction.Construction.mutliplier;
+import static space.itoncek.csyt.construction.Construction.patterns;
 
 public class BuildPlace {
 

@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction.listeners;
+package space.itoncek.csyt.construction.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,18 +12,17 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import space.itoncek.eventmaster.construction.BuildPlace;
-import space.itoncek.eventmaster.construction.SimpleLocation;
-
-import static space.itoncek.eventmaster.construction.Construction.*;
+import space.itoncek.csyt.construction.BuildPlace;
+import space.itoncek.csyt.construction.Construction;
+import space.itoncek.csyt.construction.SimpleLocation;
 
 public class BlockActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
         if (event.getBlock().getWorld() == Bukkit.getWorld("construction")) {
-            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+            BuildPlace buildPlace = Construction.locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-            if (!blocking && (buildPlace == null || buildPlace.display)) {
+            if (!Construction.blocking && (buildPlace == null || buildPlace.display)) {
                 event.setCancelled(true);
                 return;
             }
@@ -39,7 +38,7 @@ public class BlockActionListener implements Listener {
                         buildPlace.reward();
 
                         boolean finish = true;
-                        for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
+                        for (BuildPlace place : Construction.teams.get(buildPlace.color).buildPlaces()) {
                             if (place.active) {
                                 finish = false;
                                 break;
@@ -48,9 +47,9 @@ public class BlockActionListener implements Listener {
 
                         if (finish) {
                             for (Player p : event.getPlayer().getLocation().getNearbyPlayers(20)) {
-                                p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+                                p.playSound(Construction.teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
                             }
-                            teams.get(buildPlace.color).recycle();
+                            Construction.teams.get(buildPlace.color).recycle();
                         }
                     }
                 }
@@ -61,9 +60,9 @@ public class BlockActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(@NotNull BlockBreakEvent event) {
         if (event.getBlock().getWorld() == Bukkit.getWorld("construction")) {
-            BuildPlace buildPlace = locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
+            BuildPlace buildPlace = Construction.locationHash.get(SimpleLocation.createSimpleLocation(event.getBlock()));
 
-            if (!blocking && (buildPlace == null || buildPlace.display)) {
+            if (!Construction.blocking && (buildPlace == null || buildPlace.display)) {
                 event.setCancelled(true);
                 return;
             }
@@ -81,7 +80,7 @@ public class BlockActionListener implements Listener {
                                 buildPlace.reward();
 
                                 boolean finish = true;
-                                for (BuildPlace place : teams.get(buildPlace.color).buildPlaces()) {
+                                for (BuildPlace place : Construction.teams.get(buildPlace.color).buildPlaces()) {
                                     if (place.active) {
                                         finish = false;
                                         break;
@@ -90,15 +89,15 @@ public class BlockActionListener implements Listener {
 
                                 if (finish) {
                                     for (Player p : event.getPlayer().getLocation().getNearbyPlayers(20)) {
-                                        p.playSound(teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
+                                        p.playSound(Construction.teams.get(buildPlace.color).display().getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
                                     }
-                                    teams.get(buildPlace.color).recycle();
+                                    Construction.teams.get(buildPlace.color).recycle();
                                 }
                             }
                         }
                     }
                 }
-            }.runTaskLater(pl, 1L);
+            }.runTaskLater(Construction.pl, 1L);
         }
     }
 }

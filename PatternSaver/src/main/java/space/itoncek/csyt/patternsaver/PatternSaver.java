@@ -1,4 +1,4 @@
-package space.itoncek.eventmanager.patternsaver;
+package space.itoncek.csyt.patternsaver;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

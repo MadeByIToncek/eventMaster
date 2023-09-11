@@ -1,21 +1,21 @@
-package space.itoncek.eventmaster.construction;
+package space.itoncek.csyt.construction;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
-import space.itoncek.eventmaster.construction.commands.DevelopmentCommand;
-import space.itoncek.eventmaster.construction.commands.GameCommand;
-import space.itoncek.eventmaster.construction.commands.autofill.ConstructionAutofill;
-import space.itoncek.eventmaster.construction.debug.ParticleRunnable;
-import space.itoncek.eventmaster.construction.listeners.BlockActionListener;
-import space.itoncek.eventmaster.construction.utils.TeamColor;
+import space.itoncek.csyt.construction.commands.DevelopmentCommand;
+import space.itoncek.csyt.construction.commands.GameCommand;
+import space.itoncek.csyt.construction.commands.autofill.ConstructionAutofill;
+import space.itoncek.csyt.construction.debug.ParticleRunnable;
+import space.itoncek.csyt.construction.listeners.BlockActionListener;
+import space.itoncek.csyt.construction.utils.TeamColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static space.itoncek.eventmaster.construction.config.ConfigManager.*;
+import static space.itoncek.csyt.construction.config.ConfigManager.*;
 
 public final class Construction extends JavaPlugin {
 

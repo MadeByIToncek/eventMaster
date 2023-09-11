@@ -1,4 +1,4 @@
-package space.itoncek.eventmanager.commandportalserver;
+package space.itoncek.csyt.commandportalserver;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;

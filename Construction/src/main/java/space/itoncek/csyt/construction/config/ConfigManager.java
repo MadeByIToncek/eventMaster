@@ -1,11 +1,11 @@
-package space.itoncek.eventmaster.construction.config;
+package space.itoncek.csyt.construction.config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import space.itoncek.eventmaster.construction.BuildPlace;
-import space.itoncek.eventmaster.construction.Pattern;
+import space.itoncek.csyt.construction.BuildPlace;
+import space.itoncek.csyt.construction.Pattern;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction.commands.autofill;
+package space.itoncek.csyt.construction.commands.autofill;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import space.itoncek.eventmaster.construction.utils.TeamColor;
+import space.itoncek.csyt.construction.utils.TeamColor;
 
 import java.util.ArrayList;
 import java.util.List;

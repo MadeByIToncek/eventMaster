@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction;
+package space.itoncek.csyt.construction;
 
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;

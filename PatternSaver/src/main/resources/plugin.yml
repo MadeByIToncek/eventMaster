@@ -1,4 +1,4 @@
 name: PatternSaver
 version: '${project.version}'
-main: space.itoncek.eventmanager.patternsaver.PatternSaver
+main: space.itoncek.csyt.patternsaver.PatternSaver
 api-version: '1.19'

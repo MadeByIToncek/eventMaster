@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction.debug;
+package space.itoncek.csyt.construction.debug;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;

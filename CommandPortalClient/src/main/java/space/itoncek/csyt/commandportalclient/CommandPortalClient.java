@@ -1,4 +1,4 @@
-package space.itoncek.eventmanager.commandportalclient;
+package space.itoncek.csyt.commandportalclient;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

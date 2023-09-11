@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction;
+package space.itoncek.csyt.construction;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

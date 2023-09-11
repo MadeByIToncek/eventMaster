@@ -1,4 +1,4 @@
-package space.itoncek.eventmaster.construction;
+package space.itoncek.csyt.construction;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -9,8 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static space.itoncek.eventmaster.construction.Construction.patterns;
 
 public final class TeamAssets {
     private BuildPlace display;
@@ -83,7 +81,7 @@ public final class TeamAssets {
             player.getInventory().addItem(enchant(Material.DIAMOND_SHOVEL));
         }
 
-        for (Material material : patterns.get(nextID).materials()) {
+        for (Material material : Construction.patterns.get(nextID).materials()) {
             for (Player player : players) {
                 player.getInventory().addItem(new ItemStack(material, 64));
             }
