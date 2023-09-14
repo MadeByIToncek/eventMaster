@@ -1,45 +1,47 @@
 [
     {
         "materials": [
-            "CRAFTING_TABLE",
-            "BOOKSHELF",
-            "ENCHANTING_TABLE"
+            "CYAN_CONCRETE",
+            "GREEN_CONCRETE",
+            "GREEN_CONCRETE_POWDER",
+            "BROWN_CONCRETE",
+            "BROWN_CONCRETE_POWDER"
         ],
         "pattern": [
             [
-                "CRAFTING_TABLE",
-                "BOOKSHELF",
-                "BOOKSHELF",
-                "BOOKSHELF",
-                "CRAFTING_TABLE"
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "CYAN_CONCRETE"
             ],
             [
-                "BOOKSHELF",
-                "AIR",
-                "AIR",
-                "AIR",
-                "BOOKSHELF"
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE",
+                "CYAN_CONCRETE"
             ],
             [
-                "BOOKSHELF",
-                "AIR",
-                "ENCHANTING_TABLE",
-                "AIR",
-                "BOOKSHELF"
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "GREEN_CONCRETE",
+                "CYAN_CONCRETE"
             ],
             [
-                "BOOKSHELF",
-                "AIR",
-                "AIR",
-                "AIR",
-                "BOOKSHELF"
+                "CYAN_CONCRETE",
+                "CYAN_CONCRETE",
+                "BROWN_CONCRETE",
+                "CYAN_CONCRETE",
+                "CYAN_CONCRETE"
             ],
             [
-                "CRAFTING_TABLE",
-                "BOOKSHELF",
-                "BOOKSHELF",
-                "BOOKSHELF",
-                "CRAFTING_TABLE"
+                "CYAN_CONCRETE",
+                "BROWN_CONCRETE_POWDER",
+                "BROWN_CONCRETE",
+                "BROWN_CONCRETE",
+                "CYAN_CONCRETE"
             ]
         ],
         "id": 0
@@ -141,47 +143,45 @@
     },
     {
         "materials": [
-            "CYAN_CONCRETE",
-            "GREEN_CONCRETE",
-            "GREEN_CONCRETE_POWDER",
-            "BROWN_CONCRETE",
-            "BROWN_CONCRETE_POWDER"
+            "CRAFTING_TABLE",
+            "BOOKSHELF",
+            "ENCHANTING_TABLE"
         ],
         "pattern": [
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "CYAN_CONCRETE"
+                "CRAFTING_TABLE",
+                "BOOKSHELF",
+                "BOOKSHELF",
+                "BOOKSHELF",
+                "CRAFTING_TABLE"
             ],
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE",
-                "CYAN_CONCRETE"
+                "BOOKSHELF",
+                "AIR",
+                "AIR",
+                "AIR",
+                "BOOKSHELF"
             ],
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE",
-                "CYAN_CONCRETE"
+                "BOOKSHELF",
+                "AIR",
+                "ENCHANTING_TABLE",
+                "AIR",
+                "BOOKSHELF"
             ],
             [
-                "CYAN_CONCRETE",
-                "CYAN_CONCRETE",
-                "BROWN_CONCRETE",
-                "CYAN_CONCRETE",
-                "CYAN_CONCRETE"
+                "BOOKSHELF",
+                "AIR",
+                "AIR",
+                "AIR",
+                "BOOKSHELF"
             ],
             [
-                "CYAN_CONCRETE",
-                "BROWN_CONCRETE_POWDER",
-                "BROWN_CONCRETE",
-                "BROWN_CONCRETE",
-                "CYAN_CONCRETE"
+                "CRAFTING_TABLE",
+                "BOOKSHELF",
+                "BOOKSHELF",
+                "BOOKSHELF",
+                "CRAFTING_TABLE"
             ]
         ],
         "id": 3
