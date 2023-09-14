@@ -264,12 +264,12 @@ public class BuildPlace {
     private List<List<Material>> rotate(List<List<Material>> pattern) {
         int rot = switch (orientation) {
             case WEST -> 0;
-            case NORTH -> 1;
+            case NORTH -> 2;
             case EAST -> 2;
             case SOUTH -> 3;
         };
         List<List<Material>> output = pattern;
-        if (rot > 0) for (int i = 0; i < rot; i++) {
+        if (rot > 0) for (int i = 0; i <= rot; i++) {
             pattern = rotate90Degrees(pattern);
         }
         return output;

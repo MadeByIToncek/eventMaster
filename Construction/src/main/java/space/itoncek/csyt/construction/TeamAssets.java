@@ -65,11 +65,14 @@ public final class TeamAssets {
         return itemStack;
     }
 
+    public void reset() {
+        currentID = -1;
+        recycle();
+    }
     //todo
     public void recycle() {
         int nextID = currentID + 1;
         display.setPattern(nextID);
-
         for (BuildPlace buildPlace : buildPlaces) {
             buildPlace.setPattern(nextID);
         }

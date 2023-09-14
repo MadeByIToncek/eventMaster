@@ -29,7 +29,7 @@ public class GameCommand implements CommandExecutor {
                         sendCmd("minigame_construction_fetchteam " + e.getKey().name().toLowerCase());
                     }
                     for (Map.Entry<TeamColor, TeamAssets> entry : teams.entrySet()) {
-                        entry.getValue().recycle();
+                        entry.getValue().reset();
                     }
                     active = true;
                 }
@@ -43,7 +43,6 @@ public class GameCommand implements CommandExecutor {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             p.getInventory().clear();
                         }
-
                     }
                 }
                 try (FileWriter fw = new FileWriter(filename)) {
