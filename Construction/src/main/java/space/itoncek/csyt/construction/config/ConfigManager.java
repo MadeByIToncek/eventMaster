@@ -59,20 +59,22 @@ public class ConfigManager {
         List<Pattern> output = new ArrayList<>();
         folderStuff();
         JSONArray object;
-        try (Scanner sc = new Scanner(new URL("https://cdn.itoncek.space/patterns/index.json").openStream())) {
+        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/index.json").openStream())) {
             StringJoiner sj = new StringJoiner("\n");
             while (sc.hasNextLine()) sj.add(sc.nextLine());
             object = new JSONArray(sj.toString());
             for (Object o : object) {
                 JSONObject raw = (JSONObject) o;
 
-                List<List<Material>> pattern = new ArrayList<>();
+                Material[][] pattern = new Material[5][5];
+                int x = 0;
                 for (Object row : raw.getJSONArray("pattern")) {
-                    List<Material> rows = new ArrayList<>();
+                    int z = 0;
                     for (Object s : ((JSONArray) row)) {
-                        rows.add(Material.valueOf((String) s));
+                        pattern[x][z] = Material.valueOf((String) s);
+                        z++;
                     }
-                    pattern.add(rows);
+                    x++;
                 }
                 List<Material> materials = new ArrayList<>();
                 for (Object mat : raw.getJSONArray("materials")) {

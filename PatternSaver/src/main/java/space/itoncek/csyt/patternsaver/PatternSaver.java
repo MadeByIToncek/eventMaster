@@ -17,13 +17,13 @@ import java.util.List;
 public final class PatternSaver extends JavaPlugin {
 
     @NotNull
-    private static JSONObject getJsonObject(List<List<Material>> lists, List<Material> materialsRequired, int i) {
+    private static JSONObject getJsonObject(Material[][] lists, List<Material> materialsRequired, int i) {
         JSONArray arr = new JSONArray();
         for (Material material : materialsRequired) {
             arr.put(material.name());
         }
         JSONArray pattern = new JSONArray();
-        for (List<Material> materials : lists) {
+        for (Material[] materials : lists) {
             JSONArray row = new JSONArray();
             for (Material material : materials) {
                 row.put(material.name());
@@ -40,45 +40,56 @@ public final class PatternSaver extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        long start = System.currentTimeMillis();
         new File("./patterns/").delete();
         // Plugin startup logic
-        List<List<List<Material>>> superList = new ArrayList<>();
-        for (int y = 110; y <= 186; y += 4) {
-            List<List<Material>> pseudolist = new ArrayList<>();
-            for (int x = -119; x <= -115; x++) {
-                List<Material> supraList = new ArrayList<>();
-                for (int z = -105; z <= -101; z++) {
-                    supraList.add(new Location(Bukkit.getWorld("world"), x, y, z).getBlock().getType());
-                }
-                pseudolist.add(supraList);
+        List<Integer> ys = new ArrayList<>();
+        for (int i = 70; i < 320; i += 4) {
+            if (getBlockAt(0, i, 0).equals(Material.ORANGE_GLAZED_TERRACOTTA)) {
+                ys.add(i);
             }
-            superList.add(pseudolist);
         }
-
+        Material[][][] output = new Material[ys.size()][5][5];
         int i = 0;
+        for (Integer y : ys) {
+            for (int x = 1; x < 6; x++) {
+                for (int z = -2; z < 3; z++) {
+                    if (!getBlockAt(x, y + 1, z).equals(Material.ORANGE_GLAZED_TERRACOTTA))
+                        output[i][x - 1][z + 2] = getBlockAt(x, y + 1, z);
+                    else {
+                        output[i][x - 1][z + 2] = Material.AIR;
+                    }
+                }
+            }
+            i++;
+        }
         new File("./patterns/").mkdirs();
         try (FileWriter fw = new FileWriter("./patterns/index.json")) {
             JSONArray arrout = new JSONArray();
-            for (List<List<Material>> lists : superList) {
+            for (int pattern = 0; pattern < ys.size() - 1; pattern++) {
                 List<Material> materialsRequired = new ArrayList<>();
-                for (List<Material> materials : lists) {
+                System.out.println("Processing pattern #" + pattern);
+                for (Material[] materials : output[pattern]) {
                     for (Material material : materials) {
                         if (!materialsRequired.contains(material) && !material.equals(Material.AIR)) {
                             materialsRequired.add(material);
                         }
                     }
                 }
-                JSONObject object = getJsonObject(lists, materialsRequired, i);
-                arrout.put(object);
-                i++;
+                JSONObject object = getJsonObject(output[pattern], materialsRequired, pattern);
+                if (!materialsRequired.isEmpty()) arrout.put(object);
             }
             fw.write(arrout.toString(4));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         Bukkit.getServer().shutdown();
+        System.out.println("Saved in " + (System.currentTimeMillis() - start) + "ms");
     }
 
+    public Material getBlockAt(int x, int y, int z) {
+        return new Location(Bukkit.getWorld("world"), x, y, z).getBlock().getType();
+    }
     @Override
     public void onDisable() {
         // Plugin shutdown logic

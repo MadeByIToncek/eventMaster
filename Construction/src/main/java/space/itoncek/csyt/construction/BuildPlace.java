@@ -30,7 +30,7 @@ public class BuildPlace {
      */
     public final TeamColor color;
     public boolean active;
-    public List<List<Material>> pattern;
+    public Material[][] pattern;
     public HashMap<Location, Player> locationPlayerHashMap = new HashMap<>(25);
     public int patternID;
     public long patternStart;
@@ -57,7 +57,7 @@ public class BuildPlace {
             Orientation ori = obj.getEnum(Orientation.class, "orientation");
             TeamColor tc = obj.getEnum(TeamColor.class, "color");
             boolean disp = obj.getBoolean("display");
-
+            System.out.println("----> " + tc.name() + " has " + ori.name() + "<-----");
             JSONObject locObj = obj.getJSONObject("loc");
             Location loc = new Location(Bukkit.getWorld(locObj.getString("world")),
                     locObj.getInt("x"),
@@ -96,7 +96,7 @@ public class BuildPlace {
         boolean out = true;
         for (int x = 0; x < 5; x++) {
             for (int z = 0; z < 5; z++) {
-                Material expect = pattern.get(x).get(z);
+                Material expect = pattern[x][z];
                 if (!isMaterial(x, z, expect)) out = false;
             }
         }
@@ -173,14 +173,26 @@ public class BuildPlace {
         return mat.equals(loc.getBlock().getType());
     }
 
-    public static List<List<Material>> rotate90Degrees(List<List<Material>> input) {
-        List<List<Material>> output = new ArrayList<>();
-        for (List<Material> row : input) {
-            List<Material> rotatedRow = new ArrayList<>();
-            for (int j = row.size() - 1; j >= 0; j--) rotatedRow.add(row.get(j));
-            output.add(rotatedRow);
-        }
-        return output;
+    private Material[][] rotateClockWise(Material[][] matrix) {
+        int size = matrix.length;
+        Material[][] ret = new Material[size][size];
+
+        for (int i = 0; i < size; ++i)
+            for (int j = 0; j < size; ++j)
+                ret[i][j] = matrix[size - j - 1][i]; //***
+
+        return ret;
+    }
+
+    private Material[][] rotateCounterClockWise(Material[][] matrix) {
+        int size = matrix.length;
+        Material[][] ret = new Material[size][size];
+
+        for (int i = 0; i < size; ++i)
+            for (int j = 0; j < size; ++j)
+                ret[i][j] = matrix[j][size - i - 1]; //***
+
+        return ret;
     }
 
     public void clr() {
@@ -243,14 +255,11 @@ public class BuildPlace {
         this.patternID = i;
         clr();
         if (this.display) {
-            int x = 0;
-            for (List<Material> materials : pattern) {
-                int z = 0;
-                for (Material material : materials) {
-                    getRelLoc(x, z).getBlock().setType(material);
-                    z++;
+            int size = pattern.length;
+            for (int x = 0; x < size; x++) {
+                for (int z = 0; z < size; z++) {
+                    getRelLoc(x, z).getBlock().setType(pattern[x][z]);
                 }
-                x++;
             }
         }
         this.active = true;
@@ -261,18 +270,12 @@ public class BuildPlace {
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), cmd);
     }
 
-    private List<List<Material>> rotate(List<List<Material>> pattern) {
-        int rot = switch (orientation) {
-            case WEST -> 0;
-            case NORTH -> 2;
-            case EAST -> 2;
-            case SOUTH -> 3;
+    private Material[][] rotate(Material[][] pattern) {
+//        return pattern;
+        return switch (orientation) {
+            case WEST, EAST -> pattern;
+            case NORTH, SOUTH -> rotateCounterClockWise(pattern);
         };
-        List<List<Material>> output = pattern;
-        if (rot > 0) for (int i = 0; i <= rot; i++) {
-            pattern = rotate90Degrees(pattern);
-        }
-        return output;
     }
 
     public void deactivate() {
