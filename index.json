@@ -1,47 +1,46 @@
 [
     {
         "materials": [
-            "CYAN_CONCRETE",
-            "GREEN_CONCRETE",
-            "GREEN_CONCRETE_POWDER",
-            "BROWN_CONCRETE",
-            "BROWN_CONCRETE_POWDER"
+            "LIGHT_GRAY_CONCRETE",
+            "BLACK_CONCRETE",
+            "BLACK_CONCRETE_POWDER",
+            "WHITE_CONCRETE"
         ],
         "pattern": [
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "CYAN_CONCRETE"
+                "LIGHT_GRAY_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE_POWDER",
+                "BLACK_CONCRETE",
+                "LIGHT_GRAY_CONCRETE"
             ],
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE",
-                "CYAN_CONCRETE"
+                "LIGHT_GRAY_CONCRETE",
+                "WHITE_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE"
             ],
             [
-                "CYAN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE",
-                "CYAN_CONCRETE"
+                "LIGHT_GRAY_CONCRETE",
+                "WHITE_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE"
             ],
             [
-                "CYAN_CONCRETE",
-                "CYAN_CONCRETE",
-                "BROWN_CONCRETE",
-                "CYAN_CONCRETE",
-                "CYAN_CONCRETE"
+                "LIGHT_GRAY_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE",
+                "BLACK_CONCRETE_POWDER",
+                "LIGHT_GRAY_CONCRETE"
             ],
             [
-                "CYAN_CONCRETE",
-                "BROWN_CONCRETE_POWDER",
-                "BROWN_CONCRETE",
-                "BROWN_CONCRETE",
-                "CYAN_CONCRETE"
+                "LIGHT_GRAY_CONCRETE",
+                "BLACK_CONCRETE_POWDER",
+                "LIGHT_GRAY_CONCRETE",
+                "BLACK_CONCRETE",
+                "LIGHT_GRAY_CONCRETE"
             ]
         ],
         "id": 0
@@ -93,53 +92,95 @@
     },
     {
         "materials": [
-            "LAPIS_BLOCK",
-            "IRON_BLOCK",
-            "COAL_BLOCK",
-            "REDSTONE_BLOCK",
-            "NETHERITE_BLOCK",
-            "EMERALD_BLOCK",
-            "GOLD_BLOCK",
-            "DIAMOND_BLOCK"
+            "LIGHT_BLUE_CONCRETE",
+            "PINK_CONCRETE",
+            "WHITE_CONCRETE"
         ],
         "pattern": [
             [
-                "LAPIS_BLOCK",
-                "IRON_BLOCK",
-                "COAL_BLOCK",
-                "REDSTONE_BLOCK",
-                "NETHERITE_BLOCK"
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE"
             ],
             [
-                "EMERALD_BLOCK",
-                "GOLD_BLOCK",
-                "NETHERITE_BLOCK",
-                "LAPIS_BLOCK",
-                "GOLD_BLOCK"
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE"
             ],
             [
-                "GOLD_BLOCK",
-                "LAPIS_BLOCK",
-                "EMERALD_BLOCK",
-                "IRON_BLOCK",
-                "COAL_BLOCK"
+                "WHITE_CONCRETE",
+                "WHITE_CONCRETE",
+                "WHITE_CONCRETE",
+                "WHITE_CONCRETE",
+                "WHITE_CONCRETE"
             ],
             [
-                "EMERALD_BLOCK",
-                "DIAMOND_BLOCK",
-                "IRON_BLOCK",
-                "DIAMOND_BLOCK",
-                "NETHERITE_BLOCK"
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE",
+                "PINK_CONCRETE"
             ],
             [
-                "GOLD_BLOCK",
-                "REDSTONE_BLOCK",
-                "NETHERITE_BLOCK",
-                "IRON_BLOCK",
-                "EMERALD_BLOCK"
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE",
+                "LIGHT_BLUE_CONCRETE"
             ]
         ],
         "id": 2
+    },
+    {
+        "materials": [
+            "CYAN_CONCRETE",
+            "GREEN_CONCRETE",
+            "GREEN_CONCRETE_POWDER",
+            "BROWN_CONCRETE",
+            "BROWN_CONCRETE_POWDER"
+        ],
+        "pattern": [
+            [
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "CYAN_CONCRETE"
+            ],
+            [
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE",
+                "CYAN_CONCRETE"
+            ],
+            [
+                "CYAN_CONCRETE",
+                "GREEN_CONCRETE",
+                "GREEN_CONCRETE_POWDER",
+                "GREEN_CONCRETE",
+                "CYAN_CONCRETE"
+            ],
+            [
+                "CYAN_CONCRETE",
+                "CYAN_CONCRETE",
+                "BROWN_CONCRETE",
+                "CYAN_CONCRETE",
+                "CYAN_CONCRETE"
+            ],
+            [
+                "CYAN_CONCRETE",
+                "BROWN_CONCRETE_POWDER",
+                "BROWN_CONCRETE",
+                "BROWN_CONCRETE",
+                "CYAN_CONCRETE"
+            ]
+        ],
+        "id": 3
     },
     {
         "materials": [
@@ -182,52 +223,6 @@
                 "BOOKSHELF",
                 "BOOKSHELF",
                 "CRAFTING_TABLE"
-            ]
-        ],
-        "id": 3
-    },
-    {
-        "materials": [
-            "LIGHT_GRAY_CONCRETE",
-            "BLACK_CONCRETE",
-            "BLACK_CONCRETE_POWDER",
-            "WHITE_CONCRETE"
-        ],
-        "pattern": [
-            [
-                "LIGHT_GRAY_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE_POWDER",
-                "BLACK_CONCRETE",
-                "LIGHT_GRAY_CONCRETE"
-            ],
-            [
-                "LIGHT_GRAY_CONCRETE",
-                "WHITE_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE"
-            ],
-            [
-                "LIGHT_GRAY_CONCRETE",
-                "WHITE_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE"
-            ],
-            [
-                "LIGHT_GRAY_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE",
-                "BLACK_CONCRETE_POWDER",
-                "LIGHT_GRAY_CONCRETE"
-            ],
-            [
-                "LIGHT_GRAY_CONCRETE",
-                "BLACK_CONCRETE_POWDER",
-                "LIGHT_GRAY_CONCRETE",
-                "BLACK_CONCRETE",
-                "LIGHT_GRAY_CONCRETE"
             ]
         ],
         "id": 4
@@ -371,8 +366,8 @@
     {
         "materials": [
             "YELLOW_CONCRETE",
-            "WHITE_CONCRETE",
-            "BLACK_CONCRETE"
+            "BLACK_CONCRETE",
+            "WHITE_CONCRETE"
         ],
         "pattern": [
             [
@@ -384,7 +379,7 @@
             ],
             [
                 "YELLOW_CONCRETE",
-                "YELLOW_CONCRETE",
+                "BLACK_CONCRETE",
                 "YELLOW_CONCRETE",
                 "AIR",
                 "AIR"
@@ -398,7 +393,7 @@
             ],
             [
                 "YELLOW_CONCRETE",
-                "BLACK_CONCRETE",
+                "YELLOW_CONCRETE",
                 "YELLOW_CONCRETE",
                 "AIR",
                 "AIR"
@@ -863,51 +858,5 @@
             ]
         ],
         "id": 18
-    },
-    {
-        "materials": [
-            "RED_CONCRETE_POWDER",
-            "GREEN_CONCRETE_POWDER",
-            "RED_CONCRETE",
-            "GREEN_CONCRETE"
-        ],
-        "pattern": [
-            [
-                "AIR",
-                "AIR",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "GREEN_CONCRETE_POWDER"
-            ],
-            [
-                "AIR",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "GREEN_CONCRETE_POWDER"
-            ],
-            [
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE",
-                "GREEN_CONCRETE"
-            ],
-            [
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE_POWDER",
-                "RED_CONCRETE",
-                "RED_CONCRETE",
-                "GREEN_CONCRETE"
-            ],
-            [
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE_POWDER",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE",
-                "GREEN_CONCRETE"
-            ]
-        ],
-        "id": 19
     }
 ]
