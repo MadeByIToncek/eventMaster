@@ -173,17 +173,6 @@ public class BuildPlace {
         return mat.equals(loc.getBlock().getType());
     }
 
-    private Material[][] rotateClockWise(Material[][] matrix) {
-        int size = matrix.length;
-        Material[][] ret = new Material[size][size];
-
-        for (int i = 0; i < size; ++i)
-            for (int j = 0; j < size; ++j)
-                ret[i][j] = matrix[size - j - 1][i]; //***
-
-        return ret;
-    }
-
     private Material[][] rotateCounterClockWise(Material[][] matrix) {
         int size = matrix.length;
         Material[][] ret = new Material[size][size];
@@ -193,6 +182,14 @@ public class BuildPlace {
                 ret[i][j] = matrix[j][size - i - 1]; //***
 
         return ret;
+    }
+
+    public static Material[][] mirror(Material[][] in) {
+        Material[][] out = new Material[in.length][in.length];
+        for (int i = 0; i < in.length; i++) {
+            System.arraycopy(in[i], 0, out[in.length - i - 1], 0, in.length);
+        }
+        return out;
     }
 
     public void clr() {
@@ -243,7 +240,7 @@ public class BuildPlace {
     }
 
     public void end() {
-        setTeamBlock();
+        clr();
         active = false;
 //        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
 //            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "shine", 20f, 1f);
@@ -274,7 +271,8 @@ public class BuildPlace {
 //        return pattern;
         return switch (orientation) {
             case WEST, EAST -> pattern;
-            case NORTH, SOUTH -> rotateCounterClockWise(pattern);
+            case NORTH -> rotateCounterClockWise(pattern);
+            case SOUTH -> mirror(rotateCounterClockWise(pattern));
         };
     }
 

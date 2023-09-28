@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.csyt.construction.BuildPlace;
 import space.itoncek.csyt.construction.TeamAssets;
+import space.itoncek.csyt.construction.config.ConfigManager;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
 import java.io.FileWriter;
@@ -72,6 +73,7 @@ public class GameCommand implements CommandExecutor {
                     sendCmd("minigame_construction_fetchteam " + e.getKey().name().toLowerCase());
                 }
             }
+            case "reloadpatterns" -> patterns = ConfigManager.loadPatterns();
             case "setmutliplier" -> {
                 sender.sendMessage("Multiplier set to " + Float.parseFloat(args[1]));
                 mutliplier = Float.parseFloat(args[1]);
