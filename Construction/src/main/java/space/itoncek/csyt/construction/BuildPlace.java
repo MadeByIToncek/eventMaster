@@ -1,18 +1,17 @@
 package space.itoncek.csyt.construction;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import space.itoncek.csyt.construction.utils.Orientation;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static space.itoncek.csyt.construction.Construction.mutliplier;
 import static space.itoncek.csyt.construction.Construction.patterns;
 
 public class BuildPlace {
@@ -205,37 +204,29 @@ public class BuildPlace {
     }
 
     public void reward() {
-        int totalPTS = 200;
-        HashMap<Player, Integer> map = new HashMap<>();
-        int partPTS = totalPTS / locationPlayerHashMap.size();
+        int totalPTS = 25;
+        int remaining = totalPTS;
+
+        HashMap<Player, Integer> points = new HashMap<>(25);
 
         for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
-            map.put(entry.getValue(), map.getOrDefault(entry.getValue(), 0) + 1);
+            points.put(entry.getValue(), points.getOrDefault(entry.getValue(), 0) + 1);
         }
 
-        JSONArray points = new JSONArray();
-        for (Map.Entry<Player, Integer> e : map.entrySet()) {
-            int finalPoints = partPTS * e.getValue();
-            points.put(new JSONObject().put("name", e.getKey().getName()).put("pts", e.getValue()));
-            String cmd = "ptsadd " + e.getKey().getName() + " " + finalPoints * mutliplier;
-            sendCmd(cmd);
+        TreeSet<Points> pts = new TreeSet<>();
+
+        for (Map.Entry<Player, Integer> entry : points.entrySet()) {
+            remaining -= entry.getValue();
+            sendCmd("ptsadd " + entry.getKey().getName() + " " + entry.getValue());
+            pts.add(new Points(entry.getKey(), entry.getValue()));
         }
 
-        JSONObject output = new JSONObject();
-        output.put("time", new JSONObject()
-                .put("start", patternStart)
-                .put("duration", System.currentTimeMillis() - patternStart)
-                .put("end", System.currentTimeMillis()));
-        output.put("patternid", patternID);
-        output.put("team", color.name());
-        output.put("totalPTS", totalPTS);
-        output.put("partPTS", partPTS);
-        output.put("playershare", points);
-
-        Construction.output.put(output);
-        markerLocation.getWorld().spawnParticle(Particle.TOTEM, getRelLoc(2, 2).clone().add(0, 3, 0), 200, 2.5, 2.5, 2.5);
-        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
-            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 20f, 1f);
+        if (remaining > 0) {
+            Points last = pts.last();
+            sendCmd("ptsadd " + last.p().getName() + " " + remaining);
+        } else if (remaining < 0) {
+            Player iToncek = Bukkit.getPlayer("IToncek");
+            if (iToncek != null) iToncek.sendTitle("Team " + color.name(), "(" + -remaining + ")");
         }
     }
 
@@ -280,6 +271,18 @@ public class BuildPlace {
         active = false;
         for (Location location : getLocations()) {
             location.getBlock().setType(color.material);
+        }
+    }
+
+    record Points(Player p, int points) implements Comparable<Points> {
+        @Override
+        public int compareTo(@NotNull BuildPlace.Points o) {
+            return points - o.points;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj.equals(p);
         }
     }
 }

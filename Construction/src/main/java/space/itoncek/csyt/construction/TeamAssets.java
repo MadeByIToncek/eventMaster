@@ -72,6 +72,12 @@ public final class TeamAssets {
     //todo
     public void recycle() {
         int nextID = currentID + 1;
+
+        if (nextID > Construction.patterns.size()) {
+            finish();
+            return;
+        }
+
         display.setPattern(nextID);
         for (BuildPlace buildPlace : buildPlaces) {
             buildPlace.setPattern(nextID);
@@ -94,5 +100,9 @@ public final class TeamAssets {
             p.playSound(display.getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
         }
         currentID = nextID;
+    }
+
+    public void finish() {
+
     }
 }
