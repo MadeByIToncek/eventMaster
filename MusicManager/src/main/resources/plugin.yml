@@ -2,3 +2,6 @@ name: MusicManager
 version: '${project.version}'
 main: space.itoncek.eventmanager.musicmanager.MusicManager
 api-version: '1.19'
+commands:
+  reloadAdvancements:
+    permission: minecraft.op

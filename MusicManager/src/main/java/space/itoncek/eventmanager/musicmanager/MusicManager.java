@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.eventmanager.musicmanager.commands.ReloadCommand;
 import space.itoncek.eventmanager.musicmanager.sponsors.Sponsors;
 import space.itoncek.eventmanager.musicmanager.sponsors.TamHost;
 import space.itoncek.eventmanager.musicmanager.sponsors.TenM;
@@ -21,10 +22,10 @@ import java.util.StringJoiner;
 
 public final class MusicManager extends JavaPlugin {
 
-    private final AdvancementManager manager = new AdvancementManager(this);
+    public static AdvancementManager manager;
+    public static MusicManager pl;
 
-    @Override
-    public void onEnable() {
+    public static void reload() {
         File cfg = new File("./plugins/MusicManager/music.json");
         if (!cfg.getParentFile().exists()) cfg.getParentFile().mkdirs();
         if (!cfg.exists()) {
@@ -58,10 +59,10 @@ public final class MusicManager extends JavaPlugin {
         manager.createAll(true);
     }
 
-    public Advancement deserialize(JSONObject object) {
-        Advancement advancement = new Advancement(this, object.getString("id"));
+    public static Advancement deserialize(JSONObject object) {
+        Advancement advancement = new Advancement(pl, object.getString("id"));
 
-        advancement.setParent(new NamespacedKey(this, TenM.ID));
+        advancement.setParent(new NamespacedKey(pl, TenM.ID));
 
         advancement.setDisplay(x -> {
             x.setTitle(object.getString("name") + " by " + object.getString("author"));
@@ -75,7 +76,7 @@ public final class MusicManager extends JavaPlugin {
         return advancement;
     }
 
-    public JSONObject serialize(String id, String name, String author, String description, Material icon) {
+    public static JSONObject serialize(String id, String name, String author, String description, Material icon) {
         JSONObject object = new JSONObject();
 
         object.put("id", id);
@@ -85,6 +86,14 @@ public final class MusicManager extends JavaPlugin {
         object.put("icon", icon);
 
         return object;
+    }
+
+    @Override
+    public void onEnable() {
+        pl = this;
+        manager = new AdvancementManager(this);
+        getCommand("reloadAdvancements").setExecutor(new ReloadCommand());
+        reload();
     }
 
     @Override

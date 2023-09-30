@@ -22,6 +22,7 @@
         <module>CommandPortalClient</module>
         <module>CommandPortalServer</module>
         <module>MusicManager</module>
+        <module>ChunkLockPrototype</module>
     </modules>
 
 </project>
