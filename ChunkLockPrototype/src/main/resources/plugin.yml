@@ -2,3 +2,6 @@ name: ChunkLockPrototype
 version: '${project.version}'
 main: space.itoncek.eventmanager.chunklockprototype.ChunkLockPrototype
 api-version: '1.19'
+commands:
+  setupcl:
+  resetcl:
