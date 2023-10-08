@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Random;
 
 import static space.itoncek.eventmanager.chunklockprototype.ChunkLockPrototype.pl;
 
@@ -27,39 +26,40 @@ public class SetupCommand implements CommandExecutor {
                 for (int z = -Integer.parseInt(args[0]); z < Integer.parseInt(args[0]); z++) {
                     int finalX = x;
                     int finalZ = z;
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            World w = Objects.requireNonNull(Bukkit.getWorld("world"));
-                            Chunk c = w.getChunkAt(finalX, finalZ);
-                            Bukkit.getLogger().info("[CL] Adding chunk %d,%d".formatted(finalX, finalZ));
-                            JSONArray replacements = new JSONArray();
-                            for (int by = w.getMinHeight(); by <= w.getMaxHeight(); by++) {
-                                for (int bx = 0; bx < 16; bx++) {
-                                    for (int bz = 0; bz < 16; bz++) {
-                                        Block block = c.getBlock(bx, by, bz);
-                                        if ((bx == 0 || bx == 15 || bz == 0 || bz == 15)) {
-                                            JSONObject replacement = new JSONObject();
-                                            replacement.put("material", block.getType());
-                                            replacement.put("location", toJsonObject(block.getLocation()));
-                                            replacements.put(replacement);
-                                            block.setType(block.isSolid() ? Material.LIGHT_BLUE_CONCRETE : Material.LIGHT_BLUE_STAINED_GLASS);
+                    if (!(x == 0 && z == 0)) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                World w = Objects.requireNonNull(Bukkit.getWorld("world"));
+                                Chunk c = w.getChunkAt(finalX, finalZ);
+                                Bukkit.getLogger().info("[CL] Adding chunk %d,%d".formatted(finalX, finalZ));
+                                JSONArray replacements = new JSONArray();
+                                for (int by = w.getMinHeight(); by <= w.getMaxHeight(); by++) {
+                                    for (int bx = 0; bx < 16; bx++) {
+                                        for (int bz = 0; bz < 16; bz++) {
+                                            Block block = c.getBlock(bx, by, bz);
+                                            if ((bx == 0 || bx == 15 || bz == 0 || bz == 15)) {
+                                                JSONObject replacement = new JSONObject();
+                                                replacement.put("material", block.getType());
+                                                replacement.put("location", toJsonObject(block.getLocation()));
+                                                replacements.put(replacement);
+                                                block.setType(block.isSolid() ? Material.LIGHT_BLUE_CONCRETE : Material.LIGHT_BLUE_STAINED_GLASS);
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            File output = new File("./chunklock-cache/%d/%d.json".formatted(finalX, finalZ));
-                            if (!output.getParentFile().exists()) output.getParentFile().mkdirs();
-                            if (output.exists()) output.delete();
-                            try (FileWriter fw = new FileWriter(output)) {
-                                fw.write(replacements.toString());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                File output = new File("./chunklock-cache/%d/%d.json".formatted(finalX, finalZ));
+                                if (!output.getParentFile().exists()) output.getParentFile().mkdirs();
+                                if (output.exists()) output.delete();
+                                try (FileWriter fw = new FileWriter(output)) {
+                                    fw.write(replacements.toString());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-                        }
-                    }.runTaskLater(pl, Math.round(new Random().nextDouble(0.0, 4.0) * 20));
-
+                        }.runTask(pl);
+                    }
                 }
             }
 

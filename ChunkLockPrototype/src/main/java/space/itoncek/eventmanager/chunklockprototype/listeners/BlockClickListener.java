@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import static space.itoncek.eventmanager.chunklockprototype.commands.ResetCommand.resetChunk;
+
 public class BlockClickListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -14,7 +16,7 @@ public class BlockClickListener implements Listener {
                 if (event.getClickedBlock().getType().equals(Material.LIGHT_BLUE_STAINED_GLASS)) {
                     Block block = event.getClickedBlock();
 
-                    block.getChunk();
+                    resetChunk(block.getChunk().getX(), block.getChunk().getZ());
                 }
     }
 }
