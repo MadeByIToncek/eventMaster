@@ -63,7 +63,7 @@
         <dependency>
             <artifactId>bungeecord-api</artifactId>
             <groupId>net.md-5</groupId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.20-R0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
