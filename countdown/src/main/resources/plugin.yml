@@ -7,5 +7,6 @@ depend: [ WorldEdit ]
 authors: [ IToncek ]
 description: Plugin using WorldEdit to modify a countdown
 commands:
-  timer:
-  autotimer:
+  acd:
+  autocd:
+  autocountdown:

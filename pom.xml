@@ -15,14 +15,14 @@
     </properties>
 
     <modules>
-        <module>countdown</module>
         <module>Construction</module>
+        <module>MusicManager</module>
         <module>PatternSaver</module>
         <module>PointEvaluator</module>
+        <module>ChunkLockPrototype</module>
         <module>CommandPortalClient</module>
         <module>CommandPortalServer</module>
-        <module>MusicManager</module>
-        <module>ChunkLockPrototype</module>
+        <module>countdown</module>
     </modules>
 
 </project>

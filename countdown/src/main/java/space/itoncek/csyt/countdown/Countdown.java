@@ -3,7 +3,6 @@ package space.itoncek.csyt.countdown;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -12,33 +11,29 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static space.itoncek.csyt.countdown.LogicAdapter.getDigits;
 
 public final class Countdown extends JavaPlugin {
-    public static FileConfiguration config;
+    public static JSONObject config;
     public static Countdown pl;
 
     public static void setRemain(int rem, World world) {
         String digs = getDigits(rem);
         List<Action> actions = new ArrayList<>();
-        for (Integer i : List.of(0, 1, 3, 4)) {
-            int x = config.getInt("loc." + i + ".x");
-            int y = config.getInt("loc." + i + ".y");
-            int z = config.getInt("loc." + i + ".z");
-            Bukkit.broadcast(Component.text(x + " ; " + y + " ; " + z + " ; " + digs));
-            File file = new File(config.getString("schematic.prefix") + digs.charAt(i) + config.getString("schematic.suffix"));
+        for (Integer i : List.of(0, 1, 2, 3)) {
+            int x = config.getJSONObject("loc" + (i + 1)).getInt("x");
+            int y = config.getJSONObject("loc" + (i + 1)).getInt("y");
+            int z = config.getJSONObject("loc" + (i + 1)).getInt("z");
+            File file = new File(config.getJSONObject("schematic").getString("prefix") + digs.charAt(i) + config.getJSONObject("schematic").getString("suffix"));
             actions.add(new Action(file, x, y, z));
         }
 
@@ -75,16 +70,65 @@ public final class Countdown extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         pl = this;
-        Objects.requireNonNull(getCommand("timer")).setExecutor(new TimeCommand());
-        Objects.requireNonNull(getCommand("autotimer")).setExecutor(new AutoTimerCommand());
-        saveDefaultConfig();
-        config = getConfig();
-        setRemain(0, BukkitAdapter.adapt(Objects.requireNonNull(Bukkit.getWorld("world"))));
+        Objects.requireNonNull(getCommand("acd")).setExecutor(new ACDCommand());
+        Objects.requireNonNull(getCommand("acd")).setTabCompleter(new ACDHelper());
+        Objects.requireNonNull(getCommand("autocd")).setExecutor(new ACDCommand());
+        Objects.requireNonNull(getCommand("autocd")).setTabCompleter(new ACDHelper());
+        Objects.requireNonNull(getCommand("autocountdown")).setExecutor(new ACDCommand());
+        Objects.requireNonNull(getCommand("autocountdown")).setTabCompleter(new ACDHelper());
+        try {
+            config = setupConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.setEnabled(false);
+        }
+        //setRemain(0, BukkitAdapter.adapt(Objects.requireNonNull(Bukkit.getWorld("world"))));
     }
 
+    public JSONObject setupConfig() throws IOException {
+        File config = new File(this.getDataFolder().toPath() + "/config.json");
+        if (!config.getParentFile().exists()) this.getDataFolder().mkdirs();
+        if (!config.exists()) {
+            try (FileWriter fw = new FileWriter(config)) {
+                JSONObject def = new JSONObject();
+                def.put("loc1", new JSONObject().put("x", 0).put("y", 0).put("z", 0));
+                def.put("loc2", new JSONObject().put("x", 0).put("y", 0).put("z", 0));
+                def.put("loc3", new JSONObject().put("x", 0).put("y", 0).put("z", 0));
+                def.put("loc4", new JSONObject().put("x", 0).put("y", 0).put("z", 0));
+                def.put("world", "world");
+                def.put("schematic", new JSONObject().put("prefix", "./plugins/FastAsyncWorldEdit/schematics/numbers/").put("suffix", ".schem"));
+                fw.write(def.toString(4));
+            }
+        }
+        ;
+
+        try (Scanner sc = new Scanner(config)) {
+            StringJoiner js = new StringJoiner("\n");
+            while (sc.hasNextLine()) js.add(sc.nextLine());
+            return new JSONObject(js.toString());
+        }
+    }
+
+    public void unloadConfig(JSONObject data) throws IOException {
+        File config = new File(this.getDataFolder().toPath() + "/config.json");
+        if (!config.getParentFile().exists()) this.getDataFolder().mkdirs();
+        try (FileWriter fw = new FileWriter(config)) {
+            fw.write(data.toString(4));
+        }
+    }
+
+    public JSONObject reloadConfig(JSONObject data) throws IOException {
+        unloadConfig(data);
+        return setupConfig();
+    }
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        try {
+            unloadConfig(config);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
