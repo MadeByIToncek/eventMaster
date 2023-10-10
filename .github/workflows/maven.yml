@@ -25,15 +25,6 @@ jobs:
       contents: write
       security-events: write
 
-    strategy:
-      fail-fast: true
-      matrix:
-        language: [ 'java' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-        # Use only 'java' to analyze code written in Java, Kotlin or both
-        # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
@@ -71,15 +62,15 @@ jobs:
       with:
         name: plugins
         path: |
-          /ChunkLockPrototype/target/*.jar
-          /CommandPortalClient/target/*.jar
-          /CommandPortalServer/target/*.jar
-          /Construction/target/*.jar
-          /MusicManager/target/*.jar
-          /PatternSaver/target/*.jar
-          /PointEvaluator/target/*.jar
-          /countdown/target/*.jar
-          /index.json
+          ChunkLockPrototype/target/*.jar
+          CommandPortalClient/target/*.jar
+          CommandPortalServer/target/*.jar
+          Construction/target/*.jar
+          MusicManager/target/*.jar
+          PatternSaver/target/*.jar
+          PointEvaluator/target/*.jar
+          countdown/target/*.jar
+          index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -87,15 +78,15 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          /ChunkLockPrototype/target/*.jar
-          /CommandPortalClient/target/*.jar
-          /CommandPortalServer/target/*.jar
-          /Construction/target/*.jar
-          /MusicManager/target/*.jar
-          /PatternSaver/target/*.jar
-          /PointEvaluator/target/*.jar
-          /countdown/target/*.jar
-          /index.json
+          ChunkLockPrototype/target/*.jar
+          CommandPortalClient/target/*.jar
+          CommandPortalServer/target/*.jar
+          Construction/target/*.jar
+          MusicManager/target/*.jar
+          PatternSaver/target/*.jar
+          PointEvaluator/target/*.jar
+          countdown/target/*.jar
+          index.json
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
