@@ -1,6 +1,5 @@
 package space.itoncek.csyt.countdown;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +22,7 @@ public class ACDCommand implements CommandExecutor {
                 case "settime" -> {
                     if (args.length != 2) return true;
                     try {
-                        Countdown.setRemain(Integer.parseInt(args[1]), BukkitAdapter.adapt((Player) sender).getWorld());
+                        Countdown.setRemain(Integer.parseInt(args[1]));
                     } catch (NumberFormatException ignored) {
                     }
                 }
@@ -35,7 +34,7 @@ public class ACDCommand implements CommandExecutor {
                             @Override
                             public void run() {
                                 if (i[0] == 0) this.cancel();
-                                Countdown.setRemain(i[0], BukkitAdapter.adapt((Player) sender).getWorld());
+                                Countdown.setRemain(i[0]);
                                 i[0]--;
                             }
                         }.runTaskTimer(pl, 20L, 20L);

@@ -3,6 +3,7 @@ package space.itoncek.csyt.countdown;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -10,7 +11,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldedit.world.World;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
@@ -26,7 +27,7 @@ public final class Countdown extends JavaPlugin {
     public static JSONObject config;
     public static Countdown pl;
 
-    public static void setRemain(int rem, World world) {
+    public static void setRemain(int rem) {
         String digs = getDigits(rem);
         List<Action> actions = new ArrayList<>();
         for (Integer i : List.of(0, 1, 2, 3)) {
@@ -49,7 +50,7 @@ public final class Countdown extends JavaPlugin {
 
 
         try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder()
-                .world(world)
+                .world(BukkitAdapter.adapt(Objects.requireNonNull(Bukkit.getWorld(config.getString("world")))))
                 .maxBlocks(-1)
                 .build()) {
             for (Action action : actions) {
