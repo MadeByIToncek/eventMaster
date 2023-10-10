@@ -67,23 +67,19 @@ jobs:
         cache: 'maven'
     - name: Build with Maven
       run: mvn package --file pom.xml
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@v3
     - uses: actions/upload-artifact@v3
       with:
         name: plugins
         path: |
+          /ChunkLockPrototype/target/*.jar
           /CommandPortalClient/target/*.jar
           /CommandPortalServer/target/*.jar
           /Construction/target/*.jar
-          /countdown/target/*.jar
+          /MusicManager/target/*.jar
           /PatternSaver/target/*.jar
           /PointEvaluator/target/*.jar
+          /countdown/target/*.jar
+          /index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -91,5 +87,19 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          LICENSE.txt
-          /*/target/*.jar
+          /ChunkLockPrototype/target/*.jar
+          /CommandPortalClient/target/*.jar
+          /CommandPortalServer/target/*.jar
+          /Construction/target/*.jar
+          /MusicManager/target/*.jar
+          /PatternSaver/target/*.jar
+          /PointEvaluator/target/*.jar
+          /countdown/target/*.jar
+          /index.json
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
+      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    - name: Update dependency graph
+      uses: advanced-security/maven-dependency-submission-action@v3
