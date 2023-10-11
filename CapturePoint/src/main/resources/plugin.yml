@@ -1,4 +1,4 @@
 name: CP
 version: '${project.version}'
-main: space.itoncek.eventmanager.capturepoint.CP
+main: space.itoncek.eventmanager.capturepoint.CapturePoint
 api-version: '1.19'

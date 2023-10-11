@@ -3,6 +3,7 @@ package space.itoncek.csyt.patternsaver;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -40,12 +41,14 @@ public final class PatternSaver extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new WorldCreator("loadPatterns").createWorld();
+
         long start = System.currentTimeMillis();
         new File("./patterns/").delete();
         // Plugin startup logic
         List<Integer> ys = new ArrayList<>();
         for (int i = 70; i < 320; i += 4) {
-            if (getBlockAt(0, i, 0).equals(Material.ORANGE_GLAZED_TERRACOTTA)) {
+            if (getBlockAt("world", 0, i, 0).equals(Material.ORANGE_GLAZED_TERRACOTTA)) {
                 ys.add(i);
             }
         }
@@ -54,8 +57,8 @@ public final class PatternSaver extends JavaPlugin {
         for (Integer y : ys) {
             for (int x = 1; x < 6; x++) {
                 for (int z = -2; z < 3; z++) {
-                    if (!getBlockAt(x, y + 1, z).equals(Material.ORANGE_GLAZED_TERRACOTTA))
-                        output[i][x - 1][z + 2] = getBlockAt(x, y + 1, z);
+                    if (!getBlockAt("world", x, y + 1, z).equals(Material.ORANGE_GLAZED_TERRACOTTA))
+                        output[i][x - 1][z + 2] = getBlockAt("world", x, y + 1, z);
                     else {
                         output[i][x - 1][z + 2] = Material.AIR;
                     }
@@ -83,12 +86,40 @@ public final class PatternSaver extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        JSONArray pattern = new JSONArray();
+        for (int y = 0; y <= 8; y++) {
+            JSONArray progress = new JSONArray();
+            for (int x = -2; x <= 2; x++) {
+                JSONArray row = new JSONArray();
+                for (int z = -2; z <= 2; z++) {
+                    Material block = getBlockAt("loadPatterns", x, y, z);
+                    row.put(parse(block));
+                }
+                progress.put(row);
+            }
+            pattern.put(progress);
+        }
+        try (FileWriter fw = new FileWriter("./patterns/loading.json")) {
+            fw.write(pattern.toString(4));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
         Bukkit.getServer().shutdown();
         System.out.println("Saved in " + (System.currentTimeMillis() - start) + "ms");
     }
 
-    public Material getBlockAt(int x, int y, int z) {
-        return new Location(Bukkit.getWorld("world"), x, y, z).getBlock().getType();
+    private short parse(Material block) {
+        return switch (block) {
+            case LIME_STAINED_GLASS -> 2;
+            case MAGENTA_STAINED_GLASS -> 1;
+            default -> 0;
+        };
+    }
+
+    public Material getBlockAt(String world, int x, int y, int z) {
+        return new Location(Bukkit.getWorld(world), x, y, z).getBlock().getType();
     }
     @Override
     public void onDisable() {
