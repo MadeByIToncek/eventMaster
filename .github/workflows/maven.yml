@@ -49,6 +49,7 @@ jobs:
         rm MusicManager/target/original-*.jar
         rm PatternSaver/target/original-*.jar
         rm countdown/target/original-*.jar
+        rm CapturePoint/target/original-*.jar
     - uses: actions/upload-artifact@v3
       with:
         name: plugins
@@ -61,6 +62,7 @@ jobs:
           PatternSaver/target/*.jar
           PointEvaluator/target/*.jar
           countdown/target/*.jar
+          CapturePoint/target/*.jar
           index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -77,6 +79,7 @@ jobs:
           PatternSaver/target/*.jar
           PointEvaluator/target/*.jar
           countdown/target/*.jar
+          CapturePoint/target/*.jar
           index.json
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@v3

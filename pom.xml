@@ -23,6 +23,7 @@
         <module>CommandPortalClient</module>
         <module>CommandPortalServer</module>
         <module>countdown</module>
+        <module>CapturePoint</module>
     </modules>
 
 </project>

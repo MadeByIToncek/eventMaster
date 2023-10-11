@@ -10,7 +10,8 @@ import org.json.JSONObject;
 import space.itoncek.csyt.construction.utils.Orientation;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static space.itoncek.csyt.construction.Construction.patterns;
 
@@ -30,7 +31,6 @@ public class BuildPlace {
     public final TeamColor color;
     public boolean active;
     public Material[][] pattern;
-    public HashMap<Location, Player> locationPlayerHashMap = new HashMap<>(25);
     public int patternID;
     public long patternStart;
     public final boolean display;
@@ -137,10 +137,6 @@ public class BuildPlace {
         return res;
     }
 
-    public void addPlayerBlockPoints(Player p, Location loc) {
-        locationPlayerHashMap.put(loc, p);
-    }
-
     public Location getRelLoc(int x, int z) {
         if (x < 0 || x > 4 || z < 0 || z > 4) {
             return null;
@@ -203,31 +199,10 @@ public class BuildPlace {
         }
     }
 
-    public void reward() {
-        int totalPTS = 25;
-        int remaining = totalPTS;
-
-        HashMap<Player, Integer> points = new HashMap<>(25);
-
-        for (Map.Entry<Location, Player> entry : locationPlayerHashMap.entrySet()) {
-            points.put(entry.getValue(), points.getOrDefault(entry.getValue(), 0) + 1);
-        }
-
-        TreeSet<Points> pts = new TreeSet<>();
-
-        for (Map.Entry<Player, Integer> entry : points.entrySet()) {
-            remaining -= entry.getValue();
-            sendCmd("ptsadd " + entry.getKey().getName() + " " + entry.getValue());
-            pts.add(new Points(entry.getKey(), entry.getValue()));
-        }
-
-        if (remaining > 0) {
-            Points last = pts.last();
-            sendCmd("ptsadd " + last.p().getName() + " " + remaining);
-        } else if (remaining < 0) {
-            Player iToncek = Bukkit.getPlayer("IToncek");
-            if (iToncek != null) iToncek.sendTitle("Team " + color.name(), "(" + -remaining + ")");
-        }
+    public void reward(String player) {
+        String cmd = patterns.get(patternID).award(player);
+        Bukkit.getLogger().info(cmd);
+        sendCmd(cmd);
     }
 
     public void end() {

@@ -29,13 +29,12 @@ public class BlockActionListener implements Listener {
 
             if (buildPlace.active) {
                 if (!buildPlace.display) {
-                    buildPlace.addPlayerBlockPoints(event.getPlayer(), event.getBlock().getLocation());
                     if (buildPlace.matchPattern()) {
                         for (Location location : buildPlace.getLocations()) {
                             location.getBlock().setType(Material.AIR);
                         }
                         buildPlace.deactivate();
-                        buildPlace.reward();
+                        buildPlace.reward(event.getPlayer().getName());
 
                         boolean finish = true;
                         for (BuildPlace place : Construction.teams.get(buildPlace.color).buildPlaces()) {
@@ -71,13 +70,12 @@ public class BlockActionListener implements Listener {
                 public void run() {
                     if (buildPlace.active) {
                         if (!buildPlace.display) {
-                            buildPlace.addPlayerBlockPoints(event.getPlayer(), event.getBlock().getLocation());
                             if (buildPlace.matchPattern()) {
                                 for (Location location : buildPlace.getLocations()) {
                                     location.getBlock().setType(Material.AIR);
                                 }
                                 buildPlace.deactivate();
-                                buildPlace.reward();
+                                buildPlace.reward(event.getPlayer().getName());
 
                                 boolean finish = true;
                                 for (BuildPlace place : Construction.teams.get(buildPlace.color).buildPlaces()) {
