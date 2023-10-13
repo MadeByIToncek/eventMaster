@@ -85,9 +85,11 @@ public class CommandManager implements CommandExecutor {
                         }
                     }
                 }
+                //TODO: Fill up this funciton
                 case "start" -> {
 
                 }
+                //TODO: Fill up this funciton
                 case "stop" -> {
 
                 }

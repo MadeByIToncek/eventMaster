@@ -5,6 +5,7 @@ public class CapturePointManager {
 
     }
 
+    //TODO
     /**
      * Run to initialize surround checks and prepare point for game
      */
@@ -12,6 +13,7 @@ public class CapturePointManager {
 
     }
 
+    //TODO
     /**
      * Run every second to process new game changes since last "tick"
      */
@@ -19,6 +21,7 @@ public class CapturePointManager {
 
     }
 
+    //TODO
     /**
      * Runned internally to process win
      */
@@ -26,6 +29,7 @@ public class CapturePointManager {
 
     }
 
+    //TODO
     /**
      * Run at the end of every round to destroy this instance
      */
