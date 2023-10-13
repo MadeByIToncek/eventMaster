@@ -4,6 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import space.itoncek.eventmanager.capturepoint.utils.BlockState;
+
+import static space.itoncek.eventmanager.capturepoint.CapturePoint.blockStates;
+import static space.itoncek.eventmanager.capturepoint.CapturePoint.pl;
 
 public class CapturePointManager {
     private final CapturePointInstance instance;
@@ -29,14 +33,13 @@ public class CapturePointManager {
      * Run to initialize surround checks and prepare point for game
      */
     public void init() {
-
+        runnable.runTaskTimer(pl, 0, 20);
     }
     /**
      * Run every second to process new game changes since last "tick"
      */
     public void tick() {
         boolean redSneaking = false, blueSneaking = false;
-
         for (Player player : red.players) {
             if (instance.isInside(player.getLocation())) {
                 if (player.isSneaking()) {
@@ -53,21 +56,47 @@ public class CapturePointManager {
         }
         int sign = integerify(redSneaking, blueSneaking);
         state += sign;
-
-        Location center = instance.center();
-        int x = center.getBlockX(), y = center.getBlockY(), z = center.getBlockZ();
         int absState = Math.abs(state);
-        Material base = Material.MAGENTA_STAINED_GLASS;
-        Material fill;
-        if (sign > 0) fill = red.tc.material;
-        if (sign <= 0) fill = blue.tc.material;
 
+        if (absState < 9) {
+            Location center = instance.center();
+            int bx = center.getBlockX(), by = center.getBlockY(), bz = center.getBlockZ();
+            Material base = Material.MAGENTA_STAINED_GLASS;
+            Material fill = null;
+            if (sign > 0) fill = red.tc.material;
+            if (sign <= 0) fill = blue.tc.material;
+            BlockState[][] pattern = blockStates[absState];
+            for (int x = 0; x < 5; x++) {
+                for (int z = 0; z < 5; z++) {
+                    int xo = (x - 2) + bx, zo = (z - 2) + bz;
+                    BlockState state = pattern[x][z];
+                    setBlock(xo, by, zo, switch (state) {
+                        case KEEP -> null;
+                        case BASE -> base;
+                        case ACCENT -> fill;
+                    });
+                }
+            }
+
+            if (absState == 8) {
+                runnable.cancel();
+                win(state > 0);
+            }
+            ;
+        }
     }
+
+    private void setBlock(int x, int y, int z, Material mat) {
+        if (mat != null) {
+            new Location(instance.center().getWorld(), x, y, z).getBlock().setType(mat);
+        }
+    }
+
     //TODO
     /**
      * Runned internally to process win
      */
-    private void win() {
+    private void win(boolean red) {
 
     }
 
