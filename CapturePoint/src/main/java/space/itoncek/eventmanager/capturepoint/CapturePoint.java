@@ -3,20 +3,26 @@ package space.itoncek.eventmanager.capturepoint;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
+import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
 public final class CapturePoint extends JavaPlugin {
-    public static List<CapturePointInstance> instances = new ArrayList<>();
+    public static HashMap<Integer, CapturePointInstance> instances = new HashMap<>();
+    public static HashMap<Integer, CapturePointManager> managers = new HashMap<>();
+    public static HashMap<TeamColor, Team> teamMap = new HashMap<>();
     public static BlockState[][][] blockStates;
+    public static CapturePoint pl;
     @Override
     public void onEnable() {
         // Plugin startup logic
+        pl = this;
+        getCommand("capt").setExecutor(new CommandManager());
+        getCommand("capt").setTabCompleter(new CommandHelper());
         blockStates = loadPattern();
     }
 
