@@ -48,6 +48,7 @@ public class CapturePointManager {
                 }
             }
         }
+
         for (Player player : blue.players) {
             if (instance.isInside(player.getLocation())) {
                 if (player.isSneaking()) {
@@ -55,8 +56,10 @@ public class CapturePointManager {
                 }
             }
         }
+
         int sign = integerify(redSneaking, blueSneaking);
         state += sign;
+        int signstate = Math.round(Math.signum(state));
         int absState = Math.abs(state);
 
         if (absState < 9) {
@@ -64,8 +67,8 @@ public class CapturePointManager {
             int bx = center.getBlockX(), by = center.getBlockY(), bz = center.getBlockZ();
             Material base = Material.MAGENTA_STAINED_GLASS;
             Material fill = null;
-            if (sign > 0) fill = red.tc.material;
-            if (sign <= 0) fill = blue.tc.material;
+            if (signstate > 0) fill = red.tc.material;
+            if (signstate <= 0) fill = blue.tc.material;
             BlockState[][] pattern = blockStates[absState];
             for (int x = 0; x < 5; x++) {
                 for (int z = 0; z < 5; z++) {
@@ -95,6 +98,7 @@ public class CapturePointManager {
     //TODO
     /**
      * Runned internally to process win
+     * @param red if true, assuming red won this game
      */
     private void win(boolean red) {
 

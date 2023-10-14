@@ -9,6 +9,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static space.itoncek.eventmanager.capturepoint.CapturePoint.*;
 
 public class CommandManager implements CommandExecutor {
@@ -20,7 +24,7 @@ public class CommandManager implements CommandExecutor {
                     if (args.length > 1) {
                         switch (args[1]) {
                             case "setArenaCenter" -> {
-                                if (args.length == 6) {
+                                if (args.length == 7) {
                                     if (!instances.containsKey(Integer.parseInt(args[2]))) {
                                         instances.put(Integer.parseInt(args[2]), new CapturePointInstance(locFromArgs(args), null, null));
                                     } else {
@@ -31,7 +35,7 @@ public class CommandManager implements CommandExecutor {
                                 }
                             }
                             case "setArenaRegion1" -> {
-                                if (args.length == 6) {
+                                if (args.length == 7) {
                                     if (!instances.containsKey(Integer.parseInt(args[2]))) {
                                         instances.put(Integer.parseInt(args[2]), new CapturePointInstance(null, locFromArgs(args), null));
                                     } else {
@@ -42,14 +46,14 @@ public class CommandManager implements CommandExecutor {
                                 }
                             }
                             case "setArenaRegion2" -> {
-                                if (args.length == 6) {
+                                if (args.length == 7) {
                                     if (!instances.containsKey(Integer.parseInt(args[2]))) {
                                         instances.put(Integer.parseInt(args[2]), new CapturePointInstance(null, null, locFromArgs(args)));
                                     } else {
                                         CapturePointInstance capturePointInstance = instances.get(Integer.parseInt(args[2]));
                                         instances.put(Integer.parseInt(args[2]), new CapturePointInstance(capturePointInstance.center(), capturePointInstance.reg1(), locFromArgs(args)));
                                     }
-                                    sender.sendMessage("[CP] Region1 for instance " + args[2] + " successfully set!");
+                                    sender.sendMessage("[CP] Region2 for instance " + args[2] + " successfully set!");
                                 }
                             }
                             case "teams" -> {
@@ -61,23 +65,26 @@ public class CommandManager implements CommandExecutor {
                                     }).start();
                                 }
                             }
-                            case "teamloobpack" -> {
-                                if (args.length == 6) {
-                                    TeamColor tc = TeamColor.valueOf(args[2].toUpperCase());
-                                    Team t = new Team(playerify(args[3]), playerify(args[4]), playerify(args[5]), tc);
-                                    teamMap.put(tc, t);
+                            case "teamloopback" -> {
+                                TeamColor tc = TeamColor.valueOf(args[2].toUpperCase());
+                                List<Player> players = new ArrayList<>(3);
+                                for (int index = 3; index < args.length; index++) {
+                                    players.add(playerify(args[index]));
                                 }
+                                Team t = new Team(players, tc);
+                                sender.sendMessage("[CP] Adding players " + Arrays.toString(Arrays.stream(players.toArray(new Player[0])).map(Player::getName).toArray()) + " to team " + tc.name().toLowerCase() + "!");
+                                teamMap.put(tc, t);
                             }
                             case "create" -> {
                                 if (args.length == 5) {
                                     CapturePointInstance instance = instances.get(Integer.parseInt(args[2]));
                                     instances.remove(Integer.parseInt(args[2]));
-                                    managers.put(Integer.parseInt(args[2]), new CapturePointManager(instance, teamMap.get(TeamColor.valueOf(args[3].toUpperCase())), teamMap.get(TeamColor.valueOf(args[4]))));
+                                    managers.put(Integer.parseInt(args[2]), new CapturePointManager(instance, teamMap.get(TeamColor.valueOf(args[3].toUpperCase())), teamMap.get(TeamColor.valueOf(args[4].toUpperCase()))));
                                 }
                             }
                             case "destroy" -> {
-                                Integer id = Integer.valueOf(args[2]);
                                 if (args.length == 3) {
+                                    Integer id = Integer.valueOf(args[2]);
                                     managers.get(id).destroy();
                                     managers.remove(id);
                                 }
@@ -90,7 +97,7 @@ public class CommandManager implements CommandExecutor {
                         value.init();
                     }
                 }
-                //TODO: Fill up this funciton
+
                 case "stop" -> {
                     for (CapturePointManager value : managers.values()) {
                         value.destroy();

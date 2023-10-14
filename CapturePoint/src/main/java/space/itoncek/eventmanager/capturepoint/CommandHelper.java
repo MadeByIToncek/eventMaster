@@ -17,8 +17,8 @@ public class CommandHelper implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return switch (args.length) {
-            case 0 -> List.of("setup", "start", "stop");
-            case 1 -> switch (args[0]) {
+            case 1 -> List.of("setup", "start", "stop");
+            case 2 -> switch (args[0]) {
                 case "setup" ->
                         List.of("setArenaCenter", "setArenaRegion1", "setArenaRegion2", "teams", "create", "destroy");
                 case "start", "stop" -> List.of("");
@@ -28,21 +28,22 @@ public class CommandHelper implements TabCompleter {
                 if (args[0].equals("setup")) {
                     yield switch (args[1]) {
                         case "setArenaCenter", "setArenaRegion1", "setArenaRegion2" -> switch (args.length) {
-                            case 2 -> List.of("<arena id>");
-                            case 3 -> List.of("<x>");
-                            case 4 -> List.of("<y>");
-                            case 5 -> List.of("<z>");
+                            case 3 -> List.of("<arena id>");
+                            case 4 -> List.of("<world>");
+                            case 5 -> List.of("<x>");
+                            case 6 -> List.of("<y>");
+                            case 7 -> List.of("<z>");
                             default -> List.of();
                         };
                         case "create" -> switch (args.length) {
-                            case 2 -> {
+                            case 3 -> {
                                 List<String> out = new ArrayList<>();
                                 for (Integer i : instances.keySet()) {
                                     out.add(String.valueOf(i));
                                 }
                                 yield out;
                             }
-                            case 3, 4 -> {
+                            case 4, 5 -> {
                                 List<String> strings = new ArrayList<>();
                                 for (TeamColor value : TeamColor.values()) {
                                     strings.add(value.name().toLowerCase());

@@ -27,7 +27,7 @@ public final class CapturePoint extends JavaPlugin {
     }
 
     private BlockState[][][] loadPattern() {
-        BlockState[][][] out = new BlockState[8][5][5];
+        BlockState[][][] out = new BlockState[9][5][5];
         try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/loading.json").openStream())) {
             StringJoiner js = new StringJoiner("\n");
             while (sc.hasNextLine()) js.add(sc.nextLine());
