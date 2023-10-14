@@ -35,6 +35,7 @@ public class CapturePointManager {
     public void init() {
         runnable.runTaskTimer(pl, 0, 20);
     }
+
     /**
      * Run every second to process new game changes since last "tick"
      */
@@ -82,7 +83,6 @@ public class CapturePointManager {
                 runnable.cancel();
                 win(state > 0);
             }
-            ;
         }
     }
 

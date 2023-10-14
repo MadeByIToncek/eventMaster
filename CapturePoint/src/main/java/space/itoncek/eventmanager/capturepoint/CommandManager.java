@@ -92,7 +92,9 @@ public class CommandManager implements CommandExecutor {
                 }
                 //TODO: Fill up this funciton
                 case "stop" -> {
-
+                    for (CapturePointManager value : managers.values()) {
+                        value.destroy();
+                    }
                 }
             }
         }
