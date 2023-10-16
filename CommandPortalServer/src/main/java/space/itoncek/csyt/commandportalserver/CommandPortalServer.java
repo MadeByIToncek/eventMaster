@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.csyt.commandportalserver;
 
 import net.md_5.bungee.api.ProxyServer;

@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.eventmanager.chunklockprototype.commands;
 
 import org.bukkit.Bukkit;

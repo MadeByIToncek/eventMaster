@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.eventmanager.musicmanager.sponsors;
 
 import net.roxeez.advancement.Advancement;

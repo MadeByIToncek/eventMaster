@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.csyt.countdown;
 
 import com.sk89q.worldedit.EditSession;
