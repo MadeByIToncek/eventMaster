@@ -24,6 +24,7 @@
         <module>CommandPortalServer</module>
         <module>countdown</module>
         <module>CapturePoint</module>
+        <module>AnimationClient</module>
     </modules>
 
 </project>
