@@ -1,7 +1,0 @@
-name: AnimationClient
-version: '${project.version}'
-main: space.itoncek.csyt.animationclient.AnimationClient
-api-version: '1.19'
-commands:
-  anim:
-    permission: minecraft.op
