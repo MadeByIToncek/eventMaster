@@ -12,8 +12,8 @@ import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 import java.util.List;
 
 public class Team {
-    List<Player> players;
-    TeamColor tc;
+    final List<Player> players;
+    final TeamColor tc;
 
     public Team(List<Player> players, TeamColor tc) {
         this.players = players;

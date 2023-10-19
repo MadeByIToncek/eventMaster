@@ -30,7 +30,7 @@ public final class ChunkLockPrototype extends JavaPlugin {
     public static ChunkLockPrototype pl;
     public static List<Chunk> unlockedChunks = new ArrayList<>();
 
-    public static BukkitRunnable runnable = new BukkitRunnable() {
+    public static final BukkitRunnable runnable = new BukkitRunnable() {
         @Override
         public void run() {
             RegisteredServiceProvider<Spark> provider = Bukkit.getServicesManager().getRegistration(Spark.class);

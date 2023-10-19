@@ -29,7 +29,7 @@
         <module>CommandPortalServer</module>
         <module>countdown</module>
         <module>CapturePoint</module>
-        <module>AnimationClient</module>
+        <module>AcceptDiscordBot</module>
     </modules>
 
 </project>

@@ -33,15 +33,17 @@ public class ACDCommand implements CommandExecutor {
                     }
                 }
                 case "auto" -> {
-                    if (args.length != 2) return true;
+                    if (args.length != 3) return true;
                     try {
                         final int[] i = {Integer.parseInt(args[1])};
+                        EffectManager manager = new EffectManager();
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 if (i[0] == 0) this.cancel();
                                 Countdown.setRemain(i[0]);
                                 i[0]--;
+                                manager.runTaskNumber(i[0]);
                             }
                         }.runTaskTimer(pl, 20L, 20L);
                     } catch (NumberFormatException ignored) {

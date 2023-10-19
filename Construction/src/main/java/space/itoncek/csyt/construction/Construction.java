@@ -26,12 +26,12 @@ import static space.itoncek.csyt.construction.config.ConfigManager.*;
 public final class Construction extends JavaPlugin {
 
     public static List<BuildPlace> buildPlaces;
-    public static HashMap<SimpleLocation, BuildPlace> locationHash = new HashMap<>();
-    public static ParticleRunnable particles = new ParticleRunnable();
+    public static final HashMap<SimpleLocation, BuildPlace> locationHash = new HashMap<>();
+    public static final ParticleRunnable particles = new ParticleRunnable();
     public static List<Pattern> patterns = new ArrayList<>();
-    public static HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
+    public static final HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
     public static Construction pl;
-    public static JSONArray output = new JSONArray();
+    public static final JSONArray output = new JSONArray();
     public static boolean active = false;
     public static boolean blocking = false;
     public static float mutliplier = 1.0F;

@@ -50,6 +50,7 @@ jobs:
         rm PatternSaver/target/original-*.jar
         rm countdown/target/original-*.jar
         rm CapturePoint/target/original-*.jar
+        rm AcceptDiscordBot/target/original-*.jar
     - uses: actions/upload-artifact@v3
       with:
         name: plugins
@@ -63,6 +64,7 @@ jobs:
           PointEvaluator/target/*.jar
           countdown/target/*.jar
           CapturePoint/target/*.jar
+          AcceptDiscordBot/target/*.jar
           index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -80,6 +82,7 @@ jobs:
           PointEvaluator/target/*.jar
           countdown/target/*.jar
           CapturePoint/target/*.jar
+          AcceptDiscordBot/target/*.jar
           index.json
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@v3

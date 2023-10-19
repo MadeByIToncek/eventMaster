@@ -18,9 +18,9 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 
 public final class CapturePoint extends JavaPlugin {
-    public static HashMap<Integer, CapturePointInstance> instances = new HashMap<>();
-    public static HashMap<Integer, CapturePointManager> managers = new HashMap<>();
-    public static HashMap<TeamColor, Team> teamMap = new HashMap<>();
+    public static final HashMap<Integer, CapturePointInstance> instances = new HashMap<>();
+    public static final HashMap<Integer, CapturePointManager> managers = new HashMap<>();
+    public static final HashMap<TeamColor, Team> teamMap = new HashMap<>();
     public static BlockState[][][] blockStates;
     public static CapturePoint pl;
     @Override

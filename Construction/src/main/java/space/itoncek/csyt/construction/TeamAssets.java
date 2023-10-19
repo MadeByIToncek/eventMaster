@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public final class TeamAssets {
     private BuildPlace display;
-    public List<Player> players = new ArrayList<>();
+    public final List<Player> players = new ArrayList<>();
     private final List<BuildPlace> buildPlaces;
     private int currentID = -1;
     public TeamAssets(BuildPlace display, List<BuildPlace> buildPlaces) {
