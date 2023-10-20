@@ -45,9 +45,9 @@ public final class CapturePoint extends JavaPlugin {
             CapturePointInstance[] output = new CapturePointInstance[array.length()];
             for (Object o : array) {
                 JSONObject object = (JSONObject) o;
-                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center")),
-                        parseLocation(object.getJSONObject("pos1")),
-                        parseLocation(object.getJSONObject("pos2")));
+                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center"), 0, 0, 0),
+                        parseLocation(object.getJSONObject("center"), -2, 1, -2),
+                        parseLocation(object.getJSONObject("center"), 2, 1, 2));
             }
             return output;
         } catch (IOException e) {
@@ -55,8 +55,8 @@ public final class CapturePoint extends JavaPlugin {
         }
     }
 
-    private Location parseLocation(JSONObject location) {
-        return new Location(Bukkit.getWorld(location.getString("world")), location.getFloat("x"), location.getFloat("y"), location.getFloat("z"));
+    private Location parseLocation(JSONObject location, int xoff, int yoff, int zoff) {
+        return new Location(Bukkit.getWorld(location.getString("world")), location.getFloat("x") + xoff, location.getFloat("y") + yoff, location.getFloat("z") + zoff);
     }
 
     private BlockState[][][] loadPattern() {
