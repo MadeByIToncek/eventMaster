@@ -6,14 +6,15 @@
 
 package space.itoncek.eventmanager.capturepoint;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 
-import static space.itoncek.eventmanager.capturepoint.CapturePoint.blockStates;
-import static space.itoncek.eventmanager.capturepoint.CapturePoint.pl;
+import static space.itoncek.eventmanager.capturepoint.CapturePoint.*;
 
 public class CapturePointManager {
     private final CapturePointInstance instance;
@@ -21,8 +22,9 @@ public class CapturePointManager {
     private final Team red;
     private final Team blue;
     private int state = 0;
+    private final int ident;
 
-    public CapturePointManager(CapturePointInstance instance, Team red, Team blue) {
+    public CapturePointManager(CapturePointInstance instance, Team red, Team blue, int ident) {
         this.instance = instance;
         runnable = new BukkitRunnable() {
             @Override
@@ -32,6 +34,7 @@ public class CapturePointManager {
         };
         this.red = red;
         this.blue = blue;
+        this.ident = ident;
     }
 
     //TODO
@@ -88,6 +91,7 @@ public class CapturePointManager {
                 }
             }
 
+
             if (absState == 8) {
                 runnable.cancel();
                 win(state > 0);
@@ -103,11 +107,22 @@ public class CapturePointManager {
 
     //TODO
     /**
-     * Runned internally to process win
+     * Ran internally to process win
      * @param red if true, assuming red won this game
      */
     private void win(boolean red) {
-
+        for (Player player : this.red.players) {
+            if (red) {
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player + " 40");
+            }
+            player.setGameMode(GameMode.SPECTATOR);
+        }
+        for (Player player : blue.players) {
+            if (!red) {
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player + " 40");
+            }
+            player.setGameMode(GameMode.SPECTATOR);
+        }
     }
 
     //TODO
@@ -115,7 +130,8 @@ public class CapturePointManager {
      * Run at the end of every round to destroy this instance
      */
     public void destroy() {
-
+        runnable.cancel();
+        System.out.println(managers.remove(ident, this));
     }
 
     /**

@@ -8,10 +8,10 @@ package space.itoncek.eventmanager.capturepoint;
 
 import org.bukkit.Location;
 
-public record CapturePointInstance(Location center, Location reg1, Location reg2) {
+public record CapturePointInstance(Location center, Location capt1, Location capt2) {
     public boolean isInside(Location loc) {
-        Location min = new Location(reg1.getWorld(), Math.min(reg1.x(), reg2.x()), Math.min(reg1.y(), reg2.y()), Math.min(reg1.z(), reg2.z()));
-        Location max = new Location(reg1.getWorld(), Math.max(reg1.x(), reg2.x()), Math.max(reg1.y(), reg2.y()), Math.max(reg1.z(), reg2.z()));
+        Location min = new Location(capt1.getWorld(), Math.min(capt1.x(), capt2.x()), Math.min(capt1.y(), capt2.y()), Math.min(capt1.z(), capt2.z()));
+        Location max = new Location(capt1.getWorld(), Math.max(capt1.x(), capt2.x()), Math.max(capt1.y(), capt2.y()), Math.max(capt1.z(), capt2.z()));
         return loc.x() >= min.x() && loc.x() <= max.x() && loc.y() >= min.y() && loc.y() <= max.y() && loc.z() >= min.z() && loc.z() <= max.z();
     }
 }

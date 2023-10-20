@@ -6,8 +6,11 @@
 
 package space.itoncek.eventmanager.capturepoint;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 
@@ -18,9 +21,9 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 
 public final class CapturePoint extends JavaPlugin {
-    public static final HashMap<Integer, CapturePointInstance> instances = new HashMap<>();
     public static final HashMap<Integer, CapturePointManager> managers = new HashMap<>();
     public static final HashMap<TeamColor, Team> teamMap = new HashMap<>();
+    public static CapturePointInstance[] instances;
     public static BlockState[][][] blockStates;
     public static CapturePoint pl;
     @Override
@@ -29,7 +32,31 @@ public final class CapturePoint extends JavaPlugin {
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
+        instances = loadInstances();
         blockStates = loadPattern();
+    }
+
+    private CapturePointInstance[] loadInstances() {
+        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/instances.json").openStream())) {
+            StringJoiner js = new StringJoiner("\n");
+            while (sc.hasNextLine()) js.add(sc.nextLine());
+
+            JSONArray array = new JSONArray(js.toString());
+            CapturePointInstance[] output = new CapturePointInstance[array.length()];
+            for (Object o : array) {
+                JSONObject object = (JSONObject) o;
+                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center")),
+                        parseLocation(object.getJSONObject("pos1")),
+                        parseLocation(object.getJSONObject("pos2")));
+            }
+            return output;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Location parseLocation(JSONObject location) {
+        return new Location(Bukkit.getWorld(location.getString("world")), location.getFloat("x"), location.getFloat("y"), location.getFloat("z"));
     }
 
     private BlockState[][][] loadPattern() {

@@ -29,39 +29,6 @@ public class CommandManager implements CommandExecutor {
                 case "setup" -> {
                     if (args.length > 1) {
                         switch (args[1]) {
-                            case "setArenaCenter" -> {
-                                if (args.length == 7) {
-                                    if (!instances.containsKey(Integer.parseInt(args[2]))) {
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(locFromArgs(args), null, null));
-                                    } else {
-                                        CapturePointInstance capturePointInstance = instances.get(Integer.parseInt(args[2]));
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(locFromArgs(args), capturePointInstance.reg1(), capturePointInstance.reg2()));
-                                    }
-                                    sender.sendMessage("[CP] Origin for instance " + args[2] + " successfully set!");
-                                }
-                            }
-                            case "setArenaRegion1" -> {
-                                if (args.length == 7) {
-                                    if (!instances.containsKey(Integer.parseInt(args[2]))) {
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(null, locFromArgs(args), null));
-                                    } else {
-                                        CapturePointInstance capturePointInstance = instances.get(Integer.parseInt(args[2]));
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(capturePointInstance.center(), locFromArgs(args), capturePointInstance.reg2()));
-                                    }
-                                    sender.sendMessage("[CP] Region1 for instance " + args[2] + " successfully set!");
-                                }
-                            }
-                            case "setArenaRegion2" -> {
-                                if (args.length == 7) {
-                                    if (!instances.containsKey(Integer.parseInt(args[2]))) {
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(null, null, locFromArgs(args)));
-                                    } else {
-                                        CapturePointInstance capturePointInstance = instances.get(Integer.parseInt(args[2]));
-                                        instances.put(Integer.parseInt(args[2]), new CapturePointInstance(capturePointInstance.center(), capturePointInstance.reg1(), locFromArgs(args)));
-                                    }
-                                    sender.sendMessage("[CP] Region2 for instance " + args[2] + " successfully set!");
-                                }
-                            }
                             case "teams" -> {
                                 teamMap.clear();
                                 for (TeamColor value : TeamColor.values()) {
@@ -83,9 +50,11 @@ public class CommandManager implements CommandExecutor {
                             }
                             case "create" -> {
                                 if (args.length == 5) {
-                                    CapturePointInstance instance = instances.get(Integer.parseInt(args[2]));
-                                    instances.remove(Integer.parseInt(args[2]));
-                                    managers.put(Integer.parseInt(args[2]), new CapturePointManager(instance, teamMap.get(TeamColor.valueOf(args[3].toUpperCase())), teamMap.get(TeamColor.valueOf(args[4].toUpperCase()))));
+                                    CapturePointInstance instance = instances[Integer.parseInt(args[2])];
+                                    managers.put(Integer.parseInt(args[2]), new CapturePointManager(instance,
+                                            teamMap.get(TeamColor.valueOf(args[3].toUpperCase())),
+                                            teamMap.get(TeamColor.valueOf(args[4].toUpperCase())),
+                                            Integer.parseInt(args[2])));
                                 }
                             }
                             case "destroy" -> {

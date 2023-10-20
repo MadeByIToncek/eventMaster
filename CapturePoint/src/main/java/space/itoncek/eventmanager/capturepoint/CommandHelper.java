@@ -25,26 +25,17 @@ public class CommandHelper implements TabCompleter {
         return switch (args.length) {
             case 1 -> List.of("setup", "start", "stop");
             case 2 -> switch (args[0]) {
-                case "setup" ->
-                        List.of("setArenaCenter", "setArenaRegion1", "setArenaRegion2", "teams", "create", "destroy");
+                case "setup" -> List.of("teams", "create", "destroy");
                 case "start", "stop" -> List.of("");
                 default -> List.of();
             };
             default -> {
                 if (args[0].equals("setup")) {
                     yield switch (args[1]) {
-                        case "setArenaCenter", "setArenaRegion1", "setArenaRegion2" -> switch (args.length) {
-                            case 3 -> List.of("<arena id>");
-                            case 4 -> List.of("<world>");
-                            case 5 -> List.of("<x>");
-                            case 6 -> List.of("<y>");
-                            case 7 -> List.of("<z>");
-                            default -> List.of();
-                        };
                         case "create" -> switch (args.length) {
                             case 3 -> {
                                 List<String> out = new ArrayList<>();
-                                for (Integer i : instances.keySet()) {
+                                for (int i = 0; i < instances.length; i++) {
                                     out.add(String.valueOf(i));
                                 }
                                 yield out;
