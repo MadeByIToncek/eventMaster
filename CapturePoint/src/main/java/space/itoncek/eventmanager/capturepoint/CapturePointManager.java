@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 
+import java.util.List;
+
 import static space.itoncek.eventmanager.capturepoint.CapturePoint.*;
 
 public class CapturePointManager {
@@ -91,6 +93,9 @@ public class CapturePointManager {
                 }
             }
 
+            for (Integer off : List.of(-2, -4, -6)) {
+                setBlock(center.getBlockX(), center.getBlockY() + off, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
+            }
 
             if (absState == 8) {
                 runnable.cancel();
