@@ -33,8 +33,7 @@ public class CommandManager implements CommandExecutor {
                                 teamMap.clear();
                                 for (TeamColor value : TeamColor.values()) {
                                     new Thread(() -> {
-                                        //TODO: replace "cmd" with a real command
-                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "cmd " + value.name());
+                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "minigame_laser_team " + value.name().toLowerCase());
                                     }).start();
                                 }
                             }
