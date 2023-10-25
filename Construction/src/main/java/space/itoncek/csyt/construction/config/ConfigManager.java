@@ -32,7 +32,7 @@ public class ConfigManager {
 
         StringJoiner sb = new StringJoiner("\n");
 
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/index.json").openStream())) {
+        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/places.json").openStream())) {
             while (sc.hasNextLine()) sb.add(sc.nextLine());
         } catch (IOException e) {
             e.printStackTrace();
