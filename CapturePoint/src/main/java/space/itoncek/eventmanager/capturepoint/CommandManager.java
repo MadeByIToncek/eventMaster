@@ -42,7 +42,9 @@ public class CommandManager implements CommandExecutor {
                                 TeamColor tc = TeamColor.valueOf(args[2].toUpperCase());
                                 List<Player> players = new ArrayList<>(3);
                                 for (int index = 3; index < args.length; index++) {
-                                    players.add(playerify(args[index]));
+                                    if (!args[index].equals("<none>")) {
+                                        players.add(playerify(args[index]));
+                                    }
                                 }
                                 Team t = new Team(players, tc);
                                 sender.sendMessage("[CP] Adding players " + Arrays.toString(Arrays.stream(players.toArray(new Player[0])).map(Player::getName).toArray()) + " to team " + tc.name().toLowerCase() + "!");
