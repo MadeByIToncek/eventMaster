@@ -1,0 +1,442 @@
+[
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 72
+		},
+		"orientation": "WEST",
+		"color": "COAL",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 87,
+			"y": -29,
+			"z": 65
+		},
+		"orientation": "WEST",
+		"color": "COAL",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 79,
+			"y": -30,
+			"z": 65
+		},
+		"orientation": "WEST",
+		"color": "COAL",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 58
+		},
+		"orientation": "WEST",
+		"color": "COAL",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 43
+		},
+		"orientation": "WEST",
+		"color": "COPPER",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 87,
+			"y": -29,
+			"z": 36
+		},
+		"orientation": "WEST",
+		"color": "COPPER",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 29
+		},
+		"orientation": "WEST",
+		"color": "COPPER",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 79,
+			"y": -30,
+			"z": 36
+		},
+		"orientation": "WEST",
+		"color": "COPPER",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 14
+		},
+		"orientation": "WEST",
+		"color": "GOLD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 87,
+			"y": -29,
+			"z": 7
+		},
+		"orientation": "WEST",
+		"color": "GOLD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 82,
+			"y": -29,
+			"z": 0
+		},
+		"orientation": "WEST",
+		"color": "GOLD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 79,
+			"y": -30,
+			"z": 7
+		},
+		"orientation": "WEST",
+		"color": "GOLD",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 67,
+			"y": -29,
+			"z": -6
+		},
+		"orientation": "SOUTH",
+		"color": "IRON",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 60,
+			"y": -29,
+			"z": -11
+		},
+		"orientation": "SOUTH",
+		"color": "IRON",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 60,
+			"y": -30,
+			"z": -3
+		},
+		"orientation": "SOUTH",
+		"color": "IRON",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 53,
+			"y": -29,
+			"z": -6
+		},
+		"orientation": "SOUTH",
+		"color": "IRON",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 38,
+			"y": -29,
+			"z": -6
+		},
+		"orientation": "SOUTH",
+		"color": "REDSTONE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 31,
+			"y": -29,
+			"z": -11
+		},
+		"orientation": "SOUTH",
+		"color": "REDSTONE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 24,
+			"y": -29,
+			"z": -6
+		},
+		"orientation": "SOUTH",
+		"color": "REDSTONE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 31,
+			"y": -30,
+			"z": -3
+		},
+		"orientation": "SOUTH",
+		"color": "REDSTONE",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 1
+		},
+		"orientation": "EAST",
+		"color": "LAPIS",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 3,
+			"y": -29,
+			"z": 8
+		},
+		"orientation": "EAST",
+		"color": "LAPIS",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 15
+		},
+		"orientation": "EAST",
+		"color": "LAPIS",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 11,
+			"y": -30,
+			"z": 8
+		},
+		"orientation": "EAST",
+		"color": "LAPIS",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 30
+		},
+		"orientation": "EAST",
+		"color": "EMERALD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 3,
+			"y": -29,
+			"z": 37
+		},
+		"orientation": "EAST",
+		"color": "EMERALD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 44
+		},
+		"orientation": "EAST",
+		"color": "EMERALD",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 11,
+			"y": -30,
+			"z": 37
+		},
+		"orientation": "EAST",
+		"color": "EMERALD",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 59
+		},
+		"orientation": "EAST",
+		"color": "DIAMOND",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 3,
+			"y": -29,
+			"z": 66
+		},
+		"orientation": "EAST",
+		"color": "DIAMOND",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 8,
+			"y": -29,
+			"z": 73
+		},
+		"orientation": "EAST",
+		"color": "DIAMOND",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 11,
+			"y": -30,
+			"z": 66
+		},
+		"orientation": "EAST",
+		"color": "DIAMOND",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 26,
+			"y": -29,
+			"z": 79
+		},
+		"orientation": "NORTH",
+		"color": "NETHERITE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 33,
+			"y": -29,
+			"z": 84
+		},
+		"orientation": "NORTH",
+		"color": "NETHERITE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 40,
+			"y": -29,
+			"z": 79
+		},
+		"orientation": "NORTH",
+		"color": "NETHERITE",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 33,
+			"y": -30,
+			"z": 76
+		},
+		"orientation": "NORTH",
+		"color": "NETHERITE",
+		"display": true
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 55,
+			"y": -29,
+			"z": 79
+		},
+		"orientation": "NORTH",
+		"color": "QUARTZ",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 62,
+			"y": -29,
+			"z": 84
+		},
+		"orientation": "NORTH",
+		"color": "QUARTZ",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 69,
+			"y": -29,
+			"z": 79
+		},
+		"orientation": "NORTH",
+		"color": "QUARTZ",
+		"display": false
+	},
+	{
+		"loc": {
+			"world": "construction",
+			"x": 62,
+			"y": -30,
+			"z": 76
+		},
+		"orientation": "NORTH",
+		"color": "QUARTZ",
+		"display": true
+	}
+]

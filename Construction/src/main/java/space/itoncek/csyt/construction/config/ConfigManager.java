@@ -14,7 +14,6 @@ import space.itoncek.csyt.construction.BuildPlace;
 import space.itoncek.csyt.construction.Pattern;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -31,14 +30,15 @@ public class ConfigManager {
 
         folderStuff();
 
-        StringBuilder sb = new StringBuilder();
+        StringJoiner sb = new StringJoiner("\n");
 
-        try (Scanner sc = new Scanner(placesConfig)) {
-            while (sc.hasNextLine()) sb.append(sc.nextLine()).append("\n");
-        } catch (FileNotFoundException e) {
-            Bukkit.getLogger().throwing("ConfigManager", "loadPlaces()", e);
+        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/index.json").openStream())) {
+            while (sc.hasNextLine()) sb.add(sc.nextLine());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        Bukkit.getLogger().info(sb.toString());
         List<BuildPlace> out = BuildPlace.deserialize(new JSONArray(sb.toString()));
         Bukkit.getLogger().info("Places config loaded in " + (System.currentTimeMillis() - start) + "ms");
         return out;
