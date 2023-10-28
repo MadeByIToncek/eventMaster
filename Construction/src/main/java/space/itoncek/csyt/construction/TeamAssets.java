@@ -105,6 +105,7 @@ public final class TeamAssets {
         for (Player p : display.getRelLoc(2, 2).getNearbyPlayers(20)) {
             p.playSound(display.getRelLoc(2, 2).clone().add(0, 1, 0), Sound.ENTITY_PLAYER_LEVELUP, 10f, 1f);
         }
+
         currentID = nextID;
     }
 
