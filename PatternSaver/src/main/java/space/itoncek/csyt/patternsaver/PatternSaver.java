@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.csyt.DRMLib;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,6 +48,7 @@ public final class PatternSaver extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (DRMLib.checkDRM()) Bukkit.shutdown();
         new WorldCreator("loadPatterns").createWorld();
 
         long start = System.currentTimeMillis();

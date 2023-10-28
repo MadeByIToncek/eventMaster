@@ -17,6 +17,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/net.dv8tion/JDA -->
         <dependency>
@@ -28,6 +35,17 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.MrGraversen</groupId>
+            <artifactId>minecraft-rcon</artifactId>
+            <version>0.0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>space.itoncek.csyt</groupId>
+            <artifactId>commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -28,8 +28,6 @@ public class ConfigManager {
     public static List<BuildPlace> loadPlaces() {
         long start = System.currentTimeMillis();
 
-        folderStuff();
-
         StringJoiner sb = new StringJoiner("\n");
 
         try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/places.json").openStream())) {
@@ -38,7 +36,7 @@ public class ConfigManager {
             e.printStackTrace();
         }
 
-        Bukkit.getLogger().info(sb.toString());
+        //Bukkit.getLogger().info(sb.toString());
         List<BuildPlace> out = BuildPlace.deserialize(new JSONArray(sb.toString()));
         Bukkit.getLogger().info("Places config loaded in " + (System.currentTimeMillis() - start) + "ms");
         return out;

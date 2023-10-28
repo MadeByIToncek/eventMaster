@@ -8,6 +8,7 @@ package space.itoncek.eventMaster;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.csyt.DRMLib;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import static java.lang.Thread.sleep;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+        if (DRMLib.checkDRM()) System.exit(69420);
         File file = null;
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Insert file path: ");

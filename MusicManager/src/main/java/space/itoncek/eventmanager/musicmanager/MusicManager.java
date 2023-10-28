@@ -9,11 +9,13 @@ package space.itoncek.eventmanager.musicmanager;
 import net.roxeez.advancement.Advancement;
 import net.roxeez.advancement.AdvancementManager;
 import net.roxeez.advancement.trigger.TriggerType;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.csyt.DRMLib;
 import space.itoncek.eventmanager.musicmanager.commands.ReloadCommand;
 import space.itoncek.eventmanager.musicmanager.sponsors.Sponsors;
 import space.itoncek.eventmanager.musicmanager.sponsors.TamHost;
@@ -96,6 +98,7 @@ public final class MusicManager extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (DRMLib.checkDRM()) Bukkit.shutdown();
         pl = this;
         manager = new AdvancementManager(this);
         getCommand("reloadAdvancements").setExecutor(new ReloadCommand());

@@ -6,9 +6,11 @@
 
 package space.itoncek.csyt.construction;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
+import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.construction.commands.DevelopmentCommand;
 import space.itoncek.csyt.construction.commands.GameCommand;
 import space.itoncek.csyt.construction.commands.autofill.ConstructionAutofill;
@@ -38,6 +40,7 @@ public final class Construction extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (DRMLib.checkDRM()) Bukkit.shutdown();
         pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();

@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import space.itoncek.csyt.DRMLib;
 import space.itoncek.eventmanager.chunklockprototype.commands.ResetCommand;
 import space.itoncek.eventmanager.chunklockprototype.commands.SetupCommand;
 import space.itoncek.eventmanager.chunklockprototype.listeners.BlockClickListener;
@@ -51,6 +52,7 @@ public final class ChunkLockPrototype extends JavaPlugin {
     };
     @Override
     public void onEnable() {
+        if (DRMLib.checkDRM()) Bukkit.shutdown();
         // Plugin startup logic
         File cache = new File("./chunklock-cache/");
         if (cache.exists()) cache.delete();

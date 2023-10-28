@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.util.HashMap;
 
@@ -28,11 +30,17 @@ public class DiscordBot {
     public static long statusMSG = 0L;
 
     public static void main(String[] args) throws InterruptedException {
+        if (DRMLib.checkDRM()) System.exit(69420);
+        //TODO: Restore
+        //new File("./db.json").delete();
         jda = JDABuilder
                 .createDefault(args[0])
                 .setActivity(Activity.watching("you!"))
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new ButtonInteraction())
                 .build().awaitReady();
+        System.out.println("System ready, setting up!");
         setup();
     }
 
@@ -40,6 +48,8 @@ public class DiscordBot {
         for (Guild guild : jda.getGuilds()) {
             guild.updateCommands().addCommands(
                     Commands.slash("cpm", "Creates testing message")
+                            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR)),
+                    Commands.slash("propagate", "Propagates testing messages")
                             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
             ).queue(commands -> {
                 for (Command command : commands) {

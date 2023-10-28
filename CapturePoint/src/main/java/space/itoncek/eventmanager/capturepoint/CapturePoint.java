@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.csyt.DRMLib;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 
@@ -29,6 +30,7 @@ public final class CapturePoint extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        if (DRMLib.checkDRM()) Bukkit.shutdown();
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
