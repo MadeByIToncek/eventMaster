@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 import space.itoncek.csyt.construction.commands.DevelopmentCommand;
 import space.itoncek.csyt.construction.commands.GameCommand;
 import space.itoncek.csyt.construction.commands.autofill.ConstructionAutofill;
@@ -41,6 +42,7 @@ public final class Construction extends JavaPlugin {
     @Override
     public void onEnable() {
         if (DRMLib.checkDRM()) Bukkit.shutdown();
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();
@@ -75,5 +77,6 @@ public final class Construction extends JavaPlugin {
             buildPlace.clr();
         }
         savePlaces(buildPlaces);
+        UpdateLib.checkForUpdates(this.getDataFolder(), "Construction", this.getFile());
     }
 }

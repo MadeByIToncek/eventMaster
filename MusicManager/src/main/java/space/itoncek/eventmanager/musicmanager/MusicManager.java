@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 import space.itoncek.eventmanager.musicmanager.commands.ReloadCommand;
 import space.itoncek.eventmanager.musicmanager.sponsors.Sponsors;
 import space.itoncek.eventmanager.musicmanager.sponsors.TamHost;
@@ -99,6 +100,7 @@ public final class MusicManager extends JavaPlugin {
     @Override
     public void onEnable() {
         if (DRMLib.checkDRM()) Bukkit.shutdown();
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         manager = new AdvancementManager(this);
         getCommand("reloadAdvancements").setExecutor(new ReloadCommand());
@@ -108,5 +110,6 @@ public final class MusicManager extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        UpdateLib.checkForUpdates(this.getDataFolder(), "MusicManager", this.getFile());
     }
 }

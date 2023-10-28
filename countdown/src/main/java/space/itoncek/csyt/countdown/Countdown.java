@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -77,6 +78,7 @@ public final class Countdown extends JavaPlugin {
     @Override
     public void onEnable() {
         if (DRMLib.checkDRM()) Bukkit.shutdown();
+        UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
         pl = this;
         Objects.requireNonNull(getCommand("acd")).setExecutor(new ACDCommand());
@@ -138,6 +140,7 @@ public final class Countdown extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        UpdateLib.checkForUpdates(this.getDataFolder(), "countdown", this.getFile());
     }
 }
 
