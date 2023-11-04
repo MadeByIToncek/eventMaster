@@ -15,7 +15,6 @@ import space.itoncek.csyt.UpdateLib;
 import space.itoncek.csyt.construction.commands.DevelopmentCommand;
 import space.itoncek.csyt.construction.commands.GameCommand;
 import space.itoncek.csyt.construction.commands.autofill.ConstructionAutofill;
-import space.itoncek.csyt.construction.debug.ParticleRunnable;
 import space.itoncek.csyt.construction.listeners.BlockActionListener;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
@@ -30,14 +29,13 @@ public final class Construction extends JavaPlugin {
 
     public static List<BuildPlace> buildPlaces;
     public static final HashMap<SimpleLocation, BuildPlace> locationHash = new HashMap<>();
-    public static final ParticleRunnable particles = new ParticleRunnable();
     public static List<Pattern> patterns = new ArrayList<>();
     public static final HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
     public static Construction pl;
     public static final JSONArray output = new JSONArray();
     public static boolean active = false;
     public static boolean blocking = false;
-    public static float mutliplier = 1.0F;
+    public static float multiplier = 1.0F;
 
     @Override
     public void onEnable() {
@@ -47,12 +45,10 @@ public final class Construction extends JavaPlugin {
         // Plugin startup logic
         buildPlaces = loadPlaces();
         getServer().getPluginManager().registerEvents(new BlockActionListener(), this);
+        Objects.requireNonNull(getCommand("constgame")).setExecutor(new GameCommand());
         //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
-        Objects.requireNonNull(getCommand("constGame")).setExecutor(new GameCommand());
-        //getServer().getPluginManager().registerEvents(new MoveListener(), this);
         Objects.requireNonNull(getCommand("development")).setExecutor(new DevelopmentCommand());
         Objects.requireNonNull(getCommand("development")).setTabCompleter(new ConstructionAutofill());
-        particles.runTaskTimer(this, 5L, 5L);
 
         for (BuildPlace place : buildPlaces) {
             for (Location location : place.getLocations()) {

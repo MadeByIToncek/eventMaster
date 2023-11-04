@@ -33,7 +33,7 @@ public class ConfigManager {
         try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/places.json").openStream())) {
             while (sc.hasNextLine()) sb.add(sc.nextLine());
         } catch (IOException e) {
-            e.printStackTrace();
+            Bukkit.getLogger().throwing(String.valueOf(ConfigManager.class), "loadPlaces()", e);
         }
 
         //Bukkit.getLogger().info(sb.toString());

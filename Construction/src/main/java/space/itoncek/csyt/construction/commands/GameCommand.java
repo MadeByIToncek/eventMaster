@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static space.itoncek.csyt.construction.Construction.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class GameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -82,7 +83,7 @@ public class GameCommand implements CommandExecutor {
             case "reloadpatterns" -> patterns = ConfigManager.loadPatterns();
             case "setmutliplier" -> {
                 sender.sendMessage("Multiplier set to " + Float.parseFloat(args[1]));
-                mutliplier = Float.parseFloat(args[1]);
+                multiplier = Float.parseFloat(args[1]);
             }
         }
         return true;

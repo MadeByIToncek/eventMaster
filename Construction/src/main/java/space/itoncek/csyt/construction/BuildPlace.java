@@ -9,8 +9,6 @@ package space.itoncek.csyt.construction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import space.itoncek.csyt.construction.utils.Orientation;
@@ -61,14 +59,14 @@ public class BuildPlace {
             JSONObject obj = (JSONObject) o;
             Orientation ori = obj.getEnum(Orientation.class, "orientation");
             TeamColor tc = obj.getEnum(TeamColor.class, "color");
-            boolean disp = obj.getBoolean("display");
+            boolean display = obj.getBoolean("display");
             JSONObject locObj = obj.getJSONObject("loc");
             Location loc = new Location(Bukkit.getWorld(locObj.getString("world")),
                     locObj.getInt("x"),
                     locObj.getInt("y"),
                     locObj.getInt("z"));
 
-            out.add(new BuildPlace(loc, ori, tc, disp));
+            out.add(new BuildPlace(loc, ori, tc, display));
         }
         return out;
     }
@@ -213,9 +211,6 @@ public class BuildPlace {
     public void end() {
         clr();
         active = false;
-//        for (Player nearbyPlayer : getRelLoc(2, 2).getNearbyPlayers(20)) {
-//            nearbyPlayer.playSound(getRelLoc(2, 2).clone().add(0, 1, 0), "shine", 20f, 1f);
-//        }
     }
 
     public void setPattern(int i) {
@@ -254,16 +249,5 @@ public class BuildPlace {
         }
     }
 
-    record Points(Player p, int points) implements Comparable<Points> {
-        @Override
-        public int compareTo(@NotNull BuildPlace.Points o) {
-            return points - o.points;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj.equals(p);
-        }
-    }
 }
 

@@ -19,7 +19,8 @@ import space.itoncek.csyt.construction.BuildPlace;
 import space.itoncek.csyt.construction.utils.Orientation;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
-import static space.itoncek.csyt.construction.Construction.*;
+import static space.itoncek.csyt.construction.Construction.blocking;
+import static space.itoncek.csyt.construction.Construction.buildPlaces;
 import static space.itoncek.csyt.construction.config.ConfigManager.savePlaces;
 
 public class DevelopmentCommand implements CommandExecutor {
@@ -125,7 +126,6 @@ public class DevelopmentCommand implements CommandExecutor {
                             }
                         }
                         case "toggleRestrictions" -> blocking = !blocking;
-                        case "toggleParticles" -> particles.enabled = !particles.enabled;
                     }
                 }
                 default -> {

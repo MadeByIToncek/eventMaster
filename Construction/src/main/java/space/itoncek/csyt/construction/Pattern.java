@@ -9,8 +9,11 @@ package space.itoncek.csyt.construction;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static space.itoncek.csyt.construction.Construction.multiplier;
 
 public final class Pattern implements Comparable<Pattern> {
     private final int id;
@@ -25,7 +28,7 @@ public final class Pattern implements Comparable<Pattern> {
     }
 
     public String award(String player) {
-        String cmd = "ptsadd " + player + " " + remainingPoints;
+        String cmd = "ptsadd " + player + " " + remainingPoints * multiplier;
         remainingPoints--;
         return cmd;
     }
@@ -49,20 +52,20 @@ public final class Pattern implements Comparable<Pattern> {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Pattern) obj;
         return this.id == that.id &&
-                Objects.equals(this.pattern, that.pattern) &&
+                Arrays.deepEquals(this.pattern, that.pattern) &&
                 Objects.equals(this.materials, that.materials);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, pattern, materials);
+        return Objects.hash(id, Arrays.deepHashCode(pattern), materials);
     }
 
     @Override
     public String toString() {
         return "Pattern[" +
                 "id=" + id + ", " +
-                "pattern=" + pattern + ", " +
+                "pattern=" + Arrays.deepToString(pattern) + ", " +
                 "materials=" + materials + ']';
     }
 

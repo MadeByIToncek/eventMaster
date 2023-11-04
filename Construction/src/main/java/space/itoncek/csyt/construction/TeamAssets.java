@@ -6,6 +6,7 @@
 
 package space.itoncek.csyt.construction;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -110,6 +111,8 @@ public final class TeamAssets {
     }
 
     public void finish() {
-
+        display.clr();
+        buildPlaces.forEach(BuildPlace::clr);
+        for (Player player : players) player.setGameMode(GameMode.SPECTATOR);
     }
 }
