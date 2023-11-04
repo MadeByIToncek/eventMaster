@@ -62,7 +62,6 @@ public class BuildPlace {
             Orientation ori = obj.getEnum(Orientation.class, "orientation");
             TeamColor tc = obj.getEnum(TeamColor.class, "color");
             boolean disp = obj.getBoolean("display");
-            System.out.println("----> " + tc.name() + " has " + ori.name() + "<-----");
             JSONObject locObj = obj.getJSONObject("loc");
             Location loc = new Location(Bukkit.getWorld(locObj.getString("world")),
                     locObj.getInt("x"),

@@ -2,6 +2,7 @@ name: Construction
 version: '${project.version}'
 main: space.itoncek.csyt.construction.Construction
 api-version: '1.19'
+depend: [ Multiverse-Core,WorldGuard ]
 commands:
   development:
   constGame:
