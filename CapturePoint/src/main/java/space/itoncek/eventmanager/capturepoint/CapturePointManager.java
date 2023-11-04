@@ -115,13 +115,13 @@ public class CapturePointManager {
     private void win(boolean red) {
         for (Player player : this.red.players) {
             if (red) {
-                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player + " 40");
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
         for (Player player : blue.players) {
             if (!red) {
-                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player + " 40");
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
