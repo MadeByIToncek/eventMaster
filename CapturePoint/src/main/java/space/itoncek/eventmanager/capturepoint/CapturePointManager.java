@@ -38,8 +38,6 @@ public class CapturePointManager {
         this.blue = blue;
         this.ident = ident;
     }
-
-    //TODO
     /**
      * Run to initialize surround checks and prepare point for game
      */
@@ -110,7 +108,6 @@ public class CapturePointManager {
         }
     }
 
-    //TODO
     /**
      * Ran internally to process win
      * @param red if true, assuming red won this game
@@ -129,8 +126,6 @@ public class CapturePointManager {
             player.setGameMode(GameMode.SPECTATOR);
         }
     }
-
-    //TODO
     /**
      * Run at the end of every round to destroy this instance
      */
@@ -138,7 +133,6 @@ public class CapturePointManager {
         runnable.cancel();
         System.out.println(managers.remove(ident, this));
     }
-
     /**
      * Compare two booleans, basically XOR with more steps
      *

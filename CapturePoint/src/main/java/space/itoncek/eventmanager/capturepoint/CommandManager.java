@@ -32,9 +32,7 @@ public class CommandManager implements CommandExecutor {
                             case "teams" -> {
                                 teamMap.clear();
                                 for (TeamColor value : TeamColor.values()) {
-                                    new Thread(() -> {
-                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "minigame_laser_team " + value.name().toLowerCase());
-                                    }).start();
+                                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "minigame_laser_team " + value.name().toLowerCase());
                                 }
                             }
                             case "teamloopback" -> {
