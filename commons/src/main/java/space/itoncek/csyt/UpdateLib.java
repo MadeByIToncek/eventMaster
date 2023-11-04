@@ -22,6 +22,7 @@ public class UpdateLib {
         if (!pluginFolder.exists()) pluginFolder.mkdirs();
         if (!new File(pluginFolder + "/release.id").exists()) {
             int cid = getCommitID();
+            System.out.println("Current plugin version: " + getCommitID());
             if (cid > 0) {
                 try (FileWriter fw = new FileWriter(pluginFolder + "/release.id")) {
                     System.out.println("Cid: " + cid);
@@ -52,9 +53,10 @@ public class UpdateLib {
         try (Scanner sc = new Scanner(new File(pluginFolder.toString() + "/release.id"))) {
             int current = sc.nextInt();
             int remote = getCommitID();
+            System.out.println("Current plugin version: " + current + "\nRemote plugin version: " + remote);
             if (remote != current) {
                 update(plugin, pluginFile);
-                new File(pluginFolder.toString() + "/release.id").deleteOnExit();
+                new File(pluginFolder + "/release.id").deleteOnExit();
             }
         } catch (IOException | InputMismatchException e) {
             System.out.println("There is a problem with autoupdate, autoupdates are disabled!");
