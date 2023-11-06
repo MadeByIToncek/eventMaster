@@ -18,6 +18,7 @@ public abstract class DRMLib {
 
                     urlConnection.connect();
                 } catch (IOException ignored) {
+                    return;
                 }
                 callback();
             }
