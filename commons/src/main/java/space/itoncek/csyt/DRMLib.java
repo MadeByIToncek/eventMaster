@@ -3,17 +3,26 @@ package space.itoncek.csyt;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class DRMLib {
-    public static boolean checkDRM() {
-        try {
-            URL url = new URL("http://drmblock.itoncek.space");
-            URLConnection urlConnection = url.openConnection();
+public abstract class DRMLib {
+    public DRMLib() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://drmblock.itoncek.space");
+                    URLConnection urlConnection = url.openConnection();
 
-            urlConnection.connect();
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
+                    urlConnection.connect();
+                } catch (IOException ignored) {
+                }
+                callback();
+            }
+        }, 0, 600000);
     }
+
+    public abstract void callback();
 }

@@ -31,7 +31,12 @@ public final class CapturePoint extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        if (DRMLib.checkDRM()) Bukkit.shutdown();
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
         UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());

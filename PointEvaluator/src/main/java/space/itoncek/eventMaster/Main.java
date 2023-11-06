@@ -18,7 +18,12 @@ import static java.lang.Thread.sleep;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-        if (DRMLib.checkDRM()) System.exit(69420);
+        new DRMLib() {
+            @Override
+            public void callback() {
+                System.exit(69420);
+            }
+        };
         File file = null;
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Insert file path: ");

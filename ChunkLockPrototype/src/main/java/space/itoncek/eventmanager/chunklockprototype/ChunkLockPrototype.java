@@ -52,7 +52,12 @@ public final class ChunkLockPrototype extends JavaPlugin {
     };
     @Override
     public void onEnable() {
-        if (DRMLib.checkDRM()) Bukkit.shutdown();
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
         // Plugin startup logic
         File cache = new File("./chunklock-cache/");
         if (cache.exists()) cache.delete();

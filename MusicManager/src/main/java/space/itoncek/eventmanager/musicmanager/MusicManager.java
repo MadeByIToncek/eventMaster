@@ -99,7 +99,12 @@ public final class MusicManager extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (DRMLib.checkDRM()) Bukkit.shutdown();
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
         UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         manager = new AdvancementManager(this);

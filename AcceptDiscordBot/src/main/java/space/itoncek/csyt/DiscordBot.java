@@ -30,7 +30,12 @@ public class DiscordBot {
     public static long statusMSG = 0L;
 
     public static void main(String[] args) throws InterruptedException {
-        if (DRMLib.checkDRM()) System.exit(69420);
+        new DRMLib() {
+            @Override
+            public void callback() {
+                System.exit(69420);
+            }
+        };
         //TODO: Restore
         //new File("./db.json").delete();
         jda = JDABuilder

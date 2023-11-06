@@ -21,16 +21,16 @@
 
     <modules>
         <module>commons</module>
+        <module>CGCommons</module>
         <module>Construction</module>
         <module>MusicManager</module>
         <module>PatternSaver</module>
         <module>PointEvaluator</module>
         <module>ChunkLockPrototype</module>
-        <module>CommandPortalClient</module>
-        <module>CommandPortalServer</module>
         <module>countdown</module>
         <module>CapturePoint</module>
         <module>AcceptDiscordBot</module>
+        <module>GraphicsCreator</module>
     </modules>
 
 </project>

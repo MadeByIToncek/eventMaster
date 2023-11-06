@@ -51,8 +51,8 @@ public class CommandManager implements CommandExecutor {
                                 if (args.length == 5) {
                                     CapturePointInstance instance = instances[Integer.parseInt(args[2])];
                                     managers.put(Integer.parseInt(args[2]), new CapturePointManager(instance,
-                                            teamMap.get(TeamColor.valueOf(args[3].toUpperCase())),
-                                            teamMap.get(TeamColor.valueOf(args[4].toUpperCase())),
+                                            teamMap.get(TeamColor.valueOf(args[3].toUpperCase())) != null ? teamMap.get(TeamColor.valueOf(args[3].toUpperCase())) : new Team(List.of(), TeamColor.valueOf(args[3].toUpperCase())),
+                                            teamMap.get(TeamColor.valueOf(args[4].toUpperCase())) != null ? teamMap.get(TeamColor.valueOf(args[4].toUpperCase())) : new Team(List.of(), TeamColor.valueOf(args[4].toUpperCase())),
                                             Integer.parseInt(args[2])));
                                 }
                             }
@@ -76,6 +76,14 @@ public class CommandManager implements CommandExecutor {
                     for (CapturePointManager value : managers.values()) {
                         value.destroy();
                     }
+                }
+
+                case "disable" -> {
+                    for (CapturePointManager value : managers.values()) {
+                        value.destroy();
+                    }
+                    managers.clear();
+                    Bukkit.getServer().getPluginManager().disablePlugin(pl);
                 }
             }
         }

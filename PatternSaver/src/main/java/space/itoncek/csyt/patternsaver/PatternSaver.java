@@ -48,7 +48,12 @@ public final class PatternSaver extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (DRMLib.checkDRM()) Bukkit.shutdown();
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
         new WorldCreator("loadPatterns").createWorld();
 
         long start = System.currentTimeMillis();

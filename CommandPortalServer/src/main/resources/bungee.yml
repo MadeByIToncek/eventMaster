@@ -1,3 +1,0 @@
-name: CommandPortalServer
-version: '${project.version}'
-main: space.itoncek.csyt.commandportalserver.CommandPortalServer
