@@ -43,8 +43,6 @@ jobs:
       run: mvn clean package
     - run: |
         rm ChunkLockPrototype/target/original-*.jar
-        rm CommandPortalClient/target/original-*.jar
-        rm CommandPortalServer/target/original-*.jar
         rm Construction/target/original-*.jar
         rm MusicManager/target/original-*.jar
         rm PatternSaver/target/original-*.jar
@@ -56,8 +54,6 @@ jobs:
         name: plugins
         path: |
           ChunkLockPrototype/target/*.jar
-          CommandPortalClient/target/*.jar
-          CommandPortalServer/target/*.jar
           Construction/target/*.jar
           MusicManager/target/*.jar
           PatternSaver/target/*.jar
@@ -74,8 +70,6 @@ jobs:
         title: "Development Build"
         files: |
           ChunkLockPrototype/target/*.jar
-          CommandPortalClient/target/*.jar
-          CommandPortalServer/target/*.jar
           Construction/target/*.jar
           MusicManager/target/*.jar
           PatternSaver/target/*.jar
