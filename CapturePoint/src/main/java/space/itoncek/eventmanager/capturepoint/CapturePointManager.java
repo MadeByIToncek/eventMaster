@@ -42,6 +42,7 @@ public class CapturePointManager {
      * Run to initialize surround checks and prepare point for game
      */
     public void init() {
+        System.out.println("Starting capture point " + ident);
         runnable.runTaskTimer(pl, 0, 20);
     }
 
@@ -115,23 +116,26 @@ public class CapturePointManager {
     private void win(boolean red) {
         for (Player player : this.red.players) {
             if (red) {
+                System.out.println("Adding 45 points to" + player.getName());
                 Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
         for (Player player : blue.players) {
             if (!red) {
+                System.out.println("Adding 45 points to" + player.getName());
                 Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
+        destroy();
     }
     /**
      * Run at the end of every round to destroy this instance
      */
     public void destroy() {
         runnable.cancel();
-        System.out.println(managers.remove(ident, this));
+        System.out.println("Removed manager " + this.ident + "?" + managers.remove(ident, this));
     }
     /**
      * Compare two booleans, basically XOR with more steps
