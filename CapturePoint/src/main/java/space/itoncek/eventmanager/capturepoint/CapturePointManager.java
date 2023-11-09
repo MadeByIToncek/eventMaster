@@ -6,10 +6,8 @@
 
 package space.itoncek.eventmanager.capturepoint;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.apache.commons.lang3.ArrayUtils;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
@@ -96,11 +94,21 @@ public class CapturePointManager {
                 setBlock(center.getBlockX(), center.getBlockY() + off, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
             }
 
+            if (sign != 0) {
+                for (Player player : ArrayUtils.addAll(red.players.toArray(new Player[0]), blue.players.toArray(new Player[0]))) {
+                    player.playSound(instance.center(), Sound.BLOCK_NOTE_BLOCK_PLING, 1000f, pitchify(absState));
+                }
+            }
+
             if (absState == 8) {
                 runnable.cancel();
                 win(state > 0);
             }
         }
+    }
+
+    private float pitchify(int absState) {
+        return absState / 4f;
     }
 
     private void setBlock(int x, int y, int z, Material mat) {
