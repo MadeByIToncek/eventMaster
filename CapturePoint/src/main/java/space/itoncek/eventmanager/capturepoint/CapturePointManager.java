@@ -87,16 +87,9 @@ public class CapturePointManager {
                     });
                 }
             }
-
-            if (absState == 2) {
-                setBlock(center.getBlockX(), center.getBlockY() - 6, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
-            }
-            if (absState == 4) {
-                setBlock(center.getBlockX(), center.getBlockY() - 4, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
-            }
-            if (absState == 6) {
-                setBlock(center.getBlockX(), center.getBlockY() - 2, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
-            }
+            setBlock(center.getBlockX(), center.getBlockY() - 6, center.getBlockZ(), absState >= 2 ? fill : Material.PURPLE_STAINED_GLASS);
+            setBlock(center.getBlockX(), center.getBlockY() - 4, center.getBlockZ(), absState >= 4 ? fill : Material.PURPLE_STAINED_GLASS);
+            setBlock(center.getBlockX(), center.getBlockY() - 2, center.getBlockZ(), absState >= 6 ? fill : Material.PURPLE_STAINED_GLASS);
 
             if (sign != 0) {
                 for (Player player : ArrayUtils.addAll(red.players.toArray(new Player[0]), blue.players.toArray(new Player[0]))) {
