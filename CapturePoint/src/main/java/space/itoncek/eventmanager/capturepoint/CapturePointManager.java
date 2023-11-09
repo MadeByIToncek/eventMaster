@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 
-import java.util.List;
-
 import static space.itoncek.eventmanager.capturepoint.CapturePoint.*;
 
 public class CapturePointManager {
@@ -90,13 +88,21 @@ public class CapturePointManager {
                 }
             }
 
-            for (Integer off : List.of(-2, -4, -6)) {
-                setBlock(center.getBlockX(), center.getBlockY() + off, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
+            if (absState == 2) {
+                setBlock(center.getBlockX(), center.getBlockY() - 6, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
+            }
+            if (absState == 4) {
+                setBlock(center.getBlockX(), center.getBlockY() - 4, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
+            }
+            if (absState == 6) {
+                setBlock(center.getBlockX(), center.getBlockY() - 2, center.getBlockZ(), pattern[2][2] == BlockState.ACCENT ? fill : Material.PURPLE_STAINED_GLASS);
             }
 
             if (sign != 0) {
                 for (Player player : ArrayUtils.addAll(red.players.toArray(new Player[0]), blue.players.toArray(new Player[0]))) {
-                    player.playSound(instance.center(), Sound.BLOCK_NOTE_BLOCK_PLING, 1000f, pitchify(absState));
+                    if (absState < 8)
+                        player.playSound(instance.center(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.MASTER, 1000f, pitchify(absState));
+                    else player.playSound(instance.center(), "minecraft:shine", SoundCategory.MASTER, 1000f, 1);
                 }
             }
 
@@ -108,7 +114,16 @@ public class CapturePointManager {
     }
 
     private float pitchify(int absState) {
-        return absState / 4f;
+        return switch (absState) {
+            case 1 -> 1.1f;
+            case 2 -> 1.2f;
+            case 3 -> 1.4f;
+            case 4 -> 1.5f;
+            case 5 -> 1.6f;
+            case 6 -> 1.8f;
+            case 7 -> 2f;
+            default -> 1f;
+        };
     }
 
     private void setBlock(int x, int y, int z, Material mat) {
