@@ -1,4 +1,0 @@
-name: GraphicsProcessor
-version: '${project.version}'
-main: space.itoncek.csyt.graphicsprocessor.GraphicsProcessor
-api-version: '1.19'

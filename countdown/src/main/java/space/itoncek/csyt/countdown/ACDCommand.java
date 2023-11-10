@@ -11,14 +11,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-import static space.itoncek.csyt.countdown.Countdown.config;
-import static space.itoncek.csyt.countdown.Countdown.pl;
+import static space.itoncek.csyt.countdown.Countdown.*;
 
 public class ACDCommand implements CommandExecutor {
     @Override
@@ -33,19 +31,13 @@ public class ACDCommand implements CommandExecutor {
                     }
                 }
                 case "auto" -> {
-                    if (args.length != 3) return true;
+                    if (args.length != 2) return true;
                     try {
-                        final int[] i = {Integer.parseInt(args[1])};
-                        EffectManager manager = new EffectManager();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (i[0] == 0) this.cancel();
-                                Countdown.setRemain(i[0]);
-                                i[0]--;
-                                manager.runTaskNumber(i[0]);
-                            }
-                        }.runTaskTimer(pl, 20L, 20L);
+                        //EffectManager manager = new EffectManager();
+                        //manager.scheduleEvents();
+                        if (acdR != null && !acdR.isCancelled()) acdR.cancel();
+                        acdR = generateACDR(Integer.parseInt(args[1]));
+                        acdR.runTaskTimer(pl, 20L, 20L);
                     } catch (NumberFormatException ignored) {
                         sender.sendMessage(Component.text("Nope"));
                     }

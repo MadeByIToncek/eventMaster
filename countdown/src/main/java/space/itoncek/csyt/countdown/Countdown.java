@@ -19,6 +19,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.JSONObject;
 import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
@@ -34,7 +35,7 @@ import static space.itoncek.csyt.countdown.LogicAdapter.getDigits;
 public final class Countdown extends JavaPlugin {
     public static JSONObject config;
     public static Countdown pl;
-
+    public static BukkitRunnable acdR;
     public static void setRemain(int rem) {
         String digs = getDigits(rem);
         List<Action> actions = new ArrayList<>();
@@ -75,6 +76,18 @@ public final class Countdown extends JavaPlugin {
         }
     }
 
+    public static BukkitRunnable generateACDR(int time) {
+        return new BukkitRunnable() {
+            int i = time;
+
+            @Override
+            public void run() {
+                if (i == 0) this.cancel();
+                Countdown.setRemain(i);
+                i--;
+            }
+        };
+    }
     @Override
     public void onEnable() {
         new DRMLib() {
