@@ -29,6 +29,7 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
                 case "startManual" -> {
                     if (currentManager != null) currentManager.destroy();
                     currentManager = new DDDManager(false);
+                    currentManager.start();
                 }
                 case "endManual" -> {
                     currentManager.end();
@@ -48,7 +49,8 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender.isOp()) return List.of("startAuto", "abortAuto", "startManual", "endManual", "sendManual");
+        if (sender.isOp())
+            return List.of("startAuto", "abortAuto", "startManual", "endManual", "sendManual", "fillManual");
         return List.of();
     }
 }

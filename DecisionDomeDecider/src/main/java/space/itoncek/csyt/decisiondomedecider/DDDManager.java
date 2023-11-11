@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.ddd;
@@ -51,33 +52,32 @@ public class DDDManager {
         }
     }
 
-    public void end() {
-        HashMap<Minigame, Integer> results = new HashMap<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) {
-                Block block = p.getLocation().subtract(0, 1, 0).getBlock();
-                Minigame minigame = null;
-                for (Minigame value : Minigame.values()) {
-                    if (value.isBlockOfMinigame(block.getType())) {
-                        minigame = value;
-                        break;
-                    }
-                }
-                if (minigame != null) {
-                    results.put(minigame, results.getOrDefault(minigame, 0) + 1);
-                }
+    public static <K, V extends Comparable<V>> Map.Entry<K, V> max(Map<K, V> map) {
+
+        // To store the result
+        Map.Entry<K, V> entryWithMaxValue = null;
+
+        // Iterate in the map to find the required entry
+        for (Map.Entry<K, V> currentEntry :
+                map.entrySet()) {
+
+            if (
+                // If this is the first entry, set result as
+                // this
+                    entryWithMaxValue == null
+
+                            // If this entry's value is more than the
+                            // max value Set this entry as the max
+                            || currentEntry.getValue().compareTo(
+                            entryWithMaxValue.getValue())
+                            > 0) {
+
+                entryWithMaxValue = currentEntry;
             }
         }
-        System.out.println(results);
-        chosenMinigame = Minigame.GridBuilders;
-        finishRunnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                fill(chosenMinigame);
-            }
-        };
 
-        finishRunnable.runTaskLater(ddd, 20L);
+        // Return the entry with the highest value
+        return entryWithMaxValue;
     }
 
     public void fill(Minigame minigame) {
@@ -108,6 +108,38 @@ public class DDDManager {
             }
         };
         cmdrunnable.runTaskLater(ddd, 20L);
+    }
+
+    public void end() {
+        HashMap<Minigame, Integer> results = new HashMap<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) {
+                Block block = p.getLocation().subtract(0, 1, 0).getBlock();
+                Minigame minigame = null;
+                for (Minigame value : Minigame.values()) {
+                    if (value.isBlockOfMinigame(block.getType())) {
+                        minigame = value;
+                        break;
+                    }
+                }
+                if (minigame != null) {
+                    results.put(minigame, results.getOrDefault(minigame, 0) + 1);
+                }
+            }
+        }
+        System.out.println(results);
+        Bukkit.broadcast(Component.text("Minigame chosen: " + max(results)));
+        chosenMinigame = Minigame.GridBuilders;
+        if (auto) {
+            finishRunnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    fill(chosenMinigame);
+                }
+            };
+
+            finishRunnable.runTaskLater(ddd, 20L);
+        }
     }
 
     public Set<Location> circle(Location location, int radius) {
