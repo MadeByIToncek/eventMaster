@@ -2,12 +2,17 @@ package space.itoncek.csyt.decisiondomedecider;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class DecisionDomeDecider extends JavaPlugin {
     public static DecisionDomeDecider ddd;
     public static DDDManager currentManager;
+    public static List<BukkitTask> taskList = new ArrayList<>();
 
     @Override
     public void onEnable() {

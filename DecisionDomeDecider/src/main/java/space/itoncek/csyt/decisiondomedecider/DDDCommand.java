@@ -10,12 +10,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.currentManager;
+import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.*;
 
 public class DDDCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -23,8 +25,18 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
         if (sender.isOp()) {
             switch (args[0]) {
                 case "startAuto" -> {
+                    if (currentManager != null) currentManager.destroy();
+                    currentManager = new DDDManager(true);
+                    currentManager.start();
+                    taskList.add(new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            currentManager.end();
+                        }
+                    }.runTaskLater(ddd, 30 * 20));
                 }
                 case "abortAuto" -> {
+                    taskList.forEach(BukkitTask::cancel);
                 }
                 case "startManual" -> {
                     if (currentManager != null) currentManager.destroy();

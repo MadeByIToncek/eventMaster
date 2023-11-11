@@ -16,19 +16,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.security.SecureRandom;
 import java.util.*;
 
 import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.ddd;
+import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.taskList;
 
 public class DDDManager {
 
     public final boolean auto;
     public Minigame chosenMinigame;
-    private BukkitRunnable cmdrunnable;
-    private BukkitRunnable finishRunnable;
-    private BukkitRunnable fillRunnable;
     public DDDManager(boolean auto) {
         this.auto = auto;
     }
@@ -100,17 +99,15 @@ public class DDDManager {
         }
         System.out.println(results);
         Minigame resultat = process(results);
-        Bukkit.broadcast(Component.text("Minigame chosen: " + resultat));
+        Bukkit.broadcast(Component.text(resultat.getGraphic()));
         chosenMinigame = resultat;
         if (auto) {
-            finishRunnable = new BukkitRunnable() {
+            taskList.add(new BukkitRunnable() {
                 @Override
                 public void run() {
                     fill();
                 }
-            };
-
-            finishRunnable.runTaskLater(ddd, 20L);
+            }.runTaskLater(ddd, 20L));
         }
     }
 
@@ -118,10 +115,10 @@ public class DDDManager {
         if (results.values().stream().distinct().count() != results.size()) {
             SecureRandom rnd = new SecureRandom();
             List<Map.Entry<Minigame, Integer>> entries = uniqueMaxMap(results);
-            System.out.println(entries);
-            System.out.println(entries.size());
-            System.out.println(rnd.nextInt(entries.size()));
-            System.out.println(entries.get(rnd.nextInt(entries.size())).getKey());
+//            System.out.println(entries);
+//            System.out.println(entries.size());
+//            System.out.println(rnd.nextInt(entries.size()));
+//            System.out.println(entries.get(rnd.nextInt(entries.size())).getKey());
             return entries.get(rnd.nextInt(entries.size())).getKey();
         } else {
             return maxMap(results).getKey();
@@ -130,7 +127,7 @@ public class DDDManager {
 
 
     public void fill() {
-        fillRunnable = new BukkitRunnable() {
+        taskList.add(new BukkitRunnable() {
             int i = 3;
 
             @Override
@@ -139,26 +136,26 @@ public class DDDManager {
                     if (auto) startMinigame();
                     this.cancel();
                 }
-                Bukkit.broadcast(Component.text("Filling radius " + i));
+                //Bukkit.broadcast(Component.text("Filling radius " + i));
                 for (Location location : circle(new Location(Bukkit.getWorld("lobby"), 19, 127, 345), i)) {
                     chosenMinigame.replaceBlock(location.getBlock());
                 }
                 i += 2;
             }
-        };
-        fillRunnable.runTaskTimer(ddd, 20L, 5L);
+        }.runTaskTimer(ddd, 20L, 5L));
     }
 
 
     public void startMinigame() {
-        cmdrunnable = new BukkitRunnable() {
+        taskList.add(new BukkitRunnable() {
             @Override
             public void run() {
-                //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), minigame.cmd);
-                Bukkit.broadcast(Component.text(chosenMinigame.cmd));
+                for (String s : chosenMinigame.cmd) {
+                    //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), s);
+                    System.out.println(Component.text(s));
+                }
             }
-        };
-        cmdrunnable.runTaskLater(ddd, 20L);
+        }.runTask(ddd));
     }
 
     public Set<Location> circle(Location location, int radius) {
@@ -182,14 +179,6 @@ public class DDDManager {
     }
 
     public void destroy() {
-        if (cmdrunnable != null && !cmdrunnable.isCancelled()) {
-            cmdrunnable.cancel();
-        }
-        if (fillRunnable != null && !fillRunnable.isCancelled()) {
-            fillRunnable.cancel();
-        }
-        if (finishRunnable != null && !finishRunnable.isCancelled()) {
-            finishRunnable.cancel();
-        }
+        taskList.forEach(BukkitTask::cancel);
     }
 }
