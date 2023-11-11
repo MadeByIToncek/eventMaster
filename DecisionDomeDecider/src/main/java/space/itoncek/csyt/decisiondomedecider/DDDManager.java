@@ -17,10 +17,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.ddd;
 
@@ -52,32 +49,23 @@ public class DDDManager {
         }
     }
 
-    public static <K, V extends Comparable<V>> Map.Entry<K, V> max(Map<K, V> map) {
+    public static Map.Entry<Minigame, Integer> max(HashMap<Minigame, Integer> map) {
 
-        // To store the result
-        Map.Entry<K, V> entryWithMaxValue = null;
+        List<Map.Entry<Minigame, Integer>> entries = new ArrayList<>();
+        int currentResult = Integer.MIN_VALUE;
 
-        // Iterate in the map to find the required entry
-        for (Map.Entry<K, V> currentEntry :
-                map.entrySet()) {
-
-            if (
-                // If this is the first entry, set result as
-                // this
-                    entryWithMaxValue == null
-
-                            // If this entry's value is more than the
-                            // max value Set this entry as the max
-                            || currentEntry.getValue().compareTo(
-                            entryWithMaxValue.getValue())
-                            > 0) {
-
-                entryWithMaxValue = currentEntry;
+        for (Map.Entry<Minigame, Integer> currentEntry : map.entrySet()) {
+            if (currentEntry.getValue() > currentResult) {
+                entries.clear();
+                entries.add(currentEntry);
+                currentResult = currentEntry.getValue();
+            } else if (currentEntry.getValue() == currentResult) {
+                entries.add(currentEntry);
             }
         }
+        Random rand = new Random();
 
-        // Return the entry with the highest value
-        return entryWithMaxValue;
+        return entries.get(rand.nextInt(entries.size()));
     }
 
     public void end() {
@@ -98,8 +86,8 @@ public class DDDManager {
             }
         }
         System.out.println(results);
-        Bukkit.broadcast(Component.text("Minigame chosen: " + max(results)));
-        chosenMinigame = Minigame.GridBuilders;
+        Bukkit.broadcast(Component.text("Minigame chosen: " + max(results).getKey()));
+        chosenMinigame = max(results).getKey();
         if (auto) {
             finishRunnable = new BukkitRunnable() {
                 @Override
@@ -130,7 +118,7 @@ public class DDDManager {
                 i += 2;
             }
         };
-        fillRunnable.runTaskTimer(ddd, 20L, 7L);
+        fillRunnable.runTaskTimer(ddd, 20L, 5L);
     }
 
 
