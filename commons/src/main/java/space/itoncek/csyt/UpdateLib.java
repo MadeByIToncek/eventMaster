@@ -25,7 +25,7 @@ public class UpdateLib {
             System.out.println("Current plugin version: " + getCommitID());
             if (cid > 0) {
                 try (FileWriter fw = new FileWriter(pluginFolder + "/release.id")) {
-                    System.out.println("Cid: " + cid);
+                    System.out.println("Version ID: " + Integer.toHexString(cid));
                     fw.write(cid + "");
                 } catch (IOException e) {
                     System.out.println("Unable to fetch current tag, autoupdates are disabled!");
