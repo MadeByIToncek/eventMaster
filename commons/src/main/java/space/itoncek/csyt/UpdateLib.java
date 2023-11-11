@@ -22,7 +22,7 @@ public class UpdateLib {
         if (!pluginFolder.exists()) pluginFolder.mkdirs();
         if (!new File(pluginFolder + "/release.id").exists()) {
             int cid = getCommitID();
-            System.out.println("Current plugin version: " + getCommitID());
+            System.out.println("Current plugin version: " + Integer.toHexString(cid));
             if (cid > 0) {
                 try (FileWriter fw = new FileWriter(pluginFolder + "/release.id")) {
                     System.out.println("Version ID: " + Integer.toHexString(cid));
@@ -53,7 +53,7 @@ public class UpdateLib {
         try (Scanner sc = new Scanner(new File(pluginFolder.toString() + "/release.id"))) {
             int current = sc.nextInt();
             int remote = getCommitID();
-            System.out.println("Current plugin version: " + current + "\nRemote plugin version: " + remote);
+            System.out.println("Current plugin version: " + Integer.toHexString(current) + "\tRemote plugin version: " + Integer.toHexString(remote));
             if (remote != current) {
                 update(plugin, pluginFile);
                 new File(pluginFolder + "/release.id").deleteOnExit();
@@ -85,14 +85,14 @@ public class UpdateLib {
 
     private static File getTargetFile(File pluginFile) {
         String string = pluginFile.getAbsolutePath();
-        System.out.println(string);
+        //System.out.println(string);
         String targetFileName;
         if (string.endsWith("_a.jar")) {
             targetFileName = string.substring(0, string.length() - 6) + ".jar";
         } else {
             targetFileName = string.substring(0, string.length() - 4) + "_a.jar";
         }
-        System.out.println(targetFileName);
+        //System.out.println(targetFileName);
         File targetFile = new File(targetFileName);
         if (targetFile.equals(pluginFile)) {
             throw new RuntimeException("Unable to create new filename");
