@@ -131,13 +131,13 @@ public class DDDManager {
     }
 
     public void destroy() {
-        if (!cmdrunnable.isCancelled()) {
+        if (cmdrunnable != null && !cmdrunnable.isCancelled()) {
             cmdrunnable.cancel();
         }
-        if (!fillRunnable.isCancelled()) {
+        if (fillRunnable != null && !fillRunnable.isCancelled()) {
             fillRunnable.cancel();
         }
-        if (!finishRunnable.isCancelled()) {
+        if (finishRunnable != null && !finishRunnable.isCancelled()) {
             finishRunnable.cancel();
         }
     }

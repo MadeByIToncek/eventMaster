@@ -33,8 +33,13 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
                 case "endManual" -> {
                     currentManager.end();
                 }
+                case "fillManual" -> {
+                    currentManager.fill(currentManager.chosenMinigame);
+                }
                 case "sendManual" -> {
                     currentManager.startMinigame(currentManager.chosenMinigame);
+                }
+                default -> {
                 }
             }
         }
@@ -43,7 +48,7 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender.isOp()) return List.of("startAuto", "abortAuto", "startManual", "endManual", "fillManual");
+        if (sender.isOp()) return List.of("startAuto", "abortAuto", "startManual", "endManual", "sendManual");
         return List.of();
     }
 }
