@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.currentManager;
+
 public class DDDCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -25,10 +27,14 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
                 case "abortAuto" -> {
                 }
                 case "startManual" -> {
+                    if (currentManager != null) currentManager.destroy();
+                    currentManager = new DDDManager(false);
                 }
                 case "endManual" -> {
+                    currentManager.end();
                 }
-                case "fillManual" -> {
+                case "sendManual" -> {
+                    currentManager.startMinigame(currentManager.chosenMinigame);
                 }
             }
         }

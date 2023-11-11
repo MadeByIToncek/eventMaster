@@ -10,6 +10,9 @@ public final class DecisionDomeDecider extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         ddd = this;
+        DDDCommand dddc = new DDDCommand();
+        getCommand("ddd").setTabCompleter(dddc);
+        getCommand("ddd").setExecutor(dddc);
     }
 
     @Override

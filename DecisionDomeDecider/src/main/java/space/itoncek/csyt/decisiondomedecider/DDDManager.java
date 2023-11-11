@@ -6,12 +6,12 @@
 
 package space.itoncek.csyt.decisiondomedecider;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
@@ -25,10 +25,14 @@ import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.ddd;
 
 public class DDDManager {
 
-    public DDDManager() {
-
+    public final boolean auto;
+    public Minigame chosenMinigame;
+    private BukkitRunnable cmdrunnable;
+    private BukkitRunnable finishRunnable;
+    private BukkitRunnable fillRunnable;
+    public DDDManager(boolean auto) {
+        this.auto = auto;
     }
-
     public void start() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) {
@@ -65,10 +69,19 @@ public class DDDManager {
             }
         }
         System.out.println(results);
+        chosenMinigame = Minigame.GridBuilders;
+        finishRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                fill(chosenMinigame);
+            }
+        };
+
+        finishRunnable.runTaskLater(ddd, 20L);
     }
 
     public void fill(Minigame minigame) {
-        BukkitRunnable run = new BukkitRunnable() {
+        fillRunnable = new BukkitRunnable() {
             int i = 3;
 
             @Override
@@ -83,16 +96,18 @@ public class DDDManager {
                 i += 2;
             }
         };
-        run.runTaskTimer(ddd, 0L, 7L);
+        fillRunnable.runTaskTimer(ddd, 20L, 7L);
     }
 
     public void startMinigame(Minigame minigame) {
-        new BukkitRunnable() {
+        cmdrunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), minigame.cmd);
+                //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), minigame.cmd);
+                Bukkit.broadcast(Component.text(minigame.cmd));
             }
-        }.runTaskLater(ddd, 20L);
+        };
+        cmdrunnable.runTaskLater(ddd, 20L);
     }
 
     public Set<Location> circle(Location location, int radius) {
@@ -113,5 +128,17 @@ public class DDDManager {
         }
         return blocks;
 
+    }
+
+    public void destroy() {
+        if (!cmdrunnable.isCancelled()) {
+            cmdrunnable.cancel();
+        }
+        if (!fillRunnable.isCancelled()) {
+            fillRunnable.cancel();
+        }
+        if (!finishRunnable.isCancelled()) {
+            finishRunnable.cancel();
+        }
     }
 }
