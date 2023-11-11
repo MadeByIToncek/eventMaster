@@ -19,7 +19,7 @@ public final class Pattern implements Comparable<Pattern> {
     private final int id;
     private final Material[][] pattern;
     private final List<Material> materials;
-    private int remainingPoints = 40;
+    private int remainingPoints = 30;
 
     public Pattern(int id, Material[][] pattern, List<Material> materials) {
         this.id = id;
