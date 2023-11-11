@@ -50,10 +50,13 @@ jobs:
         rm CapturePoint/target/original-*.jar
         rm DecisionDomeDecider/target/original-*.jar
         rm AcceptDiscordBot/target/original-*.jar
-    - uses: actions/upload-artifact@v3
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        name: plugins
-        path: |
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
           ChunkLockPrototype/target/*.jar
           Construction/target/*.jar
           MusicManager/target/*.jar
@@ -64,13 +67,10 @@ jobs:
           AcceptDiscordBot/target/*.jar
           DecisionDomeDecider/target/*.jar
           index.json
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - uses: actions/upload-artifact@v3
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
-        files: |
+        name: plugins
+        path: |
           ChunkLockPrototype/target/*.jar
           Construction/target/*.jar
           MusicManager/target/*.jar
