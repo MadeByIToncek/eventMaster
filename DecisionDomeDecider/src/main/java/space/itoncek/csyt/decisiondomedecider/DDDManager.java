@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.ddd;
@@ -49,23 +50,35 @@ public class DDDManager {
         }
     }
 
-    public static Map.Entry<Minigame, Integer> max(HashMap<Minigame, Integer> map) {
-
-        List<Map.Entry<Minigame, Integer>> entries = new ArrayList<>();
-        int currentResult = Integer.MIN_VALUE;
-
-        for (Map.Entry<Minigame, Integer> currentEntry : map.entrySet()) {
-            if (currentEntry.getValue() > currentResult) {
-                entries.clear();
-                entries.add(currentEntry);
-                currentResult = currentEntry.getValue();
-            } else if (currentEntry.getValue() == currentResult) {
-                entries.add(currentEntry);
+    public static <K, V extends Comparable<V>> Map.Entry<K, V> maxMap(Map<K, V> map) {
+        // To store the result
+        Map.Entry<K, V> entryWithMaxValue = null;
+        // Iterate in the map to find the required entry
+        for (Map.Entry<K, V> currentEntry : map.entrySet()) {
+            if (entryWithMaxValue == null || currentEntry.getValue().compareTo(entryWithMaxValue.getValue()) > 0) {
+                entryWithMaxValue = currentEntry;
             }
         }
-        Random rand = new Random();
 
-        return entries.get(rand.nextInt(entries.size()));
+        return entryWithMaxValue;
+    }
+
+    public static List<Map.Entry<Minigame, Integer>> uniqueMaxMap(Map<Minigame, Integer> map) {
+        // To store the result
+        List<Map.Entry<Minigame, Integer>> entryWithMaxValue = new ArrayList<>();
+        int compare = Integer.MIN_VALUE;
+        // Iterate in the map to find the required entry
+        for (Map.Entry<Minigame, Integer> currentEntry : map.entrySet()) {
+            if (compare == Integer.MIN_VALUE || compare < currentEntry.getValue()) {
+                entryWithMaxValue.clear();
+                compare = currentEntry.getValue();
+                entryWithMaxValue.add(currentEntry);
+            } else if (compare == currentEntry.getValue()) {
+                entryWithMaxValue.add(currentEntry);
+            }
+        }
+
+        return entryWithMaxValue;
     }
 
     public void end() {
@@ -86,8 +99,9 @@ public class DDDManager {
             }
         }
         System.out.println(results);
-        Bukkit.broadcast(Component.text("Minigame chosen: " + max(results).getKey()));
-        chosenMinigame = max(results).getKey();
+        Minigame resultat = process(results);
+        Bukkit.broadcast(Component.text("Minigame chosen: " + resultat));
+        chosenMinigame = resultat;
         if (auto) {
             finishRunnable = new BukkitRunnable() {
                 @Override
@@ -97,6 +111,20 @@ public class DDDManager {
             };
 
             finishRunnable.runTaskLater(ddd, 20L);
+        }
+    }
+
+    private Minigame process(HashMap<Minigame, Integer> results) {
+        if (results.values().stream().distinct().count() != results.size()) {
+            SecureRandom rnd = new SecureRandom();
+            List<Map.Entry<Minigame, Integer>> entries = uniqueMaxMap(results);
+            System.out.println(entries);
+            System.out.println(entries.size());
+            System.out.println(rnd.nextInt(entries.size()));
+            System.out.println(entries.get(rnd.nextInt(entries.size())).getKey());
+            return entries.get(rnd.nextInt(entries.size())).getKey();
+        } else {
+            return maxMap(results).getKey();
         }
     }
 
