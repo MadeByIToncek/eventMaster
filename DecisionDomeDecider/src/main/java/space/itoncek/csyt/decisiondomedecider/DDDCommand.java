@@ -35,10 +35,10 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
                     currentManager.end();
                 }
                 case "fillManual" -> {
-                    currentManager.fill(currentManager.chosenMinigame);
+                    currentManager.fill();
                 }
                 case "sendManual" -> {
-                    currentManager.startMinigame(currentManager.chosenMinigame);
+                    currentManager.startMinigame();
                 }
                 default -> {
                 }

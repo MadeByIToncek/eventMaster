@@ -38,7 +38,7 @@ public class DDDManager {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) {
                 p.setGameMode(GameMode.ADVENTURE);
-                p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 127, 345), PlayerTeleportEvent.TeleportCause.COMMAND);
+                p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 130, 345), PlayerTeleportEvent.TeleportCause.COMMAND);
                 for (PotionEffect activePotionEffect : p.getActivePotionEffects()) {
                     p.removePotionEffect(activePotionEffect.getType());
                 }
@@ -47,7 +47,7 @@ public class DDDManager {
                 p.setSaturation(200);
             } else {
                 p.setFlying(true);
-                p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 130, 345), PlayerTeleportEvent.TeleportCause.COMMAND);
+                p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 133, 345), PlayerTeleportEvent.TeleportCause.COMMAND);
             }
         }
     }
@@ -80,36 +80,6 @@ public class DDDManager {
         return entryWithMaxValue;
     }
 
-    public void fill(Minigame minigame) {
-        fillRunnable = new BukkitRunnable() {
-            int i = 3;
-
-            @Override
-            public void run() {
-                if (i > 25) {
-                    startMinigame(minigame);
-                    this.cancel();
-                }
-                for (Location location : circle(new Location(Bukkit.getWorld("lobby"), 19, 130, 345), i)) {
-                    minigame.replaceBlock(location.getBlock());
-                }
-                i += 2;
-            }
-        };
-        fillRunnable.runTaskTimer(ddd, 20L, 7L);
-    }
-
-    public void startMinigame(Minigame minigame) {
-        cmdrunnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), minigame.cmd);
-                Bukkit.broadcast(Component.text(minigame.cmd));
-            }
-        };
-        cmdrunnable.runTaskLater(ddd, 20L);
-    }
-
     public void end() {
         HashMap<Minigame, Integer> results = new HashMap<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -134,12 +104,45 @@ public class DDDManager {
             finishRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    fill(chosenMinigame);
+                    fill();
                 }
             };
 
             finishRunnable.runTaskLater(ddd, 20L);
         }
+    }
+
+
+    public void fill() {
+        fillRunnable = new BukkitRunnable() {
+            int i = 3;
+
+            @Override
+            public void run() {
+                if (i > 25) {
+                    if (auto) startMinigame();
+                    this.cancel();
+                }
+                Bukkit.broadcast(Component.text("Filling radius " + i));
+                for (Location location : circle(new Location(Bukkit.getWorld("lobby"), 19, 127, 345), i)) {
+                    chosenMinigame.replaceBlock(location.getBlock());
+                }
+                i += 2;
+            }
+        };
+        fillRunnable.runTaskTimer(ddd, 20L, 7L);
+    }
+
+
+    public void startMinigame() {
+        cmdrunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), minigame.cmd);
+                Bukkit.broadcast(Component.text(chosenMinigame.cmd));
+            }
+        };
+        cmdrunnable.runTaskLater(ddd, 20L);
     }
 
     public Set<Location> circle(Location location, int radius) {
