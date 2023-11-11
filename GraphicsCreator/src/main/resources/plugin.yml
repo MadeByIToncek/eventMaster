@@ -1,6 +1,0 @@
-name: GraphicsCreator
-version: '${project.version}'
-main: space.itoncek.csyt.graphicscreator.GraphicsCreator
-api-version: '1.19'
-commands:
-  gcc:

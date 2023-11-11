@@ -30,7 +30,7 @@
         <module>countdown</module>
         <module>CapturePoint</module>
         <module>AcceptDiscordBot</module>
-        <module>GraphicsCreator</module>
+        <module>DecisionDomeDecider</module>
     </modules>
 
 </project>

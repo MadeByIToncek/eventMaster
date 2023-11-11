@@ -1,0 +1,4 @@
+name: DecisionDomeDecider
+version: '${project.version}'
+main: space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider
+api-version: '1.19'
