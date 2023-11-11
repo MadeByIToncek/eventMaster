@@ -12,6 +12,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
@@ -151,8 +152,8 @@ public class DDDManager {
             @Override
             public void run() {
                 for (String s : chosenMinigame.cmd) {
-                    //BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), s);
-                    System.out.println(Component.text(s));
+                    BukkitCommand.broadcastCommandMessage(Bukkit.getConsoleSender(), s);
+                    //System.out.println(s);
                 }
             }
         }.runTask(ddd));

@@ -67,19 +67,5 @@ jobs:
           AcceptDiscordBot/target/*.jar
           DecisionDomeDecider/target/*.jar
           index.json
-    - uses: actions/upload-artifact@v3
-      with:
-        name: plugins
-        path: |
-          ChunkLockPrototype/target/*.jar
-          Construction/target/*.jar
-          MusicManager/target/*.jar
-          PatternSaver/target/*.jar
-          PointEvaluator/target/*.jar
-          countdown/target/*.jar
-          CapturePoint/target/*.jar
-          AcceptDiscordBot/target/*.jar
-          DecisionDomeDecider/target/*.jar
-          index.json
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@v3
