@@ -18,7 +18,7 @@ public enum Minigame {
     BlitzTag(RED_CONCRETE, RED_WOOL, RED_CONCRETE_POWDER, List.of("minigame_tag_start"), "\n\n\n\n\n\n\n\n䩀"),
     ReachTheEnd(ORANGE_CONCRETE, ORANGE_WOOL, ORANGE_CONCRETE_POWDER, List.of("minigame_rte_kolo1"), "\n\n\n\n\n\n\n䩅"),
     ParkourMaster(YELLOW_CONCRETE, YELLOW_WOOL, YELLOW_CONCRETE_POWDER, List.of("minigame_parkour_reset", "minigame_parkour_start"), "\n\n\n\n\n\n\n䩃"),
-    SkyLands(GREEN_CONCRETE, GREEN_WOOL, GREEN_CONCRETE_POWDER, List.of("minigame_sl_start"), "\n\n\n\n\n\n\n\n䩂"),
+    SkyLands(LIME_CONCRETE, LIME_WOOL, LIME_CONCRETE_POWDER, List.of("minigame_sl_start"), "\n\n\n\n\n\n\n\n䩂"),
     GridBuilders(LIGHT_BLUE_CONCRETE, LIGHT_BLUE_WOOL, LIGHT_BLUE_CONCRETE_POWDER, List.of("minigame_construction_start"), "\n\n\n\n\n䩁");
     public final List<String> cmd;
     private final String display;
