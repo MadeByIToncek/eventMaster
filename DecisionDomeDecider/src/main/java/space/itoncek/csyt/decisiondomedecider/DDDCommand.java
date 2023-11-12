@@ -10,46 +10,35 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.*;
+import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.currentManager;
+import static space.itoncek.csyt.decisiondomedecider.DecisionDomeDecider.taskList;
 
 public class DDDCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.isOp()) {
             switch (args[0]) {
-                case "startAuto" -> {
-                    if (currentManager != null) currentManager.destroy();
-                    currentManager = new DDDManager(true);
-                    currentManager.start();
-                    taskList.add(new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            currentManager.end();
-                        }
-                    }.runTaskLater(ddd, 30 * 20));
-                }
-                case "abortAuto" -> {
+                case "abort" -> {
                     taskList.forEach(BukkitTask::cancel);
                 }
-                case "startManual" -> {
+                case "start" -> {
                     if (currentManager != null) currentManager.destroy();
                     currentManager = new DDDManager(false);
                     currentManager.start();
                 }
-                case "endManual" -> {
+                case "end" -> {
                     currentManager.end();
                 }
-                case "fillManual" -> {
+                case "fill" -> {
                     currentManager.fill();
                 }
-                case "sendManual" -> {
+                case "send" -> {
                     currentManager.startMinigame();
                 }
                 default -> {
@@ -61,8 +50,7 @@ public class DDDCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender.isOp())
-            return List.of("startAuto", "abortAuto", "startManual", "endManual", "sendManual", "fillManual");
+        if (sender.isOp()) return List.of("start", "end", "fill", "send", "abort");
         return List.of();
     }
 }
