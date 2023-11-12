@@ -81,7 +81,7 @@ public class GameCommand implements CommandExecutor {
                 }
             }
             case "reloadpatterns" -> patterns = ConfigManager.loadPatterns();
-            case "setmutliplier" -> {
+            case "setmultiplier" -> {
                 sender.sendMessage("Multiplier set to " + Float.parseFloat(args[1]));
                 multiplier = Float.parseFloat(args[1]);
             }
