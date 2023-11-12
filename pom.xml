@@ -21,7 +21,6 @@
 
     <modules>
         <module>commons</module>
-        <module>CGCommons</module>
         <module>Construction</module>
         <module>MusicManager</module>
         <module>PatternSaver</module>
