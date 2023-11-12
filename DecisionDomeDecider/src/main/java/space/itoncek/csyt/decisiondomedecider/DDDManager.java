@@ -6,18 +6,21 @@
 
 package space.itoncek.csyt.decisiondomedecider;
 
+import com.destroystokyo.paper.Title;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.net.URI;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -47,6 +50,48 @@ public class DDDManager {
                 p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 133, 345), PlayerTeleportEvent.TeleportCause.COMMAND);
             }
         }
+
+        taskList.add(new BukkitRunnable() {
+            @Override
+            public void run() {
+                WebSocketClient cli = new WebSocketClient(URI.create("ws://141.147.43.31:2232")) {
+                    @Override
+                    public void onOpen(ServerHandshake handshakedata) {
+
+                    }
+
+                    @Override
+                    public void onMessage(String message) {
+
+                    }
+
+                    @Override
+                    public void onClose(int code, String reason, boolean remote) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception ex) {
+
+                    }
+                };
+                taskList.add(new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        JSONArray array = new JSONArray();
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (p.getGameMode() == GameMode.ADVENTURE) {
+                                array.put(new JSONObject().put("p", p.getUniqueId().toString()).put("l", ((float) p.getLocation().getX()) + "x" + ((float) p.getLocation().getZ())));
+                            }
+                        }
+                        JSONObject output = new JSONObject();
+                        output.put("i", 0);
+                        output.put("d", array);
+                        cli.send(output.toString());
+                    }
+                }.runTaskTimer(ddd, 0L, 20L));
+            }
+        }.runTaskAsynchronously(ddd));
     }
 
     public static <K, V extends Comparable<V>> Map.Entry<K, V> maxMap(Map<K, V> map) {
@@ -121,8 +166,16 @@ public class DDDManager {
 //            System.out.println(entries.get(rnd.nextInt(entries.size())).getKey());
             return entries.get(rnd.nextInt(entries.size())).getKey();
         } else {
-            return maxMap(results).getKey();
+            try {
+                return maxMap(results).getKey();
+            } catch (Exception e) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.teleportAsync(new Location(Bukkit.getWorld("lobby"), 19, 112, 200));
+                    p.sendTitle(Title.builder().fadeIn(10).fadeOut(10).title(ChatColor.DARK_RED + "Žádná minihra nebyla vybrána").build());
+                }
+            }
         }
+        return null;
     }
 
 
@@ -154,6 +207,7 @@ public class DDDManager {
                     Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), s);
                     //System.out.println(s);
                 }
+                destroy();
             }
         }.runTask(ddd));
     }
