@@ -28,6 +28,10 @@ public final class CapturePoint extends JavaPlugin {
     public static CapturePointInstance[] instances;
     public static BlockState[][][] blockStates;
     public static CapturePoint pl;
+    public static void log(String s) {
+        Bukkit.getLogger().warning("[CapturePoint] --> " + s + " <--");
+    }
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -38,30 +42,15 @@ public final class CapturePoint extends JavaPlugin {
             }
         };
         UpdateLib.downloadCommitID(this.getDataFolder());
+        //TODO: REMOVE LOGS
+        log("Enabling capturepoint");
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
         instances = loadInstances();
         blockStates = loadPattern();
-    }
-
-    private CapturePointInstance[] loadInstances() {
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/instances.json").openStream())) {
-            StringJoiner js = new StringJoiner("\n");
-            while (sc.hasNextLine()) js.add(sc.nextLine());
-
-            JSONArray array = new JSONArray(js.toString());
-            CapturePointInstance[] output = new CapturePointInstance[array.length()];
-            for (Object o : array) {
-                JSONObject object = (JSONObject) o;
-                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center"), 0, 0, 0),
-                        parseLocation(object.getJSONObject("center"), -2, 1, -2),
-                        parseLocation(object.getJSONObject("center"), 2, 1, 2));
-            }
-            return output;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //TODO: REMOVE LOGS
+        log("Capturepoint enabled");
     }
 
     private Location parseLocation(JSONObject location, int xoff, int yoff, int zoff) {
@@ -102,9 +91,35 @@ public final class CapturePoint extends JavaPlugin {
         return out;
     }
 
+    private CapturePointInstance[] loadInstances() {
+        //TODO: REMOVE LOGS
+        log("Loaded Instances");
+        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/instances.json").openStream())) {
+            StringJoiner js = new StringJoiner("\n");
+            while (sc.hasNextLine()) js.add(sc.nextLine());
+
+            JSONArray array = new JSONArray(js.toString());
+            CapturePointInstance[] output = new CapturePointInstance[array.length()];
+            for (Object o : array) {
+                JSONObject object = (JSONObject) o;
+                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center"), 0, 0, 0),
+                        parseLocation(object.getJSONObject("center"), -2, 1, -2),
+                        parseLocation(object.getJSONObject("center"), 2, 1, 2));
+            }
+            //TODO: REMOVE LOGS
+            log("Instances loaded");
+            Bukkit.getLogger().warning(array.toString());
+            return output;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        //TODO: REMOVE LOGS
+        log("Disabling capturepoint");
         UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile());
     }
 }
