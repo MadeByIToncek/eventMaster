@@ -59,8 +59,10 @@ public class CommandManager implements CommandExecutor {
                             case "destroy" -> {
                                 if (args.length == 3) {
                                     Integer id = Integer.valueOf(args[2]);
-                                    managers.get(id).destroy();
-                                    managers.remove(id);
+                                    if (managers.get(id) != null) {
+                                        managers.get(id).destroy();
+                                        managers.remove(id);
+                                    }
                                 }
                             }
                         }
@@ -68,7 +70,9 @@ public class CommandManager implements CommandExecutor {
                 }
                 case "start" -> {
                     for (CapturePointManager value : managers.values()) {
-                        value.init();
+                        if (value != null) {
+                            value.init();
+                        }
                     }
                 }
 
@@ -78,11 +82,14 @@ public class CommandManager implements CommandExecutor {
                             value.destroy();
                         }
                     }
+                    managers.clear();
                 }
 
                 case "disable" -> {
                     for (CapturePointManager value : managers.values()) {
-                        value.destroy();
+                        if (value != null) {
+                            value.destroy();
+                        }
                     }
                     managers.clear();
                     Bukkit.getServer().getPluginManager().disablePlugin(pl);
