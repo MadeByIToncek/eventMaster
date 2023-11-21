@@ -80,7 +80,7 @@ public final class TeamAssets {
     public void recycle() {
         int nextID = currentID + 1;
 
-        if (nextID > Construction.patterns.size()) {
+        if (nextID > Construction.patterns.size() - 1) {
             finish();
             return;
         }

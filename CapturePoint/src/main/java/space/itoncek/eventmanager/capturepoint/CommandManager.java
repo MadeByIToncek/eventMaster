@@ -74,7 +74,9 @@ public class CommandManager implements CommandExecutor {
 
                 case "stop" -> {
                     for (CapturePointManager value : managers.values()) {
-                        value.destroy();
+                        if (value != null) {
+                            value.destroy();
+                        }
                     }
                 }
 

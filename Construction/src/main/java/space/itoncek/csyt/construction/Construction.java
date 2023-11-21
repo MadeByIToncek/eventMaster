@@ -12,9 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONArray;
 import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
-import space.itoncek.csyt.construction.commands.DevelopmentCommand;
 import space.itoncek.csyt.construction.commands.GameCommand;
-import space.itoncek.csyt.construction.commands.autofill.ConstructionAutofill;
 import space.itoncek.csyt.construction.listeners.BlockActionListener;
 import space.itoncek.csyt.construction.utils.TeamColor;
 
@@ -51,9 +49,6 @@ public final class Construction extends JavaPlugin {
         buildPlaces = loadPlaces();
         getServer().getPluginManager().registerEvents(new BlockActionListener(), this);
         Objects.requireNonNull(getCommand("constgame")).setExecutor(new GameCommand());
-        //TODO: DEBUG STUFF, REMOVE BEFORE RELEASE!
-        Objects.requireNonNull(getCommand("development")).setExecutor(new DevelopmentCommand());
-        Objects.requireNonNull(getCommand("development")).setTabCompleter(new ConstructionAutofill());
 
         for (BuildPlace place : buildPlaces) {
             for (Location location : place.getLocations()) {

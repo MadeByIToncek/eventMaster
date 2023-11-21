@@ -75,21 +75,23 @@ public class DDDManager {
 
                     }
                 };
-                taskList.add(new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        JSONArray array = new JSONArray();
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (p.getGameMode() == GameMode.ADVENTURE) {
-                                array.put(new JSONObject().put("p", p.getUniqueId().toString()).put("l", ((float) p.getLocation().getX()) + "x" + ((float) p.getLocation().getZ())));
+                if (cli.isOpen()) {
+                    taskList.add(new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            JSONArray array = new JSONArray();
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                if (p.getGameMode() == GameMode.ADVENTURE) {
+                                    array.put(new JSONObject().put("p", p.getUniqueId().toString()).put("l", ((float) p.getLocation().getX()) + "x" + ((float) p.getLocation().getZ())));
+                                }
                             }
+                            JSONObject output = new JSONObject();
+                            output.put("i", 0);
+                            output.put("d", array);
+                            cli.send(output.toString());
                         }
-                        JSONObject output = new JSONObject();
-                        output.put("i", 0);
-                        output.put("d", array);
-                        cli.send(output.toString());
-                    }
-                }.runTaskTimer(ddd, 0L, 20L));
+                    }.runTaskTimer(ddd, 0L, 20L));
+                }
             }
         }.runTaskAsynchronously(ddd));
     }
