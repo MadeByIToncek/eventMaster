@@ -27,6 +27,7 @@ public final class CapturePoint extends JavaPlugin {
     public static final HashMap<TeamColor, Team> teamMap = new HashMap<>();
     public static CapturePointInstance[] instances;
     public static BlockState[][][] blockStates;
+    public static float multiplier;
     public static CapturePoint pl;
     public static void log(String s) {
         Bukkit.getLogger().warning("[CapturePoint] --> " + s + " <--");

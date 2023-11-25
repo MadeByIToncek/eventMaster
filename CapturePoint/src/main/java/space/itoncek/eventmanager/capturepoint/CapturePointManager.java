@@ -132,14 +132,14 @@ public class CapturePointManager {
         for (Player player : this.red.players) {
             if (red) {
                 System.out.println("Adding 45 points to" + player.getName());
-                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " " + 40 * multiplier);
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
         for (Player player : blue.players) {
             if (!red) {
-                System.out.println("Adding 45 points to" + player.getName());
-                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " 40");
+                System.out.println("Adding 45 points to " + player.getName());
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "ptsadd " + player.getName() + " " + 40 * multiplier);
             }
             player.setGameMode(GameMode.SPECTATOR);
         }
