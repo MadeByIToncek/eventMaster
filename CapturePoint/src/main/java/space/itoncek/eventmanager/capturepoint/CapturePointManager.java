@@ -23,8 +23,6 @@ public class CapturePointManager {
     private final int ident;
 
     public CapturePointManager(CapturePointInstance instance, Team red, Team blue, int ident) {
-        //TODO: REMOVE LOGS
-        log("Starting CP Instance");
         this.instance = instance;
         runnable = new BukkitRunnable() {
             @Override
@@ -40,8 +38,6 @@ public class CapturePointManager {
      * Run to initialize surround checks and prepare point for game
      */
     public void init() {
-        //TODO: REMOVE LOGS
-        log("Innit minigame #" + ident);
         runnable.runTaskTimer(pl, 0, 20);
     }
 
@@ -71,8 +67,6 @@ public class CapturePointManager {
         int signstate = Math.round(Math.signum(state));
         int absState = Math.abs(state);
 
-        //TODO: REMOVE LOGS
-        log("#" + ident + "-->" + signstate);
         if (absState < 9) {
             Location center = instance.center();
             int bx = center.getBlockX(), by = center.getBlockY(), bz = center.getBlockZ();

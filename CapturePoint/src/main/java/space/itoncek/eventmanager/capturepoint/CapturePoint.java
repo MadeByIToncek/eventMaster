@@ -42,15 +42,11 @@ public final class CapturePoint extends JavaPlugin {
             }
         };
         UpdateLib.downloadCommitID(this.getDataFolder());
-        //TODO: REMOVE LOGS
-        log("Enabling capturepoint");
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
         instances = loadInstances();
         blockStates = loadPattern();
-        //TODO: REMOVE LOGS
-        log("Capturepoint enabled");
     }
 
     private Location parseLocation(JSONObject location, int xoff, int yoff, int zoff) {
@@ -92,8 +88,6 @@ public final class CapturePoint extends JavaPlugin {
     }
 
     private CapturePointInstance[] loadInstances() {
-        //TODO: REMOVE LOGS
-        log("Loaded Instances");
         try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/instances.json").openStream())) {
             StringJoiner js = new StringJoiner("\n");
             while (sc.hasNextLine()) js.add(sc.nextLine());
@@ -106,8 +100,6 @@ public final class CapturePoint extends JavaPlugin {
                         parseLocation(object.getJSONObject("center"), -2, 1, -2),
                         parseLocation(object.getJSONObject("center"), 2, 1, 2));
             }
-            //TODO: REMOVE LOGS
-            log("Instances loaded");
             Bukkit.getLogger().warning(array.toString());
             return output;
         } catch (IOException e) {
@@ -118,8 +110,6 @@ public final class CapturePoint extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        //TODO: REMOVE LOGS
-        log("Disabling capturepoint");
         UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile());
     }
 }

@@ -76,7 +76,6 @@ public final class TeamAssets {
         currentID = -1;
         recycle();
     }
-    //todo
     public void recycle() {
         int nextID = currentID + 1;
 
