@@ -67,8 +67,7 @@ public class CommandManager implements CommandExecutor {
                             }
                             case "multi" -> {
                                 if (args.length == 3) {
-                                    float mult = Float.parseFloat(args[2]);
-                                    multiplier = mult;
+                                    multiplier = Float.parseFloat(args[2]);
                                 }
                             }
                         }
