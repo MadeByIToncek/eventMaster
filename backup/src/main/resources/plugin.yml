@@ -1,0 +1,8 @@
+name: backup
+version: '${project.version}'
+main: fun.csyt.backup.Backup
+api-version: '1.19'
+commands:
+  resume:
+  sett:
+  sets:

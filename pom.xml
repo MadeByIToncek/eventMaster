@@ -21,6 +21,7 @@
 
     <modules>
         <module>commons</module>
+        <module>CSYTOpen</module>
         <module>Construction</module>
         <module>MusicManager</module>
         <module>PatternSaver</module>
@@ -30,6 +31,7 @@
         <module>CapturePoint</module>
         <module>AcceptDiscordBot</module>
         <module>DecisionDomeDecider</module>
+        <module>backup</module>
     </modules>
 
 </project>
