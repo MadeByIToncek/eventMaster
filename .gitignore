@@ -41,3 +41,4 @@ build/
 /CSYT-RTS/bin/
 /CSYT-RTS/obj/
 /CSYT-RTS/.vs/
+/config/.ghcreds

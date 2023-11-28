@@ -42,7 +42,7 @@ public final class CapturePoint extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder());
+        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
@@ -111,6 +111,6 @@ public final class CapturePoint extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile());
+        UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile(), "./config/.ghcreds");
     }
 }

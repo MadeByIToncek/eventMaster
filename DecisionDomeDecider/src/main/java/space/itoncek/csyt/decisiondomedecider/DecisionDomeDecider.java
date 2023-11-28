@@ -23,7 +23,7 @@ public final class DecisionDomeDecider extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder());
+        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
         ddd = this;
         DDDCommand dddc = new DDDCommand();
         getCommand("ddd").setTabCompleter(dddc);
@@ -33,6 +33,6 @@ public final class DecisionDomeDecider extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        UpdateLib.checkForUpdates(this.getDataFolder(), "DecisionDomeDecider", this.getFile());
+        UpdateLib.checkForUpdates(this.getDataFolder(), "DecisionDomeDecider", this.getFile(), "./config/.ghcreds");
     }
 }

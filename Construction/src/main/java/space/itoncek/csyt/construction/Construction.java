@@ -43,7 +43,7 @@ public final class Construction extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder());
+        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
         pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();
@@ -73,6 +73,6 @@ public final class Construction extends JavaPlugin {
             buildPlace.clr();
         }
         savePlaces(buildPlaces);
-        UpdateLib.checkForUpdates(this.getDataFolder(), "Construction", this.getFile());
+        UpdateLib.checkForUpdates(this.getDataFolder(), "Construction", this.getFile(), "./config/.ghcreds");
     }
 }

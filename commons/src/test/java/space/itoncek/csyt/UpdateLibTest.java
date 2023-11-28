@@ -6,15 +6,17 @@
 
 package space.itoncek.csyt;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 class UpdateLibTest {
 
-    @Test
-    void getCommitID() {
-        System.out.println("Latest release: " + UpdateLib.getCommitID());
-        assertTrue(true);
-    }
+//    @Test
+//    void getCommitID() {
+//        System.out.println("Latest release: " + UpdateLib.getCommitID("./config/.ghcreds"));
+//        assertTrue(true);
+//    }
+
+//    @Test
+//    void update() throws IOException {
+//        UpdateLib.update("construction", new File("./plugin.jar"),"./config/.ghcreds");
+//        assertTrue(new File("./plugin_a.jar").exists() || new File("./plugin.jar").exists());
+//    }
 }

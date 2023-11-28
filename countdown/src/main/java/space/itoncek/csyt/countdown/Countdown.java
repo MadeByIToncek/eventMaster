@@ -96,7 +96,7 @@ public final class Countdown extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder());
+        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
         // Plugin startup logic
         pl = this;
         Objects.requireNonNull(getCommand("acd")).setExecutor(new ACDCommand());
@@ -158,7 +158,7 @@ public final class Countdown extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        UpdateLib.checkForUpdates(this.getDataFolder(), "countdown", this.getFile());
+        UpdateLib.checkForUpdates(this.getDataFolder(), "countdown", this.getFile(), "./config/.ghcreds");
     }
 }
 
