@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import space.itoncek.csyt.DRMLib;
@@ -50,22 +51,27 @@ public final class MusicManager extends JavaPlugin {
             }
         }
         // Plugin startup logic
-        manager.register(new Sponsors());
-        manager.register(new TamHost());
-        manager.register(new TenM());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                manager.register(new Sponsors());
+                manager.register(new TamHost());
+                manager.register(new TenM());
 
-        StringJoiner js = new StringJoiner("\n");
-        try (Scanner sc = new Scanner(cfg)) {
-            while (sc.hasNextLine()) js.add(sc.nextLine());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+                StringJoiner js = new StringJoiner("\n");
+                try (Scanner sc = new Scanner(cfg)) {
+                    while (sc.hasNextLine()) js.add(sc.nextLine());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-        for (Object o : new JSONArray(js.toString())) {
-            manager.register(deserialize((JSONObject) o));
-        }
+                for (Object o : new JSONArray(js.toString())) {
+                    manager.register(deserialize((JSONObject) o));
+                }
 
-        manager.createAll(true);
+                manager.createAll(true);
+            }
+        }.runTask(pl);
     }
 
     public static Advancement deserialize(JSONObject object) {

@@ -39,8 +39,14 @@ public class UpdateLib {
     public static int getCommitID() {
         try {
             GHRepository repo = getRepo();
-            return (int) repo.getLatestRelease().getId();
+            for (GHRelease release : repo.listReleases()) {
+                if (release.getTagName().equals("latest")) {
+                    System.out.println(release.getId());
+                    return (int) release.getId();
+                }
+            }
         } catch (IOException ignored) {
+
         }
         return -1;
     }
@@ -104,7 +110,7 @@ public class UpdateLib {
     }
 
     private static GHRepository getRepo() throws IOException {
-        String credentials = "S:\\dev\\CSYT\\config\\.ghcreds";
+        String credentials = "./config/.ghcreds";
         if (!new File(credentials).exists()) new File(credentials).createNewFile();
         GitHub gitHub = GitHubBuilder.fromPropertyFile(credentials)
                 .withRateLimitHandler(RateLimitHandler.FAIL)
@@ -113,7 +119,7 @@ public class UpdateLib {
     }
 
     private static Properties getProps() throws IOException {
-        String credentials = "S:\\dev\\CSYT\\config\\.ghcreds";
+        String credentials = "./config/.ghcreds";
         if (!new File(credentials).exists()) new File(credentials).createNewFile();
         Properties props = new Properties();
         props.load(new FileInputStream(credentials));
