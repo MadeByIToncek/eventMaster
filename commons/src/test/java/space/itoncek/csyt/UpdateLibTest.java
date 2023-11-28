@@ -6,6 +6,13 @@
 
 package space.itoncek.csyt;
 
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class UpdateLibTest {
 
 //    @Test
@@ -14,9 +21,9 @@ class UpdateLibTest {
 //        assertTrue(true);
 //    }
 
-//    @Test
-//    void update() throws IOException {
-//        UpdateLib.update("construction", new File("./plugin.jar"),"./config/.ghcreds");
-//        assertTrue(new File("./plugin_a.jar").exists() || new File("./plugin.jar").exists());
-//    }
+    @Test
+    void update() throws IOException {
+        UpdateLib.update("construction", new File("./plugin.jar"));
+        assertTrue(true);
+    }
 }

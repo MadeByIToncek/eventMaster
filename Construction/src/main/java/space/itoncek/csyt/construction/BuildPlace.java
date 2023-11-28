@@ -33,11 +33,12 @@ public class BuildPlace {
      * Color of the team, owning this BuildPlace
      */
     public final TeamColor color;
+    public final boolean display;
     public boolean active;
     public Material[][] pattern;
     public int patternID;
     public long patternStart;
-    public final boolean display;
+
     /**
      * @param markerLocation Location of orientation defining block (top of BuildPlace)
      * @param orientation    Orientation of BuildPlace (NORTH if markerLocation is at the north [neg z] side of BuildPlace)
@@ -91,6 +92,14 @@ public class BuildPlace {
             out.put(obj);
         }
 
+        return out;
+    }
+
+    public static Material[][] mirror(Material[][] in) {
+        Material[][] out = new Material[in.length][in.length];
+        for (int i = 0; i < in.length; i++) {
+            System.arraycopy(in[i], 0, out[in.length - i - 1], 0, in.length);
+        }
         return out;
     }
 
@@ -165,7 +174,6 @@ public class BuildPlace {
         }
     }
 
-
     public boolean isMaterial(int x, int z, Material mat) {
         Location loc = getRelLoc(x, z);
         return mat.equals(loc.getBlock().getType());
@@ -180,14 +188,6 @@ public class BuildPlace {
                 ret[i][j] = matrix[j][size - i - 1]; //***
 
         return ret;
-    }
-
-    public static Material[][] mirror(Material[][] in) {
-        Material[][] out = new Material[in.length][in.length];
-        for (int i = 0; i < in.length; i++) {
-            System.arraycopy(in[i], 0, out[in.length - i - 1], 0, in.length);
-        }
-        return out;
     }
 
     public void clr() {

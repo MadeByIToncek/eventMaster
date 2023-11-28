@@ -105,7 +105,7 @@ public final class MusicManager extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         manager = new AdvancementManager(this);
         getCommand("reloadAdvancements").setExecutor(new ReloadCommand());
@@ -115,6 +115,6 @@ public final class MusicManager extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        UpdateLib.checkForUpdates(this.getDataFolder(), "MusicManager", this.getFile(), "./config/.ghcreds");
+        UpdateLib.checkForUpdates(this.getDataFolder(), "MusicManager", this.getFile());
     }
 }

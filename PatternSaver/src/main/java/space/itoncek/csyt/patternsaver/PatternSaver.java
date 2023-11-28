@@ -134,6 +134,7 @@ public final class PatternSaver extends JavaPlugin {
     public Material getBlockAt(String world, int x, int y, int z) {
         return new Location(Bukkit.getWorld(world), x, y, z).getBlock().getType();
     }
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic

@@ -16,11 +16,7 @@ import space.itoncek.csyt.UpdateLib;
 import space.itoncek.eventmanager.capturepoint.utils.BlockState;
 import space.itoncek.eventmanager.capturepoint.utils.TeamColor;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.StringJoiner;
 
 public final class CapturePoint extends JavaPlugin {
     public static final HashMap<Integer, CapturePointManager> managers = new HashMap<>();
@@ -29,6 +25,7 @@ public final class CapturePoint extends JavaPlugin {
     public static BlockState[][][] blockStates;
     public static float multiplier = 1;
     public static CapturePoint pl;
+
     public static void log(String s) {
         Bukkit.getLogger().warning("[CapturePoint] --> " + s + " <--");
     }
@@ -42,7 +39,7 @@ public final class CapturePoint extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         getCommand("capt").setExecutor(new CommandManager());
         getCommand("capt").setTabCompleter(new CommandHelper());
@@ -56,61 +53,49 @@ public final class CapturePoint extends JavaPlugin {
 
     private BlockState[][][] loadPattern() {
         BlockState[][][] out = new BlockState[9][5][5];
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/loading.json").openStream())) {
-            StringJoiner js = new StringJoiner("\n");
-            while (sc.hasNextLine()) js.add(sc.nextLine());
+        JSONArray array = new JSONArray(UpdateLib.getFile("loading.json"));
+        int y = 0;
+        for (Object o : array) {
+            JSONArray a = (JSONArray) o;
+            int x = 0;
+            for (Object object : a) {
+                JSONArray b = (JSONArray) object;
+                int z = 0;
 
-            JSONArray array = new JSONArray(js.toString());
-            int y = 0;
-            for (Object o : array) {
-                JSONArray a = (JSONArray) o;
-                int x = 0;
-                for (Object object : a) {
-                    JSONArray b = (JSONArray) object;
-                    int z = 0;
-
-                    for (Object in : b) {
-                        int i = (int) in;
-                        out[y][x][z] = switch (i) {
-                            case 1 -> BlockState.BASE;
-                            case 2 -> BlockState.ACCENT;
-                            default -> BlockState.KEEP;
-                        };
-                        z++;
-                    }
-                    x++;
+                for (Object in : b) {
+                    int i = (int) in;
+                    out[y][x][z] = switch (i) {
+                        case 1 -> BlockState.BASE;
+                        case 2 -> BlockState.ACCENT;
+                        default -> BlockState.KEEP;
+                    };
+                    z++;
                 }
-                y++;
+                x++;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            y++;
         }
         return out;
     }
 
     private CapturePointInstance[] loadInstances() {
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/instances.json").openStream())) {
-            StringJoiner js = new StringJoiner("\n");
-            while (sc.hasNextLine()) js.add(sc.nextLine());
 
-            JSONArray array = new JSONArray(js.toString());
-            CapturePointInstance[] output = new CapturePointInstance[array.length()];
-            for (Object o : array) {
-                JSONObject object = (JSONObject) o;
-                output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center"), 0, 0, 0),
-                        parseLocation(object.getJSONObject("center"), -2, 1, -2),
-                        parseLocation(object.getJSONObject("center"), 2, 1, 2));
-            }
-            Bukkit.getLogger().warning(array.toString());
-            return output;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        String sb = UpdateLib.getFile("instances.json");
+        JSONArray array = new JSONArray(sb);
+        CapturePointInstance[] output = new CapturePointInstance[array.length()];
+        for (Object o : array) {
+            JSONObject object = (JSONObject) o;
+            output[object.getInt("ident")] = new CapturePointInstance(parseLocation(object.getJSONObject("center"), 0, 0, 0),
+                    parseLocation(object.getJSONObject("center"), -2, 1, -2),
+                    parseLocation(object.getJSONObject("center"), 2, 1, 2));
         }
+        Bukkit.getLogger().warning(array.toString());
+        return output;
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile(), "./config/.ghcreds");
+        UpdateLib.checkForUpdates(this.getDataFolder(), "CapturePoint", this.getFile());
     }
 }

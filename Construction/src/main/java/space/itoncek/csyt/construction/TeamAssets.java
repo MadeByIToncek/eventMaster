@@ -18,13 +18,22 @@ import java.util.List;
 import java.util.Objects;
 
 public final class TeamAssets {
-    private BuildPlace display;
     public final List<Player> players = new ArrayList<>();
     private final List<BuildPlace> buildPlaces;
+    private BuildPlace display;
     private int currentID = -1;
+
     public TeamAssets(BuildPlace display, List<BuildPlace> buildPlaces) {
         this.display = display;
         this.buildPlaces = buildPlaces;
+    }
+
+    public static ItemStack enchant(Material mat) {
+        ItemStack itemStack = new ItemStack(mat);
+        itemStack.addEnchantment(Enchantment.SILK_TOUCH, 1);
+        itemStack.addUnsafeEnchantment(Enchantment.DIG_SPEED, 100);
+        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
+        return itemStack;
     }
 
     public BuildPlace display() {
@@ -64,18 +73,11 @@ public final class TeamAssets {
                 "buildPlaces=" + buildPlaces + ']';
     }
 
-    public static ItemStack enchant(Material mat) {
-        ItemStack itemStack = new ItemStack(mat);
-        itemStack.addEnchantment(Enchantment.SILK_TOUCH, 1);
-        itemStack.addUnsafeEnchantment(Enchantment.DIG_SPEED, 100);
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 100);
-        return itemStack;
-    }
-
     public void reset() {
         currentID = -1;
         recycle();
     }
+
     public void recycle() {
         int nextID = currentID + 1;
 

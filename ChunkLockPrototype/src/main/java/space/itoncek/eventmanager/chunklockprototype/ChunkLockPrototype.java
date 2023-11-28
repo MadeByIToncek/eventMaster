@@ -28,9 +28,6 @@ import java.util.List;
 
 public final class ChunkLockPrototype extends JavaPlugin {
 
-    public static ChunkLockPrototype pl;
-    public static List<Chunk> unlockedChunks = new ArrayList<>();
-
     public static final BukkitRunnable runnable = new BukkitRunnable() {
         @Override
         public void run() {
@@ -50,6 +47,9 @@ public final class ChunkLockPrototype extends JavaPlugin {
             }
         }
     };
+    public static ChunkLockPrototype pl;
+    public static List<Chunk> unlockedChunks = new ArrayList<>();
+
     @Override
     public void onEnable() {
         new DRMLib() {

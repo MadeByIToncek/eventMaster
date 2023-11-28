@@ -19,8 +19,8 @@ public class CapturePointManager {
     private final BukkitRunnable runnable;
     private final Team red;
     private final Team blue;
-    private int state = 0;
     private final int ident;
+    private int state = 0;
 
     public CapturePointManager(CapturePointInstance instance, Team red, Team blue, int ident) {
         this.instance = instance;
@@ -34,6 +34,7 @@ public class CapturePointManager {
         this.blue = blue;
         this.ident = ident;
     }
+
     /**
      * Run to initialize surround checks and prepare point for game
      */
@@ -126,6 +127,7 @@ public class CapturePointManager {
 
     /**
      * Ran internally to process win
+     *
      * @param red if true, assuming red won this game
      */
     private void win(boolean red) {
@@ -145,6 +147,7 @@ public class CapturePointManager {
         }
         destroy();
     }
+
     /**
      * Run at the end of every round to destroy this instance
      */
@@ -152,6 +155,7 @@ public class CapturePointManager {
         runnable.cancel();
         System.out.println("Removed manager " + this.ident + "?" + managers.remove(ident, this));
     }
+
     /**
      * Compare two booleans, basically XOR with more steps
      *

@@ -25,47 +25,47 @@ jobs:
       contents: write
       security-events: write
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-    - name: Cache local Maven repository
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Build with Maven
-      run: mvn clean package
-    - run: |
-        rm ChunkLockPrototype/target/original-*.jar
-        rm Construction/target/original-*.jar
-        rm MusicManager/target/original-*.jar
-        rm PatternSaver/target/original-*.jar
-        rm countdown/target/original-*.jar
-        rm CapturePoint/target/original-*.jar
-        rm DecisionDomeDecider/target/original-*.jar
-        rm AcceptDiscordBot/target/original-*.jar
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
-        files: |
-          ChunkLockPrototype/target/*.jar
-          Construction/target/*.jar
-          MusicManager/target/*.jar
-          PatternSaver/target/*.jar
-          PointEvaluator/target/*.jar
-          countdown/target/*.jar
-          CapturePoint/target/*.jar
-          AcceptDiscordBot/target/*.jar
-          DecisionDomeDecider/target/*.jar
-          index.json
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@v3
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Maven
+        run: mvn clean package
+      - run: |
+          rm ChunkLockPrototype/target/original-*.jar
+          rm Construction/target/original-*.jar
+          rm MusicManager/target/original-*.jar
+          rm PatternSaver/target/original-*.jar
+          rm countdown/target/original-*.jar
+          rm CapturePoint/target/original-*.jar
+          rm DecisionDomeDecider/target/original-*.jar
+          rm AcceptDiscordBot/target/original-*.jar
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            ChunkLockPrototype/target/*.jar
+            Construction/target/*.jar
+            MusicManager/target/*.jar
+            PatternSaver/target/*.jar
+            PointEvaluator/target/*.jar
+            countdown/target/*.jar
+            CapturePoint/target/*.jar
+            AcceptDiscordBot/target/*.jar
+            DecisionDomeDecider/target/*.jar
+            index.json
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@v3

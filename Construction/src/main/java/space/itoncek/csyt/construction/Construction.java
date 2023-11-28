@@ -25,12 +25,12 @@ import static space.itoncek.csyt.construction.config.ConfigManager.*;
 
 public final class Construction extends JavaPlugin {
 
-    public static List<BuildPlace> buildPlaces;
     public static final HashMap<SimpleLocation, BuildPlace> locationHash = new HashMap<>();
-    public static List<Pattern> patterns = new ArrayList<>();
     public static final HashMap<TeamColor, TeamAssets> teams = new HashMap<>();
-    public static Construction pl;
     public static final JSONArray output = new JSONArray();
+    public static List<BuildPlace> buildPlaces;
+    public static List<Pattern> patterns = new ArrayList<>();
+    public static Construction pl;
     public static boolean active = false;
     public static boolean blocking = false;
     public static float multiplier = 1.0F;
@@ -43,7 +43,7 @@ public final class Construction extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         // Plugin startup logic
         buildPlaces = loadPlaces();
@@ -73,6 +73,6 @@ public final class Construction extends JavaPlugin {
             buildPlace.clr();
         }
         savePlaces(buildPlaces);
-        UpdateLib.checkForUpdates(this.getDataFolder(), "Construction", this.getFile(), "./config/.ghcreds");
+        UpdateLib.checkForUpdates(this.getDataFolder(), "Construction", this.getFile());
     }
 }

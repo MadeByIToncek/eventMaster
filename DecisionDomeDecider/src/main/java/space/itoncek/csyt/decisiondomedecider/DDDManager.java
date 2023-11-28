@@ -31,9 +31,42 @@ public class DDDManager {
 
     public final boolean auto;
     public Minigame chosenMinigame;
+
     public DDDManager(boolean auto) {
         this.auto = auto;
     }
+
+    public static <K, V extends Comparable<V>> Map.Entry<K, V> maxMap(Map<K, V> map) {
+        // To store the result
+        Map.Entry<K, V> entryWithMaxValue = null;
+        // Iterate in the map to find the required entry
+        for (Map.Entry<K, V> currentEntry : map.entrySet()) {
+            if (entryWithMaxValue == null || currentEntry.getValue().compareTo(entryWithMaxValue.getValue()) > 0) {
+                entryWithMaxValue = currentEntry;
+            }
+        }
+
+        return entryWithMaxValue;
+    }
+
+    public static List<Map.Entry<Minigame, Integer>> uniqueMaxMap(Map<Minigame, Integer> map) {
+        // To store the result
+        List<Map.Entry<Minigame, Integer>> entryWithMaxValue = new ArrayList<>();
+        int compare = Integer.MIN_VALUE;
+        // Iterate in the map to find the required entry
+        for (Map.Entry<Minigame, Integer> currentEntry : map.entrySet()) {
+            if (compare == Integer.MIN_VALUE || compare < currentEntry.getValue()) {
+                entryWithMaxValue.clear();
+                compare = currentEntry.getValue();
+                entryWithMaxValue.add(currentEntry);
+            } else if (compare == currentEntry.getValue()) {
+                entryWithMaxValue.add(currentEntry);
+            }
+        }
+
+        return entryWithMaxValue;
+    }
+
     public void start() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) {
@@ -94,37 +127,6 @@ public class DDDManager {
                 }
             }
         }.runTaskAsynchronously(ddd));
-    }
-
-    public static <K, V extends Comparable<V>> Map.Entry<K, V> maxMap(Map<K, V> map) {
-        // To store the result
-        Map.Entry<K, V> entryWithMaxValue = null;
-        // Iterate in the map to find the required entry
-        for (Map.Entry<K, V> currentEntry : map.entrySet()) {
-            if (entryWithMaxValue == null || currentEntry.getValue().compareTo(entryWithMaxValue.getValue()) > 0) {
-                entryWithMaxValue = currentEntry;
-            }
-        }
-
-        return entryWithMaxValue;
-    }
-
-    public static List<Map.Entry<Minigame, Integer>> uniqueMaxMap(Map<Minigame, Integer> map) {
-        // To store the result
-        List<Map.Entry<Minigame, Integer>> entryWithMaxValue = new ArrayList<>();
-        int compare = Integer.MIN_VALUE;
-        // Iterate in the map to find the required entry
-        for (Map.Entry<Minigame, Integer> currentEntry : map.entrySet()) {
-            if (compare == Integer.MIN_VALUE || compare < currentEntry.getValue()) {
-                entryWithMaxValue.clear();
-                compare = currentEntry.getValue();
-                entryWithMaxValue.add(currentEntry);
-            } else if (compare == currentEntry.getValue()) {
-                entryWithMaxValue.add(currentEntry);
-            }
-        }
-
-        return entryWithMaxValue;
     }
 
     public void end() {

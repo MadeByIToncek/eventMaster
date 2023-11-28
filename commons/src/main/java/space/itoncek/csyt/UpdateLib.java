@@ -17,10 +17,10 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class UpdateLib {
-    public static void downloadCommitID(File pluginFolder, String cf) {
+    public static void downloadCommitID(File pluginFolder) {
         if (!pluginFolder.exists()) pluginFolder.mkdirs();
         if (!new File(pluginFolder + "/release.id").exists()) {
-            int cid = getCommitID(cf);
+            int cid = getCommitID();
             System.out.println("Current plugin version: " + Integer.toHexString(cid));
             if (cid > 0) {
                 try (FileWriter fw = new FileWriter(pluginFolder + "/release.id")) {
@@ -36,22 +36,22 @@ public class UpdateLib {
         }
     }
 
-    public static int getCommitID(String cf) {
+    public static int getCommitID() {
         try {
-            GHRepository repo = getRepo(cf);
+            GHRepository repo = getRepo();
             return (int) repo.getLatestRelease().getId();
         } catch (IOException ignored) {
         }
         return -1;
     }
 
-    public static void checkForUpdates(File pluginFolder, String plugin, File pluginFile, String credentials) {
+    public static void checkForUpdates(File pluginFolder, String plugin, File pluginFile) {
         try (Scanner sc = new Scanner(new File(pluginFolder.toString() + "/release.id"))) {
             int current = sc.nextInt();
-            int remote = getCommitID(credentials);
+            int remote = getCommitID();
             System.out.println("Current plugin version: " + Integer.toHexString(current) + "\tRemote plugin version: " + Integer.toHexString(remote));
             if (remote != current) {
-                update(plugin, pluginFile, credentials);
+                update(plugin, pluginFile);
                 new File(pluginFolder + "/release.id").deleteOnExit();
             }
         } catch (IOException | InputMismatchException e) {
@@ -59,28 +59,28 @@ public class UpdateLib {
         }
     }
 
-    public static void update(String plugin, File pluginFile, String credentials) throws IOException {
+    public static void update(String plugin, File pluginFile) throws IOException {
         if (pluginFile.delete()) {
             System.out.println("Able to delete pluginFile, downloading new one to it's place");
-            downloadFile(plugin, pluginFile, credentials);
+            downloadFile(plugin, pluginFile);
         } else {
             File targetFile = getTargetFile(pluginFile);
             System.out.println("Unable to delete pluginFile, creating new file and removing the current one");
-            downloadFile(plugin, targetFile, credentials);
+            downloadFile(plugin, targetFile);
             pluginFile.deleteOnExit();
         }
     }
 
-    private static void downloadFile(String plugin, File targetFile, String credentials) throws IOException {
-        GHRepository repository = getRepo(credentials);
+    private static void downloadFile(String plugin, File targetFile) throws IOException {
+        GHRepository repository = getRepo();
         String addr = "";
         for (GHRelease release : repository.listReleases()) {
-            System.out.println("release: " + release.getName());
-            System.out.println("assets :");
-            for (GHAsset asset : release.listAssets()) {
-                asset.getBrowserDownloadUrl();
-                if (asset.getName().toLowerCase().contains(plugin.toLowerCase())) {
-                    addr = "https://api.github.com/repos/CSYoutubeTurnaj/CSYT/releases/assets/" + asset.getId();
+            if (release.getTagName().equals("latest")) {
+                for (GHAsset asset : release.listAssets()) {
+                    asset.getBrowserDownloadUrl();
+                    if (asset.getName().toLowerCase().contains(plugin.toLowerCase())) {
+                        addr = "https://api.github.com/repos/CSYoutubeTurnaj/CSYT/releases/assets/" + asset.getId();
+                    }
                 }
             }
         }
@@ -92,7 +92,7 @@ public class UpdateLib {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/octet-stream");
-        con.setRequestProperty("Authorization", "token " + getProps(credentials).getProperty("password"));
+        con.setRequestProperty("Authorization", "token " + getProps().getProperty("password"));
 
         con.setDoInput(true);
         int status = con.getResponseCode();
@@ -103,7 +103,8 @@ public class UpdateLib {
         con.disconnect();
     }
 
-    private static GHRepository getRepo(String credentials) throws IOException {
+    private static GHRepository getRepo() throws IOException {
+        String credentials = "S:\\dev\\CSYT\\config\\.ghcreds";
         if (!new File(credentials).exists()) new File(credentials).createNewFile();
         GitHub gitHub = GitHubBuilder.fromPropertyFile(credentials)
                 .withRateLimitHandler(RateLimitHandler.FAIL)
@@ -111,7 +112,8 @@ public class UpdateLib {
         return gitHub.getRepository("CSYoutubeTurnaj/CSYT");
     }
 
-    private static Properties getProps(String credentials) throws IOException {
+    private static Properties getProps() throws IOException {
+        String credentials = "S:\\dev\\CSYT\\config\\.ghcreds";
         if (!new File(credentials).exists()) new File(credentials).createNewFile();
         Properties props = new Properties();
         props.load(new FileInputStream(credentials));
@@ -133,5 +135,14 @@ public class UpdateLib {
             throw new RuntimeException("Unable to create new filename");
         }
         return targetFile;
+    }
+
+    public static String getFile(String s) {
+        try {
+            GHRepository repo = getRepo();
+            return new String(repo.getFileContent(s).read().readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

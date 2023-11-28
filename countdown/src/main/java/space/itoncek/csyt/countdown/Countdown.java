@@ -36,6 +36,7 @@ public final class Countdown extends JavaPlugin {
     public static JSONObject config;
     public static Countdown pl;
     public static BukkitRunnable acdR;
+
     public static void setRemain(int rem) {
         String digs = getDigits(rem);
         List<Action> actions = new ArrayList<>();
@@ -88,6 +89,7 @@ public final class Countdown extends JavaPlugin {
             }
         };
     }
+
     @Override
     public void onEnable() {
         new DRMLib() {
@@ -96,7 +98,7 @@ public final class Countdown extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
-        UpdateLib.downloadCommitID(this.getDataFolder(), "./config/.ghcreds");
+        UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
         pl = this;
         Objects.requireNonNull(getCommand("acd")).setExecutor(new ACDCommand());
@@ -150,6 +152,7 @@ public final class Countdown extends JavaPlugin {
         unloadConfig(data);
         return setupConfig();
     }
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
@@ -158,7 +161,7 @@ public final class Countdown extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        UpdateLib.checkForUpdates(this.getDataFolder(), "countdown", this.getFile(), "./config/.ghcreds");
+        UpdateLib.checkForUpdates(this.getDataFolder(), "countdown", this.getFile());
     }
 }
 

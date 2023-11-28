@@ -10,17 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import space.itoncek.csyt.UpdateLib;
 import space.itoncek.csyt.construction.BuildPlace;
 import space.itoncek.csyt.construction.Pattern;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.StringJoiner;
 
 public class ConfigManager {
     private static final File placesConfig = new File("./plugins/construction/places.json");
@@ -28,16 +26,10 @@ public class ConfigManager {
     public static List<BuildPlace> loadPlaces() {
         long start = System.currentTimeMillis();
 
-        StringJoiner sb = new StringJoiner("\n");
-
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/places.json").openStream())) {
-            while (sc.hasNextLine()) sb.add(sc.nextLine());
-        } catch (IOException e) {
-            Bukkit.getLogger().throwing(String.valueOf(ConfigManager.class), "loadPlaces()", e);
-        }
+        String sb = UpdateLib.getFile("places.json");
 
         //Bukkit.getLogger().info(sb.toString());
-        List<BuildPlace> out = BuildPlace.deserialize(new JSONArray(sb.toString()));
+        List<BuildPlace> out = BuildPlace.deserialize(new JSONArray(sb));
         Bukkit.getLogger().info("Places config loaded in " + (System.currentTimeMillis() - start) + "ms");
         return out;
     }
@@ -63,32 +55,27 @@ public class ConfigManager {
         List<Pattern> output = new ArrayList<>();
         folderStuff();
         JSONArray object;
-        try (Scanner sc = new Scanner(new URL("https://raw.githubusercontent.com/MadeByIToncek/eventMaster/master/index.json").openStream())) {
-            StringJoiner sj = new StringJoiner("\n");
-            while (sc.hasNextLine()) sj.add(sc.nextLine());
-            object = new JSONArray(sj.toString());
-            for (Object o : object) {
-                JSONObject raw = (JSONObject) o;
+        String sb = UpdateLib.getFile("index.json");
+        object = new JSONArray(sb);
+        for (Object o : object) {
+            JSONObject raw = (JSONObject) o;
 
-                Material[][] pattern = new Material[5][5];
-                int x = 0;
-                for (Object row : raw.getJSONArray("pattern")) {
-                    int z = 0;
-                    for (Object s : ((JSONArray) row)) {
-                        pattern[x][z] = Material.valueOf((String) s);
-                        z++;
-                    }
-                    x++;
+            Material[][] pattern = new Material[5][5];
+            int x = 0;
+            for (Object row : raw.getJSONArray("pattern")) {
+                int z = 0;
+                for (Object s : ((JSONArray) row)) {
+                    pattern[x][z] = Material.valueOf((String) s);
+                    z++;
                 }
-                List<Material> materials = new ArrayList<>();
-                for (Object mat : raw.getJSONArray("materials")) {
-                    materials.add(Material.valueOf((String) mat));
-                }
-
-                output.add(new Pattern(raw.getInt("id"), pattern, materials));
+                x++;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            List<Material> materials = new ArrayList<>();
+            for (Object mat : raw.getJSONArray("materials")) {
+                materials.add(Material.valueOf((String) mat));
+            }
+
+            output.add(new Pattern(raw.getInt("id"), pattern, materials));
         }
         Bukkit.getLogger().info("Patterns loaded in " + (System.currentTimeMillis() - start) + "ms");
         return output;
