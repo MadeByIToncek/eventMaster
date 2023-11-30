@@ -36,7 +36,7 @@ public abstract class CommLib implements AutoCloseable {
      */
     public int GetPoints(String username) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery(String.format("SELECT %s FROM players".formatted(username)));
+        ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM players WHERE name = '%s';".formatted(username)));
         stmt.close();
 
         System.out.println("[DEBUG] getting points from %s".formatted(username));
