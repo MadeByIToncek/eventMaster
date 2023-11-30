@@ -41,7 +41,7 @@ public abstract class CommLib implements AutoCloseable {
 
         System.out.println("[DEBUG] getting points from %s".formatted(username));
 
-        return rs.getInt("NAME");
+        return rs.getInt("points");
     }
 
     /**
