@@ -7,6 +7,14 @@ import java.sql.*;
 public abstract class CommLib implements AutoCloseable {
     private final Connection conn;
 
+    /* Table SQL QUERY
+    CREATE TABLE Players (
+    name TINYTEXT,
+    points int,
+    team TINYTEXT
+    );
+    */
+
     /**
      * Creates new DB connection
      *
@@ -26,12 +34,14 @@ public abstract class CommLib implements AutoCloseable {
      * @return TODO
      * @throws SQLException most likely DB access error
      */
-    public boolean GetPlayer(String username) throws SQLException {
+    public int GetPoints(String username) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT *");
+        ResultSet rs = stmt.executeQuery(String.format("SELECT %s FROM players".formatted(username)));
         stmt.close();
 
-        return true;
+        System.out.println("[DEBUG] getting points from %s".formatted(username));
+
+        return rs.getInt("NAME");
     }
 
     /**
