@@ -16,5 +16,6 @@ public enum Team {
     emerald,
     diamond,
     netherite,
-    spectator, quartz
+    quartz,
+    spectator
 }

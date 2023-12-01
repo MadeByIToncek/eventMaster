@@ -15,10 +15,11 @@ public abstract class CommLib implements AutoCloseable {
     private final Connection conn;
 
     /* Table SQL QUERY
-    CREATE TABLE Players (
-    name TINYTEXT,
-    points int,
-    team ENUM('coal', 'copper', 'iron', 'gold', 'redstone', 'lapis', 'emerald', 'diamond', 'netherite', 'quartz')
+    CREATE TABLE `Players` (
+	    `name` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'latin1_swedish_ci',
+	    `points` INT(10) UNSIGNED ZEROFILL NOT NULL DEFAULT '0000000000',
+	    `team` ENUM('coal','copper','iron','gold','redstone','lapis','emerald','diamond','netherite','quartz','spectator') NOT NULL COLLATE 'latin1_swedish_ci',
+	    PRIMARY KEY (`name`) USING BTREE
     );
     */
 
@@ -49,7 +50,7 @@ public abstract class CommLib implements AutoCloseable {
         System.out.printf("[DEBUG] getting points from %s%n", username);
 
         //TODO: Vyplnit tyto hodnoty
-        return new CSYTPlayer("", rs.getInt("points"), Team.spectator);
+        return new CSYTPlayer(rs.getString(""), rs.getInt("points"), Team.spectator);
     }
 
     public CSYTTeam getTeam(String color) {
