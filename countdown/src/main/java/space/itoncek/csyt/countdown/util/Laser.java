@@ -320,8 +320,8 @@ public abstract class Laser {
     }
 
     @FunctionalInterface
-    public static interface ReflectiveConsumer<T> {
-        abstract void accept(T t) throws ReflectiveOperationException;
+    public interface ReflectiveConsumer<T> {
+        void accept(T t) throws ReflectiveOperationException;
     }
 
     public static class GuardianLaser extends Laser {
@@ -580,8 +580,8 @@ public abstract class Laser {
         private final int crystalID = Packets.generateEID();
         private Object createCrystalPacket;
         private Object metadataPacketCrystal;
-        private Object[] destroyPackets;
-        private Object fakeCrystalDataWatcher;
+        private final Object[] destroyPackets;
+        private final Object fakeCrystalDataWatcher;
 
         /**
          * Creates a new Ender Crystal Laser instance
@@ -1097,20 +1097,20 @@ public abstract class Laser {
             private final String teamSetCollision;
             private final String teamGetPlayers;
 
-            private ProtocolMappings(int major, ProtocolMappings parent) {
+            ProtocolMappings(int major, ProtocolMappings parent) {
                 this(major, parent.watcherFlags, parent.watcherSpikes, parent.watcherTargetEntity, parent.watcherTargetLocation, parent.watcherBasePlate, parent.squidID, parent.guardianID, parent.guardianTypeName, parent.squidTypeName, parent.crystalTypeName, parent.teamSetCollision, parent.teamGetPlayers);
             }
 
-            private ProtocolMappings(int major,
-                                     String watcherFlags, String watcherSpikes, String watcherTargetEntity, String watcherTargetLocation, String watcherBasePlate,
-                                     int squidID, int guardianID) {
+            ProtocolMappings(int major,
+                             String watcherFlags, String watcherSpikes, String watcherTargetEntity, String watcherTargetLocation, String watcherBasePlate,
+                             int squidID, int guardianID) {
                 this(major, watcherFlags, watcherSpikes, watcherTargetEntity, watcherTargetLocation, watcherBasePlate, squidID, guardianID, null, "SQUID", "END_CRYSTAL", null, null);
             }
 
-            private ProtocolMappings(int major,
-                                     String watcherFlags, String watcherSpikes, String watcherTargetEntity, String watcherTargetLocation, String watcherBasePlate,
-                                     int squidID, int guardianID,
-                                     String guardianTypeName, String squidTypeName, String crystalTypeName, String teamSetCollision, String teamGetPlayers) {
+            ProtocolMappings(int major,
+                             String watcherFlags, String watcherSpikes, String watcherTargetEntity, String watcherTargetLocation, String watcherBasePlate,
+                             int squidID, int guardianID,
+                             String guardianTypeName, String squidTypeName, String crystalTypeName, String teamSetCollision, String teamGetPlayers) {
                 this.major = major;
                 this.watcherFlags = watcherFlags;
                 this.watcherSpikes = watcherSpikes;

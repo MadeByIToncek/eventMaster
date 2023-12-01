@@ -40,8 +40,6 @@ public enum Minigame {
         return type.equals(powder);
     }
 
-    ;
-
     public void replaceBlock(Block block) {
         if (block.getType().equals(concrete)) block.setType(BLACK_CONCRETE);
         if (block.getType().equals(wool)) block.setType(GRAY_WOOL);

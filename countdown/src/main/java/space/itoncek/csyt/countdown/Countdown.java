@@ -131,7 +131,6 @@ public final class Countdown extends JavaPlugin {
                 fw.write(def.toString(4));
             }
         }
-        ;
 
         try (Scanner sc = new Scanner(config)) {
             StringJoiner js = new StringJoiner("\n");
