@@ -19,8 +19,8 @@ public final class CSYTools extends JavaPlugin {
         };
         UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
-        getCommand("csytools").setExecutor(new CSYTools());
-        getCommand("csytools").setTabCompleter(new CSYTools());
+        getCommand("csytools").setExecutor(new CSYToolsCommand());
+        getCommand("csytools").setTabCompleter(new CSYToolsCommand());
     }
 
     @Override
