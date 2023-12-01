@@ -9,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 
 import java.util.List;
 
@@ -19,6 +21,13 @@ public final class CSYTools extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
+        UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
         getCommand("csytools").setExecutor(new CSYTools());
         getCommand("csytools").setTabCompleter(new CSYTools());
@@ -28,6 +37,7 @@ public final class CSYTools extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        UpdateLib.checkForUpdates(this.getDataFolder(), "CSYTools", this.getFile());
     }
 }
 
