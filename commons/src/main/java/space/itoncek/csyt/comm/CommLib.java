@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.List;
 
 public abstract class CommLib implements AutoCloseable {
+
     private final Connection conn;
 
     /* Table SQL QUERY
@@ -45,12 +46,12 @@ public abstract class CommLib implements AutoCloseable {
     public CSYTPlayer getPlayer(String username) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM players WHERE name = '%s';".formatted(username));
-        stmt.close();
-
+        rs.next();
         System.out.printf("[DEBUG] getting points from %s%n", username);
-
         //TODO: Vyplnit tyto hodnoty
-        return new CSYTPlayer(rs.getString(""), rs.getInt("points"), Team.spectator);
+        CSYTPlayer csytPlayer = new CSYTPlayer(rs.getString("name"), rs.getInt("points"), Team.valueOf(rs.getString("team")));
+        stmt.close();
+        return csytPlayer;
     }
 
     public CSYTTeam getTeam(String color) {
@@ -62,8 +63,12 @@ public abstract class CommLib implements AutoCloseable {
         //TODO: Tato funkce by měla vrátit void
     }
 
-    public void setPlayerScore(String username, int points) {
-        //TODO: Tato funkce by měla vrátit void
+    public void setPlayerScore(String username, int points) throws SQLException {
+        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`".formatted(points, username));
+        stmt.close();
+
+        System.out.println("Setting %s to %d".formatted(username, points));
     }
 
     public String getValue(String key) {
