@@ -44,8 +44,8 @@ public abstract class CommLib implements AutoCloseable {
      * @throws SQLException most likely DB access error
      */
     public CSYTPlayer getPlayer(String username) throws SQLException {
-        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM players WHERE name = '%s';".formatted(username));
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE name = '%s';".formatted(username));
         rs.next();
         System.out.printf("[DEBUG] getting points from %s%n", username);
         //TODO: Vyplnit tyto hodnoty

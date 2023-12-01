@@ -7,20 +7,20 @@
 package space.itoncek.csyt.comm;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public final class CSYTPlayer {
     private final String name;
     private final int points;
     private final Team team;
-    private final long createdAt;
+    private final LocalDateTime createdAt;
 
     public CSYTPlayer(String name, int points, Team team) {
         this.name = name;
         this.points = points;
         this.team = team;
-        this.createdAt = System.currentTimeMillis();
+        this.createdAt = LocalDateTime.now();
     }
 
     public String name() {
@@ -57,7 +57,7 @@ public final class CSYTPlayer {
                 "name=" + name + ", " +
                 "points=" + points + ", " +
                 "team=" + team + ", " +
-                "createdAt=" + LocalDateTime.ofEpochSecond(createdAt, 0, ZoneOffset.of(String.valueOf(ZoneOffset.systemDefault()))) + "]";
+                "createdAt=" + createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "]";
     }
 
 }
