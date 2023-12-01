@@ -15,13 +15,20 @@ public abstract class CommLib implements AutoCloseable {
 
     private final Connection conn;
 
-    /* Table SQL QUERY
+    /* Players SQL QUERY
     CREATE TABLE `Players` (
-	    `name` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'latin1_swedish_ci',
+	    `name` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'latin2_czech_cs',
 	    `points` INT(10) UNSIGNED ZEROFILL NOT NULL DEFAULT '0000000000',
-	    `team` ENUM('coal','copper','iron','gold','redstone','lapis','emerald','diamond','netherite','quartz','spectator') NOT NULL COLLATE 'latin1_swedish_ci',
+	    `team` ENUM('coal','copper','iron','gold','redstone','lapis','emerald','diamond','netherite','quartz','spectator') NOT NULL COLLATE 'latin2_czech_cs',
 	    PRIMARY KEY (`name`) USING BTREE
     );
+
+    Storage SQL QUERY
+    CREATE TABLE `Storage` (
+    	`key` VARCHAR(256) NOT NULL DEFAULT '0' COLLATE 'latin2_czech_cs',
+    	`value` VARCHAR(256) NULL DEFAULT NULL COLLATE 'latin2_czech_cs',
+    	PRIMARY KEY (`key`) USING BTREE
+    )
     */
 
     /**
