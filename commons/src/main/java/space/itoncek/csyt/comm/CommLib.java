@@ -9,6 +9,7 @@ package space.itoncek.csyt.comm;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.util.List;
 
 public abstract class CommLib implements AutoCloseable {
     private final Connection conn;
@@ -40,21 +41,20 @@ public abstract class CommLib implements AutoCloseable {
      * @return TODO
      * @throws SQLException most likely DB access error
      */
-    public boolean getPlayer(String username) throws SQLException {
+    public CSYTPlayer getPlayer(String username) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM players WHERE name = '%s';".formatted(username));
         stmt.close();
 
         System.out.printf("[DEBUG] getting points from %s%n", username);
 
-        //return rs.getInt("points");
-        //TODO: Tato funkce by měla vrátit objekt CSYTPlayer
-        return false;
+        //TODO: Vyplnit tyto hodnoty
+        return new CSYTPlayer("", rs.getInt("points"), Team.spectator);
     }
 
-    public boolean getTeam(String color) {
-        //TODO: Tato funkce by měla vrátit objekt CSYTTeam
-        return false;
+    public CSYTTeam getTeam(String color) {
+        //TODO: Vyplnit tyto hodnoty
+        return new CSYTTeam(Team.spectator, List.of());
     }
 
     public void addPlayerScore(String username, int points) {
