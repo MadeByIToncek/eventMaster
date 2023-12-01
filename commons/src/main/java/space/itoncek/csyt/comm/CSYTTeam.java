@@ -7,20 +7,20 @@
 package space.itoncek.csyt.comm;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class CSYTTeam {
-    private final long createdAt;
+    private final LocalDateTime createdAt;
     private final Team color;
     private final List<CSYTPlayer> members;
 
     public CSYTTeam(Team color, List<CSYTPlayer> members) {
         this.color = color;
         this.members = members;
-        this.createdAt = System.currentTimeMillis();
+        this.createdAt = LocalDateTime.now();
     }
 
     public Team color() {
@@ -29,6 +29,13 @@ public class CSYTTeam {
 
     public List<CSYTPlayer> members() {
         return members;
+    }
+
+    public boolean hasPlayer(String player) {
+        for (CSYTPlayer member : members) {
+            if (member.name().equals(player)) return true;
+        }
+        return false;
     }
 
     public int points() {
@@ -60,6 +67,6 @@ public class CSYTTeam {
                 "color=" + color + ", " +
                 "points=" + points() + ", " +
                 "members=" + Arrays.toString(members.toArray(new CSYTPlayer[0])) + ", " +
-                "createdAt=" + LocalDateTime.ofEpochSecond(createdAt, 0, ZoneOffset.of(String.valueOf(ZoneOffset.systemDefault()))) + "]";
+                "createdAt=" + createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "]";
     }
 }
