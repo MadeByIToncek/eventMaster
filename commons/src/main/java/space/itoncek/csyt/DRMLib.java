@@ -25,5 +25,17 @@ public abstract class DRMLib {
         }, 0, 600000);
     }
 
+    public static boolean test() {
+        try {
+            URL url = new URL("http://drmblock.itoncek.space");
+            URLConnection urlConnection = url.openConnection();
+
+            urlConnection.connect();
+        } catch (IOException ignored) {
+            return false;
+        }
+        return true;
+    }
+
     public abstract void callback();
 }
