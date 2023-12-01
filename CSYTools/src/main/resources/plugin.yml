@@ -1,0 +1,6 @@
+name: CSYTools
+version: '${project.version}'
+main: fun.csyt.csytools.CSYTools
+api-version: '1.19'
+commands:
+  csytools:
