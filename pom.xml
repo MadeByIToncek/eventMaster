@@ -32,6 +32,6 @@
         <module>AcceptDiscordBot</module>
         <module>DecisionDomeDecider</module>
         <module>backup</module>
+        <module>CSYTools</module>
     </modules>
-
 </project>
