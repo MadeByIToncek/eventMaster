@@ -50,6 +50,9 @@ jobs:
           rm CapturePoint/target/original-*.jar
           rm DecisionDomeDecider/target/original-*.jar
           rm AcceptDiscordBot/target/original-*.jar
+          rm CSYTools/target/original-*.jar
+          rm CSYTOpen/target/original-*.jar
+          rm backup/target/original-*.jar
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.TOKEN }}"
@@ -66,6 +69,9 @@ jobs:
             CapturePoint/target/*.jar
             AcceptDiscordBot/target/*.jar
             DecisionDomeDecider/target/*.jar
+            CSYTools/target/*.jar
+            CSYTOpen/target/*.jar
+            backup/target/*.jar
             index.json
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v3
