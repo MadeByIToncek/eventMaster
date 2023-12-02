@@ -67,22 +67,24 @@ public abstract class CommLib implements AutoCloseable {
     }
 
     public void addPlayerScore(String username, int points) throws SQLException{
+        //TODO: WTF IS THIS???
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         ResultSet rs = stmt.executeQuery("INSERT INTO Customers (name, points) VALUES (%s, %d);".formatted(username, points));
 
-        System.out.println("[DEBUG] adding score to player %s".formatted(username));
+        System.out.printf("[DEBUG] adding score to player %s%n", username);
     }
 
     public void setPlayerScore(String username, int points) throws SQLException {
+        // LGTM 👍
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`;".formatted(points, username));
         stmt.close();
 
-        System.out.println("Setting %s to %d".formatted(username, points));
+        System.out.printf("Setting %s to %d%n", username, points);
     }
 
     public String getValue(String key) throws SQLException {
-        //TODO: Tato funkce by měla vrátit String
+        // LGTM 👍
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Storage WHERE key=`%s`;".formatted(key));
         return rs.getString("value");
@@ -90,9 +92,10 @@ public abstract class CommLib implements AutoCloseable {
 
     public void setValue(String key, String value) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        //TODO: Poradí si to s tím, že daná hodnota neexistuje?
         ResultSet rs = stmt.executeQuery("UPDATE Storage SET key=`%s` AND value=`%s`;".formatted(key, value));
 
-        System.out.println("[DEBUG] setting value to key %s".formatted(key));
+        System.out.printf("[DEBUG] setting value to key %s%n", key);
     }
 
     /**
