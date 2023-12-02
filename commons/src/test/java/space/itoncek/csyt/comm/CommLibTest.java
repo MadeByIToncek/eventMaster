@@ -21,15 +21,24 @@ class CommLibTest {
 
     @BeforeEach
     void setUp() throws SQLException {
+        long startTime = System.nanoTime();
         lib = new CommLib(System.getenv("DB_URL"), System.getenv("DB_USER"), System.getenv("DB_PWD")) {
         };
+
+        long endTime = System.nanoTime();
+        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("setUp() took " + duration + " seconds");
     }
 
     @Test
     void getPlayer() throws SQLException {
+        long startTime = System.nanoTime();
         CSYTPlayer player = lib.getPlayer("IToncek");
 
-        System.out.println(player.toString());
+        long endTime = System.nanoTime();
+        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("getPlayer() took " + duration + " seconds");
+
         assertEquals(player.name(), "IToncek");
         assertEquals(player.points(), 0);
         assertEquals(player.team(), Team.spectator);
@@ -37,7 +46,12 @@ class CommLibTest {
 
     @Test
     void getTeam() {
+        long startTime = System.nanoTime();
         CSYTTeam player = lib.getTeam(Team.spectator);
+
+        long endTime = System.nanoTime();
+        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("getTeam() took " + duration + " seconds");
 
         System.out.println(player.toString());
         assertTrue(player.hasPlayer("IToncek"));
