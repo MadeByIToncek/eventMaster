@@ -26,8 +26,8 @@ class CommLibTest {
         };
 
         long endTime = System.nanoTime();
-        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
-        System.out.println("setUp() took " + duration + " seconds");
+        double duration = (endTime - startTime) / 1000000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("setUp() took " + duration + "ms");
     }
 
     @Test
@@ -36,8 +36,8 @@ class CommLibTest {
         CSYTPlayer player = lib.getPlayer("IToncek");
 
         long endTime = System.nanoTime();
-        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
-        System.out.println("getPlayer() took " + duration + " seconds");
+        double duration = (endTime - startTime) / 1000000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("setUp() took " + duration + "ms");
 
         assertEquals(player.name(), "IToncek");
         assertEquals(player.points(), 0);
@@ -50,8 +50,8 @@ class CommLibTest {
         CSYTTeam player = lib.getTeam(Team.spectator);
 
         long endTime = System.nanoTime();
-        double duration = (endTime - startTime) / 1000000d / 1000d;  //divide by 1000000 to get milliseconds.
-        System.out.println("getTeam() took " + duration + " seconds");
+        double duration = (endTime - startTime) / 1000000d;  //divide by 1000000 to get milliseconds.
+        System.out.println("setUp() took " + duration + "ms");
 
         System.out.println(player.toString());
         assertTrue(player.hasPlayer("IToncek"));
