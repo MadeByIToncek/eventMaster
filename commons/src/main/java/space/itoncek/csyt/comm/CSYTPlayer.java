@@ -36,7 +36,7 @@ public final class CSYTPlayer {
         return team;
     }
 
-    public CSYTTeam teamObject(CommLib processor) {
+    public CSYTTeam teamObject(CommLib processor) throws SQLException{
         return processor.getTeam(team);
     }
 

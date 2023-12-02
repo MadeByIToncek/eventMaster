@@ -68,7 +68,7 @@ public abstract class CommLib implements AutoCloseable {
      * @param color color of team you want to query
      * @return CSYTPlayer object
      */
-    public CSYTTeam getTeam(Team color) throws SQLException{
+    public CSYTTeam getTeam(Team color) throws SQLException {
         List teams = new ArrayList();
 
         Statement stmt = conn.createStatement();
