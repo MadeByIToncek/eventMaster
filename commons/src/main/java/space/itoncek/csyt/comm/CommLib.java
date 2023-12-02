@@ -47,7 +47,7 @@ public abstract class CommLib implements AutoCloseable {
      * Request player object from database
      *
      * @param username username of player you want to query
-     * @return TODO
+     * @return CSYTPlayer object
      * @throws SQLException most likely DB access error
      */
     public CSYTPlayer getPlayer(String username) throws SQLException {
@@ -61,11 +61,24 @@ public abstract class CommLib implements AutoCloseable {
         return csytPlayer;
     }
 
+    /**
+     * Request player object from database
+     *
+     * @param color color of team you want to query
+     * @return CSYTPlayer object
+     */
     public CSYTTeam getTeam(String color) {
         //TODO: Vyplnit tyto hodnoty
         return new CSYTTeam(Team.spectator, List.of());
     }
 
+    /**
+     * Adds points to user
+     *
+     * @param username Username of this player
+     * @param points   points to add to this player
+     * @throws SQLException DB Access Error!
+     */
     public void addPlayerScore(String username, int points) throws SQLException{
         //TODO: WTF IS THIS???
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
@@ -74,6 +87,12 @@ public abstract class CommLib implements AutoCloseable {
         System.out.printf("[DEBUG] adding score to player %s%n", username);
     }
 
+    /**
+     * Sets user's points
+     * @param username Username of this player
+     * @param points points to set to this player
+     * @throws SQLException DB Access Error!
+     */
     public void setPlayerScore(String username, int points) throws SQLException {
         // LGTM 👍
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
@@ -83,6 +102,12 @@ public abstract class CommLib implements AutoCloseable {
         System.out.printf("Setting %s to %d%n", username, points);
     }
 
+    /**
+     * Fetches value associated with key
+     * @param key key
+     * @return String associated with key
+     * @throws SQLException DB Access Error!
+     */
     public String getValue(String key) throws SQLException {
         // LGTM 👍
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
@@ -90,6 +115,12 @@ public abstract class CommLib implements AutoCloseable {
         return rs.getString("value");
     }
 
+    /**
+     * Edits selected keypair
+     * @param key key
+     * @param value value to associate with key
+     * @throws SQLException DB Access Error!
+     */
     public void setValue(String key, String value) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
         //TODO: Poradí si to s tím, že daná hodnota neexistuje?
@@ -112,6 +143,26 @@ public abstract class CommLib implements AutoCloseable {
         } catch (NumberFormatException ignored) {
         }
     }
+
+    /**
+     * Creates backup of the whole database, exported as some object (JSONObject/SQL string/etc...)
+     *
+     * @param checkpointID ID of this checkpoint
+     * @return some Object
+     * @implNote 🔼 tohle implementovat můžeš ale nemusíš, např. pokud to budeš dělat jako JSONObject tak tam jen přidej hodnotu jak to identifikovat
+     */
+    public Object createCheckpoint(String checkpointID) {
+        //TODO: Dopsat!
+        return null;
+    }
+
+    /**
+     * Resets (!) database from backup, created using createCheckpoint()
+     *
+     * @param data data from createCheckpoint()
+     * @implNote reloadCheckpoint(createCheckpoint ( " test ")) should do nothing!
+     */
+    public void reloadCheckpoint(Object data){}
 
     /**
      * Closes this connection
