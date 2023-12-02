@@ -59,25 +59,33 @@ public abstract class CommLib implements AutoCloseable {
         return new CSYTTeam(Team.spectator, List.of());
     }
 
-    public void addPlayerScore(String username, int points) {
-        //TODO: Tato funkce by měla vrátit void
+    public void addPlayerScore(String username, int points) throws SQLException{
+        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        ResultSet rs = stmt.executeQuery("INSERT INTO Customers (name, points) VALUES (%s, %d);".formatted(username, points));
+
+        System.out.println("[DEBUG] adding score to player %s".formatted(username));
     }
 
     public void setPlayerScore(String username, int points) throws SQLException {
         PreparedStatement stmt = (PreparedStatement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`".formatted(points, username));
+        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`;".formatted(points, username));
         stmt.close();
 
         System.out.println("Setting %s to %d".formatted(username, points));
     }
 
-    public String getValue(String key) {
+    public String getValue(String key) throws SQLException {
         //TODO: Tato funkce by měla vrátit String
-        return "";
+        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Storage WHERE key=`%s`;".formatted(key));
+        return rs.getString("value");
     }
 
-    public void setValue(String key, String value) {
-        //TODO: Tato funkce by měla vrátit void
+    public void setValue(String key, String value) throws SQLException {
+        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        ResultSet rs = stmt.executeQuery("UPDATE Storage SET key=`%s` AND value=`%s`;".formatted(key, value));
+
+        System.out.println("[DEBUG] setting value to key %s".formatted(key));
     }
 
     /**
@@ -87,7 +95,7 @@ public abstract class CommLib implements AutoCloseable {
      * @param amount Amount to add to the value
      * @implNote Fails silently if value of key is not an integer
      */
-    public void addValue(String key, int amount) {
+    public void addValue(String key, int amount) throws SQLException {
         try {
             int value = Integer.parseInt(getValue(key));
             setValue(key, String.valueOf(value + amount));
