@@ -67,7 +67,7 @@ public abstract class CommLib implements AutoCloseable {
      * @param color color of team you want to query
      * @return CSYTPlayer object
      */
-    public CSYTTeam getTeam(String color) {
+    public CSYTTeam getTeam(Team color) {
         //TODO: Vyplnit tyto hodnoty
         return new CSYTTeam(Team.spectator, List.of());
     }

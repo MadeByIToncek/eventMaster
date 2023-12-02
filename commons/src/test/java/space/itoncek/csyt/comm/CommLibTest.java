@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.csyt.comm;
 
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +37,7 @@ class CommLibTest {
 
     @Test
     void getTeam() {
-        CSYTTeam player = lib.getTeam(Team.spectator.toString());
+        CSYTTeam player = lib.getTeam(Team.spectator);
 
         System.out.println(player.toString());
         assertTrue(player.hasPlayer("IToncek"));

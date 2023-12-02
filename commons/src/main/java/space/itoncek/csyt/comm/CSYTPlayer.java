@@ -35,6 +35,10 @@ public final class CSYTPlayer {
         return team;
     }
 
+    public CSYTTeam teamObject(CommLib processor) {
+        return processor.getTeam(team);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
