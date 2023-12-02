@@ -9,7 +9,7 @@ package space.itoncek.csyt.comm;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.List;
+import java.util.*;
 
 public abstract class CommLib implements AutoCloseable {
 
@@ -68,9 +68,18 @@ public abstract class CommLib implements AutoCloseable {
      * @param color color of team you want to query
      * @return CSYTPlayer object
      */
-    public CSYTTeam getTeam(Team color) {
-        //TODO: Vyplnit tyto hodnoty
-        return new CSYTTeam(Team.spectator, List.of());
+    public CSYTTeam getTeam(Team color) throws SQLException{
+        List teams = new ArrayList();
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE team=`%s`".formatted(color));
+
+        while (rs.next()) {
+            String s = rs.getString("name");
+            teams.add(s);
+        }
+
+        return new CSYTTeam(color, teams);
     }
 
     /**
