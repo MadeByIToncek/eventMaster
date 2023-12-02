@@ -51,11 +51,12 @@ public abstract class CommLib implements AutoCloseable {
      * @throws SQLException most likely DB access error
      */
     public CSYTPlayer getPlayer(String username) throws SQLException {
+        // LGTM
+
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE name = '%s';".formatted(username));
         rs.next();
         System.out.printf("[DEBUG] getting points from %s%n", username);
-        //TODO: Vyplnit tyto hodnoty
         CSYTPlayer csytPlayer = new CSYTPlayer(rs.getString("name"), rs.getInt("points"), Team.valueOf(rs.getString("team")));
         stmt.close();
         return csytPlayer;
@@ -80,9 +81,13 @@ public abstract class CommLib implements AutoCloseable {
      * @throws SQLException DB Access Error!
      */
     public void addPlayerScore(String username, int points) throws SQLException{
-        //TODO: WTF IS THIS???
-        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery("INSERT INTO Customers (name, points) VALUES (%s, %d);".formatted(username, points));
+        Statement st = conn.createStatement();
+        ResultSet r = st.executeQuery(String.format("SELECT * FROM Players WHERE name=`%s`", username));
+        int tempscore = r.getInt("points");
+
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=%d + %d WHERE name=%s".formatted(tempscore, points, username));
 
         System.out.printf("[DEBUG] adding score to player %s%n", username);
     }
@@ -95,7 +100,8 @@ public abstract class CommLib implements AutoCloseable {
      */
     public void setPlayerScore(String username, int points) throws SQLException {
         // LGTM 👍
-        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        Statement stmt = conn.createStatement();
+
         ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`;".formatted(points, username));
         stmt.close();
 
@@ -110,7 +116,7 @@ public abstract class CommLib implements AutoCloseable {
      */
     public String getValue(String key) throws SQLException {
         // LGTM 👍
-        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Storage WHERE key=`%s`;".formatted(key));
         return rs.getString("value");
     }
@@ -122,7 +128,7 @@ public abstract class CommLib implements AutoCloseable {
      * @throws SQLException DB Access Error!
      */
     public void setValue(String key, String value) throws SQLException {
-        PreparedStatement stmt = (PreparedStatement) conn.createStatement();
+        Statement stmt = conn.createStatement();
         //TODO: Poradí si to s tím, že daná hodnota neexistuje?
         ResultSet rs = stmt.executeQuery("UPDATE Storage SET key=`%s` AND value=`%s`;".formatted(key, value));
 
