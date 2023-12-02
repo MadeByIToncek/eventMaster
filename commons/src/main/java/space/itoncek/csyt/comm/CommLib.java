@@ -72,7 +72,7 @@ public abstract class CommLib implements AutoCloseable {
         List teams = new ArrayList();
 
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE team=`%s`".formatted(color));
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE team=`%s`;".formatted(color));
 
         while (rs.next()) {
             String s = rs.getString("name");
