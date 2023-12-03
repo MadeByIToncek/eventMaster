@@ -53,6 +53,7 @@ jobs:
           rm CSYTools/target/original-*.jar
           rm CSYTOpen/target/original-*.jar
           rm backup/target/original-*.jar
+
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.TOKEN }}"
