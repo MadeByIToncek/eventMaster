@@ -67,6 +67,7 @@ public class UpdateLib {
         }
         if (Objects.equals(plugin, "open")) {
             System.out.println("Updating UHCCORE!");
+            new File(pluginFolder + "/../uhccore.jar").delete();
             try (FileOutputStream fos = new FileOutputStream(pluginFolder + "/../uhccore.jar")) {
                 URLConnection con = new URL("http://cloud.itoncek.space:25574/api/maven/latest/file/releases/net/zerodind/uhccore/").openConnection();
                 fos.getChannel().transferFrom(Channels.newChannel(con.getInputStream()), 0, Long.MAX_VALUE);

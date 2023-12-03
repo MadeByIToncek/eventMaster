@@ -9,7 +9,8 @@ package space.itoncek.csyt.comm;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CommLib implements AutoCloseable {
 
@@ -68,14 +69,14 @@ public abstract class CommLib implements AutoCloseable {
      * @return CSYTPlayer object
      */
     public CSYTTeam getTeam(Team color) throws SQLException {
-        List teams = new ArrayList();
+        List<CSYTPlayer> teams = new ArrayList<>();
 
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE team='%s';".formatted(color));
 
         while (rs.next()) {
-            String s = rs.getString("name");
-            teams.add(s);
+            CSYTPlayer csytPlayer = new CSYTPlayer(rs.getString("name"), rs.getInt("points"), Team.valueOf(rs.getString("team")));
+            teams.add(csytPlayer);
         }
 
         return new CSYTTeam(color, teams);
@@ -90,14 +91,14 @@ public abstract class CommLib implements AutoCloseable {
      */
     public void addPlayerScore(String username, int points) throws SQLException{
         Statement st = conn.createStatement();
-        ResultSet r = st.executeQuery(String.format("SELECT * FROM Players WHERE name=`%s`", username));
+        ResultSet r = st.executeQuery(String.format("SELECT * FROM Players WHERE name = '%s';", username));
+        r.next();
         int tempscore = r.getInt("points");
 
-
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=%d + %d WHERE name=%s".formatted(tempscore, points, username));
+        int rs = stmt.executeUpdate("UPDATE Players SET points=%d + %d WHERE name = '%s';".formatted(tempscore, points, username));
 
-        System.out.printf("[DEBUG] adding score to player %s%n", username);
+        System.out.printf("[DEBUG] adding score to player %s, edited %d row%n", username, rs);
     }
 
     /**
@@ -110,10 +111,10 @@ public abstract class CommLib implements AutoCloseable {
         // LGTM 👍
         Statement stmt = conn.createStatement();
 
-        ResultSet rs = stmt.executeQuery("UPDATE Players SET points=`%d` WHERE name=`%s`;".formatted(points, username));
+        int rs = stmt.executeUpdate("UPDATE Players SET points='%d' WHERE name='%s';".formatted(points, username));
         stmt.close();
 
-        System.out.printf("Setting %s to %d%n", username, points);
+        System.out.printf("Setting %s to %d, edited %d rows%n", username, points, rs);
     }
 
     /**
