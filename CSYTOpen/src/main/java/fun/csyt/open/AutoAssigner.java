@@ -54,9 +54,11 @@ public class AutoAssigner implements Listener, AutoCloseable {
                             gmmgr.getPlayerManager().getUhcPlayer(fellows.getString("name")).getTeam().join(p);
                         }
                     }
-                    gmmgr.getScoreboardManager().updatePlayerOnTab(p);
                     stmt.close();
                     gmmgr.getTeamManager().squash();
+                    for (UhcPlayer uhcPlayer : gmmgr.getPlayerManager().getPlayersList()) {
+                        gmmgr.getScoreboardManager().updatePlayerOnTab(uhcPlayer);
+                    }
                 } catch (UhcPlayerDoesNotExistException | SQLException | UhcTeamException e) {
                     handle(e);
                 }

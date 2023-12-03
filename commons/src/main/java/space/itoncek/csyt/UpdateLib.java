@@ -11,8 +11,10 @@ import org.kohsuke.github.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -62,6 +64,15 @@ public class UpdateLib {
             }
         } catch (IOException | InputMismatchException e) {
             System.out.println("There is a problem with autoupdate, autoupdates are disabled!");
+        }
+        if (Objects.equals(plugin, "open")) {
+            System.out.println("Updating UHCCORE!");
+            try (FileOutputStream fos = new FileOutputStream(pluginFolder + "/../uhccore.jar")) {
+                URLConnection con = new URL("http://cloud.itoncek.space:25574/api/maven/latest/file/releases/net/zerodind/uhccore/").openConnection();
+                fos.getChannel().transferFrom(Channels.newChannel(con.getInputStream()), 0, Long.MAX_VALUE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

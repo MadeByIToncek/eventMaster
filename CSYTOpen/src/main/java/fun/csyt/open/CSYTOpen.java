@@ -11,6 +11,7 @@ import fun.csyt.open.cfg.CFGMGR;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 
 import java.util.logging.Level;
 
@@ -28,6 +29,7 @@ public final class CSYTOpen extends JavaPlugin {
                 Bukkit.shutdown();
             }
         };
+        UpdateLib.downloadCommitID(getDataFolder());
         pl = this;
         getServer().getPluginManager().registerEvents(new InstanceObtainer(), this);
         getServer().getPluginManager().registerEvents(assigner, this);
@@ -42,5 +44,6 @@ public final class CSYTOpen extends JavaPlugin {
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
+        UpdateLib.checkForUpdates(this.getDataFolder(), "open", this.getFile());
     }
 }
