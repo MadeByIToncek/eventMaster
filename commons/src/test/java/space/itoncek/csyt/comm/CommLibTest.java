@@ -45,7 +45,7 @@ class CommLibTest {
     }
 
     @Test
-    void getTeam() {
+    void getTeam() throws SQLException {
         long startTime = System.nanoTime();
         CSYTTeam player = lib.getTeam(Team.spectator);
 

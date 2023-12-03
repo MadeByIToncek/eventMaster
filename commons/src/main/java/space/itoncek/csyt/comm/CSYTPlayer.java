@@ -6,6 +6,7 @@
 
 package space.itoncek.csyt.comm;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public final class CSYTPlayer {
         return team;
     }
 
-    public CSYTTeam teamObject(CommLib processor) {
+    public CSYTTeam teamObject(CommLib processor) throws SQLException{
         return processor.getTeam(team);
     }
 
