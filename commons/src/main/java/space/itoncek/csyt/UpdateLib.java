@@ -61,19 +61,19 @@ public class UpdateLib {
             if (remote != current) {
                 update(plugin, pluginFile);
                 new File(pluginFolder + "/release.id").deleteOnExit();
+                if (Objects.equals(plugin, "open")) {
+                    System.out.println("Updating UHCCORE!");
+                    new File(pluginFolder + "/../uhccore.jar").delete();
+                    try (FileOutputStream fos = new FileOutputStream(pluginFolder + "/../uhccore.jar")) {
+                        URLConnection con = new URL("http://cloud.itoncek.space:25574/api/maven/latest/file/releases/net/zerodind/uhccore/").openConnection();
+                        fos.getChannel().transferFrom(Channels.newChannel(con.getInputStream()), 0, Long.MAX_VALUE);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } catch (IOException | InputMismatchException e) {
             System.out.println("There is a problem with autoupdate, autoupdates are disabled!");
-        }
-        if (Objects.equals(plugin, "open")) {
-            System.out.println("Updating UHCCORE!");
-            new File(pluginFolder + "/../uhccore.jar").delete();
-            try (FileOutputStream fos = new FileOutputStream(pluginFolder + "/../uhccore.jar")) {
-                URLConnection con = new URL("http://cloud.itoncek.space:25574/api/maven/latest/file/releases/net/zerodind/uhccore/").openConnection();
-                fos.getChannel().transferFrom(Channels.newChannel(con.getInputStream()), 0, Long.MAX_VALUE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
