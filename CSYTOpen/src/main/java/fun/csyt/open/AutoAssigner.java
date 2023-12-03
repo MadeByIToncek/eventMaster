@@ -60,7 +60,7 @@ public class AutoAssigner implements Listener, AutoCloseable {
                         gmmgr.getScoreboardManager().updatePlayerOnTab(uhcPlayer);
                     }
                 } catch (UhcPlayerDoesNotExistException | SQLException | UhcTeamException e) {
-                    handle(e);
+                    Bukkit.getLogger().log(Level.INFO, e.getMessage());
                 }
             }
         }.runTaskLater(pl, 20L);
