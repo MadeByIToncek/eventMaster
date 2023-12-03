@@ -14,6 +14,7 @@ import com.gmail.val59000mc.players.UhcPlayer;
 import com.gmail.val59000mc.players.UhcTeam;
 import fun.csyt.open.cfg.CFGMGR;
 import fun.csyt.open.meta.TeamMeta;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,9 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
-import static fun.csyt.open.CSYTOpen.*;
+import static fun.csyt.open.CSYTOpen.gmmgr;
+import static fun.csyt.open.CSYTOpen.pl;
 
+@Deprecated(since = "03. 12. 2023", forRemoval = true)
 public class AssignCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -55,7 +59,7 @@ public class AssignCommand implements CommandExecutor {
                 try {
                     uhcPlayers.add(gmmgr.getPlayerManager().getUhcPlayer(player));
                 } catch (UhcPlayerDoesNotExistException e) {
-                    log.throwing("AssignCommand", "loadTeams()", e);
+                    Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
                 }
             }
 
@@ -64,14 +68,12 @@ public class AssignCommand implements CommandExecutor {
                     try {
                         setPlayerSpectating(p.getPlayer(), p);
                     } catch (UhcPlayerNotOnlineException e) {
-                        log.throwing("AssignCommand", "loadTeams()", e);
+                        Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
                     }
                 }
             } else {
                 //Modify team values
-                UhcTeam team = uhcPlayers.get(0).getTeam();
-                team.setTeamName(meta.icon());
-                team.setColor(ChatColor.WHITE);
+                UhcTeam team = new UhcTeam(uhcPlayers.get(0));
 
                 //Add other players
                 for (UhcPlayer p : uhcPlayers) {
@@ -79,13 +81,11 @@ public class AssignCommand implements CommandExecutor {
                         try {
                             team.join(p);
                         } catch (UhcTeamException e) {
-                            log.throwing("AssignCommand", "loadTeams()", e);
+                            Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
                         }
                     }
+                    gmmgr.getScoreboardManager().updatePlayerOnTab(p);
                 }
-            }
-            for (UhcPlayer p : uhcPlayers) {
-                gmmgr.getScoreboardManager().updatePlayerOnTab(p);
             }
         });
     }
@@ -103,7 +103,7 @@ public class AssignCommand implements CommandExecutor {
                 gmmgr.getScoreboardManager().updatePlayerOnTab(uhcPlayer);
                 gmmgr.getScoreboardManager().updateTeamOnTab(oldTeam);
             } catch (UhcTeamException e) {
-                log.throwing("AssignCommand", "setPlayerSpectating()", e);
+                Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -115,7 +115,7 @@ public class AssignCommand implements CommandExecutor {
                 try {
                     if (t.getLeader() != m) t.leave(m);
                 } catch (UhcTeamException e) {
-                    log.throwing("AssignCommand", "resetTeams()", e);
+                    Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         }

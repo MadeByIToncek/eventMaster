@@ -52,7 +52,6 @@ public abstract class CommLib implements AutoCloseable {
      */
     public CSYTPlayer getPlayer(String username) throws SQLException {
         // LGTM
-
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Players WHERE name = '%s';".formatted(username));
         rs.next();

@@ -33,5 +33,6 @@
         <module>DecisionDomeDecider</module>
         <module>backup</module>
         <module>CSYTools</module>
+        <module>PapikSquared</module>
     </modules>
 </project>

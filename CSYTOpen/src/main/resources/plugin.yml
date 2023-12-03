@@ -4,5 +4,5 @@ main: fun.csyt.open.CSYTOpen
 api-version: '1.19'
 depend:
   - UhcCore
-commands:
-  assign:
+#commands:
+#  assign:
