@@ -36,6 +36,7 @@ public final class CSYTOpen extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InstanceObtainer(), this);
         getServer().getPluginManager().registerEvents(assigner, this);
         //getCommand("assign").setExecutor(new AssignCommand());
+        getCommand("discord").setExecutor(new DiscordCommand());
     }
 
     @Override

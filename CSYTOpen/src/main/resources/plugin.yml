@@ -4,5 +4,11 @@ main: fun.csyt.open.CSYTOpen
 api-version: '1.19'
 depend:
   - UhcCore
-#commands:
+commands:
+  discord:
+    permission: minecraft.op
+    aliases:
+      - dsc
+      - dbc
+    permission-message: Nu-uh!
 #  assign:

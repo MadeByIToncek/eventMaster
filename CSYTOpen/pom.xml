@@ -74,10 +74,6 @@
 
     <repositories>
         <repository>
-            <id>local-maven-repo</id>
-            <url>file://${project.basedir}/libs/</url>
-        </repository>
-        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
