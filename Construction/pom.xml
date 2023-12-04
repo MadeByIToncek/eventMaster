@@ -10,7 +10,7 @@
 
     <groupId>space.itoncek.csyt</groupId>
     <artifactId>Construction</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>Construction</name>

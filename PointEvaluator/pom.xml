@@ -10,6 +10,7 @@
 
     <groupId>space.itoncek.eventMaster</groupId>
     <artifactId>PointEvaluator</artifactId>
+    <version>${revision}</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
