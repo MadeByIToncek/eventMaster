@@ -64,7 +64,6 @@ public class AutoAssigner implements Listener, AutoCloseable {
                                 }
                             }
                             stmt.close();
-                            gmmgr.getTeamManager().squash();
                             for (UhcPlayer uhcPlayer : gmmgr.getPlayerManager().getPlayersList()) {
                                 gmmgr.getScoreboardManager().updatePlayerOnTab(uhcPlayer);
                             }
