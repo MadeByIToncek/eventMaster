@@ -41,7 +41,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Maven
-        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=${{ github.event.repository.updated_at}}
+        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$NOW
       - run: |
           rm ChunkLockPrototype/target/original-*.jar
           rm Construction/target/original-*.jar
