@@ -142,10 +142,6 @@ public class DiscordCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.isOp()) return List.of();
-        //noinspection SwitchStatementWithTooFewBranches
-        return switch (args.length) {
-            case 0 -> List.of("startBot", "stopBot", "createChannels", "destroyChannels", "cleanupChannels");
-            default -> List.of();
-        };
+        return List.of("startBot", "stopBot", "createChannels", "destroyChannels", "cleanupChannels");
     }
 }

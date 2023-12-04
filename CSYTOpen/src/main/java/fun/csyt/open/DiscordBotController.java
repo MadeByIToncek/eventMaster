@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -129,10 +130,12 @@ public class DiscordBotController {
 
                     Role role = guild.createRole().setName("Team #" + integer).complete();
                     for (IncompletePlayer incompletePlayer : incompletePlayers) {
-                        guild.addRoleToMember(guild.getMemberById(incompletePlayer.snowflake), role).queue((v) -> {
-                        }, (v) -> {
+                        Member member = guild.getMemberById(incompletePlayer.snowflake);
+                        if (member != null) {
+                            guild.addRoleToMember(member, role).queue();
+                        } else {
                             System.out.println("User not given role! " + guild.getMemberById(incompletePlayer.snowflake).getUser().getName() + " in team " + integer);
-                        });
+                        }
                     }
                     VoiceChannel voiceChannel = guild.getCategoryById(categorySnowFlake).createVoiceChannel("Team #" + integer).complete();
                     try {
