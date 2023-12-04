@@ -25,6 +25,7 @@ jobs:
       contents: write
       security-events: write
     steps:
+      - run: echo "NOW=${{ github.event.repository.updated_at}}" | sed 's/:/./g' >> $GITHUB_ENV
       - name: Checkout repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Cache local Maven repository
