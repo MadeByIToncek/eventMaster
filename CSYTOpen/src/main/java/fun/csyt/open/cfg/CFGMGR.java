@@ -85,7 +85,7 @@ public class CFGMGR {
     private static void dumpDefaultCFG(File datadir) {
         File cfg = new File(datadir + "/config.json");
         try (FileWriter fw = new FileWriter(cfg)) {
-            fw.write(new JSONObject().put("dburl", "").put("dbcToken", new JSONArray().put("token1").put("token2")).put("dbcGuildID", 0L).put("dbcCategoryID", 0L).toString(4));
+            fw.write(new JSONObject().put("dburl", "").put("dbcToken", new JSONArray().put("token1").put("token2")).put("dbcGuildID", 0L).put("mainVoice", 0L).put("dbcCategoryID", 0L).toString(4));
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

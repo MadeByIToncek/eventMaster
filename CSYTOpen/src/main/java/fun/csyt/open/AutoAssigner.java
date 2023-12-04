@@ -58,7 +58,9 @@ public class AutoAssigner implements Listener, AutoCloseable {
                             ResultSet fellows = stmt.executeQuery("SELECT * FROM Players WHERE team = '%d'".formatted(rs.getInt("team")));
                             while (fellows.next()) {
                                 if (!Objects.equals(fellows.getString("name"), p.getName()) && gmmgr.getPlayerManager().getUhcPlayer(fellows.getString("name")).isOnline()) {
-                                    gmmgr.getPlayerManager().getUhcPlayer(fellows.getString("name")).getTeam().join(p);
+                                    UhcTeam team = gmmgr.getPlayerManager().getUhcPlayer(fellows.getString("name")).getTeam();
+                                    team.join(p);
+                                    team.setTeamId(rs.getInt("team"));
                                 }
                             }
                             stmt.close();

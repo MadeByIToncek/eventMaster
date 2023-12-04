@@ -21,6 +21,7 @@ import java.security.SecureRandom;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.WHITE;
@@ -35,6 +36,7 @@ public class DiscordBotController {
     private String bottoken;
     private Connection conn;
     private boolean initialized = false;
+    private final long mainVoice;
 
 
     public DiscordBotController(JSONObject dbcConf) {
@@ -51,14 +53,16 @@ public class DiscordBotController {
         }
         this.serverSnowFlake = dbcConf.getLong("dbcGuildID");
         this.categorySnowFlake = dbcConf.getLong("dbcCategoryID");
+        this.mainVoice = dbcConf.getLong("mainVoice");
         this.jdbc = dbcConf.getString("dburl");
         jda = new ArrayList<>();
     }
 
-    public DiscordBotController(String token, List<String> supportBots, long serverSnowFlake, long categorySnowFlake, String jdbc) {
+    public DiscordBotController(String token, List<String> supportBots, long serverSnowFlake, long categorySnowFlake, long mainVoice, String jdbc) {
         this.bottoken = token;
         this.token = supportBots;
         this.serverSnowFlake = serverSnowFlake;
+        this.mainVoice = mainVoice;
         this.categorySnowFlake = categorySnowFlake;
         this.jdbc = jdbc;
         jda = new ArrayList<>();
@@ -108,6 +112,7 @@ public class DiscordBotController {
                 if (!requests.containsKey(rs.getInt("team"))) requests.put(rs.getInt("team"), new ArrayList<>());
                 requests.get(rs.getInt("team")).add(new IncompletePlayer(rs.getString("name"), rs.getLong("snowflake")));
             }
+            requests.remove(-1);
             stmt.close();
             var ref = new Object() {
                 final CountDownLatch latch = new CountDownLatch(requests.size());
@@ -124,7 +129,10 @@ public class DiscordBotController {
 
                     Role role = guild.createRole().setName("Team #" + integer).complete();
                     for (IncompletePlayer incompletePlayer : incompletePlayers) {
-                        //guild.addRoleToMember(guild.getMemberById(incompletePlayer.snowflake),role).complete();
+                        guild.addRoleToMember(guild.getMemberById(incompletePlayer.snowflake), role).queue((v) -> {
+                        }, (v) -> {
+                            System.out.println("User not given role! " + guild.getMemberById(incompletePlayer.snowflake).getUser().getName() + " in team " + integer);
+                        });
                     }
                     VoiceChannel voiceChannel = guild.getCategoryById(categorySnowFlake).createVoiceChannel("Team #" + integer).complete();
                     try {
@@ -149,6 +157,49 @@ public class DiscordBotController {
                     })
                     .complete();
         }
+    }
+
+    public void moveAll(Consumer<String> errorStream) throws SQLException, InterruptedException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Players;");
+
+        List<MoveAction> todo = new ArrayList<>();
+
+        Guild g = bot.getGuildById(serverSnowFlake);
+        while (rs.next()) {
+            long userID = rs.getLong("Snowflake");
+            if (rs.getLong("team") == -1) continue;
+
+            if (!g.getMemberById(userID).getVoiceState().inAudioChannel()) {
+                errorStream.accept("Player " + rs.getString("name") + " is not in voice channel, ignoring;");
+                continue;
+            }
+
+            if (g.getMemberById(userID).getVoiceState().getChannel().asStageChannel().getIdLong() == mainVoice) {
+                System.out.println("Moving " + rs.getString("name") + " to appropriate channel");
+                ResultSet set = stmt.executeQuery("SELECT * FROM DiscordChannelStorage WHERE team = %d;");
+                set.next();
+                long vcid = set.getLong("channelSnowflake");
+                todo.add(new MoveAction(userID, vcid));
+            }
+        }
+
+        CountDownLatch latch = new CountDownLatch(todo.size());
+        List<JDA> superbots = new ArrayList<>(jda);
+        superbots.add(bot);
+        Random rnd = new SecureRandom();
+
+        for (MoveAction l : todo) {
+            Thread t = new Thread(() -> {
+                Guild gu = superbots.get(rnd.nextInt(superbots.size())).getGuildById(serverSnowFlake);
+                VoiceChannel vc = gu.getVoiceChannelById(l.targetChannel);
+                gu.moveVoiceMember(gu.getMemberById(l.userID), vc).complete();
+            });
+            t.start();
+        }
+        latch.await();
+
+        stmt.close();
     }
 
     /**
@@ -271,5 +322,8 @@ public class DiscordBotController {
 
 
     private record IncompletePlayer(String name, long snowflake) {
+    }
+
+    private record MoveAction(long userID, long targetChannel) {
     }
 }

@@ -90,8 +90,20 @@ public class DiscordCommand implements CommandExecutor, TabCompleter {
                     dbc.cleanUp();
                 } catch (InterruptedException e) {
                     sender.sendMessage(ChatColor.DARK_RED + "JDA processing interrupted!");
+                } finally {
+                    sender.sendMessage(ChatColor.GREEN + "Channels Cleaned up Succesfully");
                 }
-                sender.sendMessage(ChatColor.GREEN + "Channels Cleaned up Succesfully");
+            }
+            case "moveAll" -> {
+                try {
+                    dbc.moveAll((s -> sender.sendMessage(ChatColor.DARK_RED + s)));
+                } catch (SQLException e) {
+                    sender.sendMessage(ChatColor.DARK_RED + "MySQL DB Access Error!");
+                } catch (InterruptedException e) {
+                    sender.sendMessage(ChatColor.DARK_RED + "JDA processing interrupted!");
+                } finally {
+                    sender.sendMessage(ChatColor.GREEN + "Members moved succesfully");
+                }
             }
         }
 
