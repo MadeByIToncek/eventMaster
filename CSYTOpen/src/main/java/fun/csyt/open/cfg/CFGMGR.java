@@ -21,8 +21,9 @@ import java.util.logging.Level;
 
 public class CFGMGR {
 
+    @Deprecated(since = "removing /assign command", forRemoval = true)
     public static @Nullable HashMap<TeamMeta, List<String>> readTeams(File datadir) {
-        if (!checkIfConfigIsPresent(datadir)) {
+        if (configNotPresent(datadir)) {
             mkdirs(datadir);
             dumpDefaultCFG(datadir);
         }
@@ -57,8 +58,45 @@ public class CFGMGR {
         return out;
     }
 
-    public static @Nullable String readDBURL(File datadir) {
-        if (!checkIfConfigIsPresent(datadir)) {
+//    public static @Nullable String readDBURL(File datadir) {
+//        if (!checkIfConfigIsPresent(datadir)) {
+//            mkdirs(datadir);
+//            dumpDefaultCFG(datadir);
+//        }
+//        File cfg = new File(datadir + "/config.json");
+//        JSONObject raw = new JSONObject();
+//
+//        try (Scanner sc = new Scanner(cfg)) {
+//            StringJoiner js = new StringJoiner("\n");
+//            while (sc.hasNextLine()) {
+//                js.add(sc.nextLine());
+//            }
+//            raw = new JSONObject(js.toString());
+//        } catch (FileNotFoundException e) {
+//            Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
+//        }
+//        return raw.getString("dburl");
+//    }
+
+    public static boolean configNotPresent(File datadir) {
+        return !new File(datadir + "/config.json").exists();
+    }
+
+    private static void dumpDefaultCFG(File datadir) {
+        File cfg = new File(datadir + "/config.json");
+        try (FileWriter fw = new FileWriter(cfg)) {
+            fw.write(new JSONObject().put("dburl", "").put("dbcToken", new JSONArray().put("token1").put("token2")).put("dbcGuildID", 0L).put("dbcCategoryID", 0L).toString(4));
+        } catch (IOException e) {
+            Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    private static void mkdirs(File datadir) {
+        datadir.mkdirs();
+    }
+
+    public static JSONObject getConfig(File datadir) {
+        if (configNotPresent(datadir)) {
             mkdirs(datadir);
             dumpDefaultCFG(datadir);
         }
@@ -74,28 +112,6 @@ public class CFGMGR {
         } catch (FileNotFoundException e) {
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
-        return raw.getString("dburl");
-    }
-
-    public static boolean checkIfConfigIsPresent(File datadir) {
-        return new File(datadir + "/config.json").exists();
-    }
-
-    private static void dumpDefaultCFG(File datadir) {
-        File cfg = new File(datadir + "/config.json");
-        try (FileWriter fw = new FileWriter(cfg)) {
-            fw.write(new JSONObject().put("dburl", "")
-                    .put("teams", new JSONArray().put(new JSONObject().put("id", "coal").put("icon", "⫽").put("spectator", true).put("players", new JSONArray()
-                            .put("IToncek")
-                            .put("NeXuSoveVidea")
-                            .put("mrkwi")))
-                    ).toString(4));
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
-        }
-    }
-
-    private static void mkdirs(File datadir) {
-        datadir.mkdirs();
+        return raw;
     }
 }

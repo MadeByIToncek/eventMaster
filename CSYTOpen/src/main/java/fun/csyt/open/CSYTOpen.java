@@ -18,7 +18,8 @@ import java.util.logging.Level;
 public final class CSYTOpen extends JavaPlugin {
     public static GameManager gmmgr = null;
     public static CSYTOpen pl;
-    public AutoAssigner assigner = new AutoAssigner(CFGMGR.readDBURL(getDataFolder()));
+    public static DiscordBotController dbc;
+    public AutoAssigner assigner = new AutoAssigner(CFGMGR.getConfig(getDataFolder()).getString("dburl"));
 
     @Override
     public void onEnable() {
@@ -31,6 +32,7 @@ public final class CSYTOpen extends JavaPlugin {
         };
         UpdateLib.downloadCommitID(getDataFolder());
         pl = this;
+        dbc = new DiscordBotController(CFGMGR.getConfig(getDataFolder()));
         getServer().getPluginManager().registerEvents(new InstanceObtainer(), this);
         getServer().getPluginManager().registerEvents(assigner, this);
         //getCommand("assign").setExecutor(new AssignCommand());
