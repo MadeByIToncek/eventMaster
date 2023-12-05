@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 public final class CSYTOpen extends JavaPlugin {
@@ -36,6 +37,7 @@ public final class CSYTOpen extends JavaPlugin {
         getCommand("discord").setExecutor(new DiscordCommand());
         getCommand("discord").setTabCompleter(new DiscordCommand());
         getServer().getPluginManager().registerEvents(new InstanceObtainer(), this);
+        getServer().getPluginManager().registerEvents(new Teleporter(), this);
         getServer().getPluginManager().registerEvents(assigner, this);
         //getCommand("assign").setExecutor(new AssignCommand());
     }
@@ -49,5 +51,10 @@ public final class CSYTOpen extends JavaPlugin {
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
         UpdateLib.checkForUpdates(this.getDataFolder(), "open", this.getFile());
+        try {
+            dbc.close();
+        } catch (SQLException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
