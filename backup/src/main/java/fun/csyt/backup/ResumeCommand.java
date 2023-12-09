@@ -6,6 +6,7 @@
 
 package fun.csyt.backup;
 
+import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
@@ -13,16 +14,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import static fun.csyt.backup.Backup.pl;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-public class ResumeCommand implements CommandExecutor {
+import static fun.csyt.backup.Backup.*;
+
+public class ResumeCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.isOp()) return true;
+        if (!sender.isOp() || args.length != 1) return true;
 
         Player[] playerList = Bukkit.getOnlinePlayers().toArray(new Player[0]);
         for (int i = 0; i < playerList.length; i++) {
@@ -45,12 +51,31 @@ public class ResumeCommand implements CommandExecutor {
                 p.clearTitle();
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("Connect");
-                out.writeUTF("event");
+                out.writeUTF(args[0]);
                 p.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
                 i++;
             }
-        }.runTaskTimer(pl, 2 * 20L, 20L);
+        }.runTaskTimer(pl, 0L, 5L);
 
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!sender.isOp()) return List.of();
+        try {
+            return parseServers();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<String> parseServers() throws InterruptedException {
+        Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("GetServers");
+        latch = new CountDownLatch(1);
+        latch.await();
+        return servers.stream().toList();
     }
 }
