@@ -6,7 +6,6 @@
 
 package fun.csyt.backup;
 
-import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
@@ -21,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
-import static fun.csyt.backup.Backup.*;
+import static fun.csyt.backup.Backup.pl;
+import static fun.csyt.backup.Backup.servers;
 
 public class ResumeCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -63,19 +62,8 @@ public class ResumeCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.isOp()) return List.of();
-        try {
-            return parseServers();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private List<String> parseServers() throws InterruptedException {
-        Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("GetServers");
-        latch = new CountDownLatch(1);
-        latch.await();
         return servers.stream().toList();
     }
+
+
 }
