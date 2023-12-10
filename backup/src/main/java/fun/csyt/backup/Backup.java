@@ -17,6 +17,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -39,12 +40,13 @@ public final class Backup extends JavaPlugin implements @NotNull PluginMessageLi
         Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServers");
-        player.sendPluginMessage(pl, "Bungeecord", out.toByteArray());
+        player.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        UpdateLib.checkForUpdates(this.getDataFolder(), "backup", this.getFile());
     }
 
     @Override
@@ -56,6 +58,7 @@ public final class Backup extends JavaPlugin implements @NotNull PluginMessageLi
                 Bukkit.shutdown();
             }
         };
+        UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         getServer().getPluginManager().registerEvents(new PlayerInteractionHandler(), this);
         getCommand("resume").setExecutor(new ResumeCommand());
