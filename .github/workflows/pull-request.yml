@@ -27,4 +27,4 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn package --file pom.xml --settings=./.mvn/settings.xml -Drevision=${{ github.head_ref }}.${{ github.sha }}
+        run: mvn package --file pom.xml --settings=./.mvn/settings.xml -Drevision=${{ github.sha }}
