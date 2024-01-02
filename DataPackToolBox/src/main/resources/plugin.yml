@@ -1,0 +1,4 @@
+name: DataPackToolBox
+version: '${project.version}'
+main: fun.csyt.datapacktoolbox.DataPackToolBox
+api-version: '1.19'
