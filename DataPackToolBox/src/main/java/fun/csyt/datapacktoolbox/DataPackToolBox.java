@@ -17,21 +17,16 @@ import java.io.File;
 import java.util.Arrays;
 
 public final class DataPackToolBox extends JavaPlugin {
-
+    public static DataPackToolBox pl;
     @Override
     public void onEnable() {
+        pl = this;
         new DRMLib() {
             @Override
             public void callback() {
                 Bukkit.shutdown();
             }
         };
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-        // Plugin startup logic
         boolean isPresent = Arrays.stream(Bukkit.getDatapackManager().getPacks().toArray(new Datapack[0]))
                 .filter(d -> d.getName().startsWith("file/CSYT_"))
                 .map((d) -> d.getName() + " ? " + d.isEnabled()).findAny().isPresent();
@@ -45,5 +40,13 @@ public final class DataPackToolBox extends JavaPlugin {
             }
             UpdateLib.downloadAssetFile("csyt_loot.zip", dp);
         }
+
+        getCommand("dptb").setTabCompleter(new DPTBCommandController());
+        getCommand("dptb").setExecutor(new DPTBCommandController());
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
     }
 }
