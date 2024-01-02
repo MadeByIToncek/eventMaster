@@ -52,7 +52,6 @@ jobs:
           rm DecisionDomeDecider/target/original-*.jar
           rm AcceptDiscordBot/target/original-*.jar
           rm CSYTools/target/original-*.jar
-          rm CSYTOpen/target/original-*.jar
           rm backup/target/original-*.jar
 
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -72,6 +71,5 @@ jobs:
             AcceptDiscordBot/target/*.jar
             DecisionDomeDecider/target/*.jar
             CSYTools/target/*.jar
-            CSYTOpen/target/*.jar
             backup/target/*.jar
             index.json
