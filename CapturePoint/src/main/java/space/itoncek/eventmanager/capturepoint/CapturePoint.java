@@ -26,10 +26,6 @@ public final class CapturePoint extends JavaPlugin {
     public static float multiplier = 1;
     public static CapturePoint pl;
 
-    public static void log(String s) {
-        Bukkit.getLogger().warning("[CapturePoint] --> " + s + " <--");
-    }
-
     @Override
     public void onEnable() {
         // Plugin startup logic

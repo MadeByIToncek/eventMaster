@@ -34,5 +34,6 @@
         <module>CSYTools</module>
         <module>DataPackToolBox</module>
         <module>PapikSquared</module>
+        <module>TurfWars</module>
     </modules>
 </project>

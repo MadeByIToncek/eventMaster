@@ -54,7 +54,7 @@ jobs:
           rm CSYTools/target/original-*.jar
           rm DataPackToolBox/target/original-*.jar
           rm backup/target/original-*.jar
-
+          rm TurfWars/target/original-*.jar
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.TOKEN }}"
@@ -74,4 +74,5 @@ jobs:
             CSYTools/target/*.jar
             DataPackToolBox/target/*.jar
             backup/target/*.jar
+            TurfWars/target/*.jar
             index.json
