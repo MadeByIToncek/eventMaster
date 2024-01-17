@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class DebugCommand implements CommandExecutor, TabCompleter {
+    /** Keeping track */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.isOp()) {
@@ -28,6 +29,7 @@ public class DebugCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    /** Keeping track */
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.isOp()) {

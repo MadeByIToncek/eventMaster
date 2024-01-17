@@ -10,9 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/** Keeping track */
 public final class TurfWars extends JavaPlugin {
+    /** Keeping track */
     public static TurfWarsRuntime turfWars;
 
+    /** Keeping track */
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -25,6 +28,7 @@ public final class TurfWars extends JavaPlugin {
         getServer().getPluginManager().registerEvents(turfWars, this);
     }
 
+    /** Keeping track */
     @Override
     public void onDisable() {
         // Plugin shutdown logic

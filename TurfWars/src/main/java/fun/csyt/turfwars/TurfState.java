@@ -6,11 +6,18 @@
 
 package fun.csyt.turfwars;
 
+/** Keeping track */
 public enum TurfState {
+    /** Game is asleep */
     INACTIVE,
+    /** Game awaits setup */
     SETUP,
+    /** Game awaits start */
     READY,
-    INGAME,
-    OVERTIME,
+    /** Game is in PVP mode */
+    PVP,
+    /** Game is in BUILD mode */
+    BUILD,
+    /** Game is finished */
     FINISHED
 }

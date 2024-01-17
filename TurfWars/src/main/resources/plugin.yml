@@ -4,3 +4,4 @@ main: fun.csyt.turfwars.TurfWars
 api-version: '1.19'
 commands:
   turfDebug:
+  turf:
