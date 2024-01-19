@@ -1,0 +1,10 @@
+name: DataPackToolBox
+version: '${project.version}'
+main: fun.csyt.datapacktoolbox.DataPackToolBox
+api-version: '1.19'
+load: STARTUP
+commands:
+  dptb:
+    description: main command for DPTB
+    permission: minecraft.op
+    usage: /dptb

@@ -52,6 +52,7 @@ jobs:
           rm DecisionDomeDecider/target/original-*.jar
           rm AcceptDiscordBot/target/original-*.jar
           rm CSYTools/target/original-*.jar
+          rm DataPackToolBox/target/original-*.jar
           rm backup/target/original-*.jar
 
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -71,5 +72,6 @@ jobs:
             AcceptDiscordBot/target/*.jar
             DecisionDomeDecider/target/*.jar
             CSYTools/target/*.jar
+            DataPackToolBox/target/*.jar
             backup/target/*.jar
             index.json

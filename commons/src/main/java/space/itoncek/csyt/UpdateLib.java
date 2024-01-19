@@ -125,7 +125,6 @@ public class UpdateLib {
         String credentials = "./config/.ghcreds";
         if (!new File(credentials).exists()) new File(credentials).createNewFile();
         GitHub gitHub = GitHubBuilder.fromPropertyFile(credentials)
-                .withRateLimitHandler(RateLimitHandler.FAIL)
                 .build();
         return gitHub.getRepository("CSYoutubeTurnaj/CSYT");
     }
@@ -162,5 +161,17 @@ public class UpdateLib {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static File downloadAssetFile(String s, File f) {
+        try {
+            GHRepository repo = getRepo();
+            try (FileOutputStream fos = new FileOutputStream(f)) {
+                fos.getChannel().transferFrom(Channels.newChannel(repo.getFileContent(s).read()), 0, Long.MAX_VALUE);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return f;
     }
 }
