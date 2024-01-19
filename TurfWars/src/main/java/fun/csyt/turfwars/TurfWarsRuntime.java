@@ -398,6 +398,9 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 
 	public void victory(boolean isRed) {
+		tasks.forEach(BukkitTask::cancel);
+		tasks.forEach(t -> Bukkit.getScheduler().cancelTask(t.getTaskId()));
+
 		System.out.println(isRed);
 		List<Location> launchBlocks = new ArrayList<>(40);
 		for (int x = blueMinCorner.getBlockX() + 1; x < redMaxCorner.getBlockX(); x++) {
@@ -635,7 +638,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 				}
 			}
 			updatePlayingField();
-		} else if (event.getEntity() instanceof Player p) {
+		} else if (event.getEntity() instanceof Player) {
 			event.setCancelled(true);
 		}
 	}

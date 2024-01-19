@@ -9,6 +9,8 @@ package fun.csyt.turfwars;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.itoncek.csyt.DRMLib;
+import space.itoncek.csyt.UpdateLib;
 
 /** Keeping track */
 public final class TurfWars extends JavaPlugin {
@@ -18,8 +20,15 @@ public final class TurfWars extends JavaPlugin {
     /** Keeping track */
     @Override
     public void onEnable() {
+        new DRMLib() {
+            @Override
+            public void callback() {
+                Bukkit.shutdown();
+            }
+        };
+        UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
-        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld("world"), -34, 67, -18), new Location(Bukkit.getWorld("world"), 12, 67, 12), this);
+        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld("finale"), -34, 67, -18), new Location(Bukkit.getWorld("finale"), 12, 67, 12), this);
         getCommand("turfDebug").setExecutor(new DebugCommand());
         getCommand("turfDebug").setTabCompleter(new DebugCommand());
 
@@ -32,5 +41,6 @@ public final class TurfWars extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        UpdateLib.checkForUpdates(this.getDataFolder(), "TurfWars", this.getFile());
     }
 }
