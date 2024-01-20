@@ -7,7 +7,6 @@
 package fun.csyt.turfwars;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
@@ -29,13 +28,9 @@ public final class TurfWars extends JavaPlugin {
         saveDefaultConfig();
         UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
-        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld(getConfig().getString("world")), -34, 67, -18), new Location(Bukkit.getWorld(getConfig().getString("world")), 12, 67, 12), this);
-        getCommand("turfDebug").setExecutor(new DebugCommand());
-        getCommand("turfDebug").setTabCompleter(new DebugCommand());
+        getCommand("turfmanager").setExecutor(new TurfManagerCommand(this));
+        getCommand("turfmanager").setTabCompleter(new TurfManagerCommand(this));
 
-        getCommand("turf").setExecutor(turfWars);
-        getCommand("turf").setTabCompleter(turfWars);
-        getServer().getPluginManager().registerEvents(turfWars, this);
     }
 
     /** Keeping track */

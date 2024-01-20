@@ -30,6 +30,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -46,12 +47,10 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Closeable;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static fun.csyt.turfwars.TurfState.*;
@@ -59,7 +58,7 @@ import static fun.csyt.turfwars.TurfState.*;
 /**
  * Main Turf Wars Runtime
  */
-public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener {
+public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener, Closeable {
 	/** Carries original object for bukkit interactions */
 	private final TurfWars plugin;
 	/** Minimal corner of the arena (blue side) */
@@ -83,7 +82,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 	/** List of all runnables associated with this class */
 	private final List<BukkitTask> tasks = new ArrayList<>();
 	private final List<BukkitTask> arrowReplenishTasks = new ArrayList<>();
-	private final List<Arrow> arrowsInFlightList = new ArrayList<>();
+	private final HashMap<Arrow, Boolean> arrowsInFlightList = new HashMap<>();
 	/** Is pvp active */
 	boolean pvp = false;
 	private Material blueBuildMaterial = Material.LIGHT_BLUE_WOOL;
@@ -102,6 +101,11 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 		this.redMaxCorner = redMaxCorner;
 		this.plugin = plugin;
 		resetPlayingField();
+
+
+		plugin.getCommand("turf").setExecutor(this);
+		plugin.getCommand("turf").setTabCompleter(this);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	public static String convertToText(int i) {
@@ -616,6 +620,10 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerLaunchProjectile(EntityShootBowEvent event) {
+		if (event.getEntity().getWorld() != blueMinCorner.getWorld()) return;
+		if (state != PVP) {
+			event.getEntity().sendActionBar(Component.text("Není PVP!", TextColor.color(255, 0, 0)));
+		}
 		BukkitTask replenishTask = new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -626,21 +634,24 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 			}
 		}.runTaskLater(plugin, 40L);
 		arrowReplenishTasks.add(replenishTask);
-		arrowsInFlightList.add(((Arrow) event.getProjectile()));
+		Player p = (Player) event.getEntity();
+		arrowsInFlightList.put(((Arrow) event.getProjectile()), redPlayers.contains(p));
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onProjectileHit(ProjectileHitEvent event) {
 		if (event.getHitEntity() != null && event.getEntity() instanceof Arrow a) {
+			if (event.getEntity().getWorld() != blueMinCorner.getWorld()) return;
 			if (event.getHitEntity() instanceof Player p) {
-				if (bluePlayers.contains(p)) {
+				Boolean isRedArrow = arrowsInFlightList.get(a);
+				if (bluePlayers.contains(p) && isRedArrow) {
 					if (ratio - .1 <= -1) {
 						victory(true);
 					} else {
 						updateRatio(ratio - .1);
 					}
 					p.setHealth(0);
-				} else if (redPlayers.contains(p)) {
+				} else if (redPlayers.contains(p) && !isRedArrow) {
 					if (ratio + .1 >= 1) {
 						victory(false);
 					} else {
@@ -661,11 +672,13 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupArrow(PlayerPickupArrowEvent event) {
+		if (event.getPlayer().getWorld() != blueMinCorner.getWorld()) return;
 		event.setCancelled(true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.getEntity().getWorld() != blueMinCorner.getWorld()) return;
 		if (!event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			event.setCancelled(true);
 		}
@@ -674,6 +687,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPostRespawn(PlayerPostRespawnEvent event) {
+		if (event.getPlayer().getWorld() != blueMinCorner.getWorld()) return;
 		Player p = event.getPlayer();
 		if (bluePlayers.contains(p)) {
 			p.teleportAsync(new Location(blueMinCorner.getWorld(), -37, 68, -3, -90, 0));
@@ -686,6 +700,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		if (event.getBlock().getWorld() != blueMinCorner.getWorld()) return;
 		if (event.getBlock().getY() > 72) event.setCancelled(true);
 		if (event.getBlock().getType() == redBuildMaterial) {
 			if (event.getBlock().getLocation().getBlockX() < getMidBlock() + 2) {
@@ -700,6 +715,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.getBlock().getWorld() != blueMinCorner.getWorld()) return;
 		if (!(event.getPlayer().isOp() && event.getPlayer().getGameMode().equals(GameMode.CREATIVE))) {
 			event.setCancelled(true);
 		}
@@ -708,6 +724,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPortal(PlayerPortalEvent event) {
+		if (event.getFrom().getWorld() != blueMinCorner.getWorld()) return;
 		if (event.getTo().getWorld().getEnvironment().equals(World.Environment.THE_END)) {
 			event.getPlayer().teleportAsync(new Location(event.getFrom().getWorld(), 0, 86, 0));
 		}
@@ -721,5 +738,12 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 		redTunic.setItemMeta(meta);
 		p.getInventory().setChestplate(redTunic);
+	}
+
+	@Override
+	public void close() {
+		plugin.getCommand("turf").setExecutor(null);
+		plugin.getCommand("turf").setTabCompleter(null);
+		HandlerList.unregisterAll(this);
 	}
 }

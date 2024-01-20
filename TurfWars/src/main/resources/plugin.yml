@@ -3,5 +3,7 @@ version: '${project.version}'
 main: fun.csyt.turfwars.TurfWars
 api-version: '1.19'
 commands:
-  turfDebug:
+  turfmanager:
+    permission: minecraft.op
   turf:
+    permission: minecraft.op
