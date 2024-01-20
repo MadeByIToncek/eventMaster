@@ -28,7 +28,7 @@ public final class TurfWars extends JavaPlugin {
         };
         UpdateLib.downloadCommitID(this.getDataFolder());
         // Plugin startup logic
-        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld("finale"), -34, 67, -18), new Location(Bukkit.getWorld("finale"), 12, 67, 12), this);
+        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld("world"), -34, 67, -18), new Location(Bukkit.getWorld("world"), 12, 67, 12), this);
         getCommand("turfDebug").setExecutor(new DebugCommand());
         getCommand("turfDebug").setTabCompleter(new DebugCommand());
 

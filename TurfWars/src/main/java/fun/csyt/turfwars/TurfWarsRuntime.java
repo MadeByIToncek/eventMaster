@@ -40,6 +40,7 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,8 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 	private TurfState state = INACTIVE;
 	/** List of all runnables associated with this class */
 	private final List<BukkitTask> tasks = new ArrayList<>();
+	private final List<BukkitTask> arrowReplenishTasks = new ArrayList<>();
+	private final List<Arrow> arrowsInFlightList = new ArrayList<>();
 	/** Is pvp active */
 	boolean pvp = false;
 	private Material blueBuildMaterial = Material.LIGHT_BLUE_WOOL;
@@ -157,9 +160,6 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 			return;
 		}
 
-		if (override)
-			Bukkit.getLogger().info(Component.text("Using debug mode!", TextColor.color(150, 0, 0)).content());
-
 		long x = getMidBlock();
 
 		if (x > redMaxCorner.getBlockX() + 1 || x < blueMinCorner.getBlockX() - 1) return;
@@ -190,6 +190,19 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 						BlockVector3.at(redMaxCorner.x(), 67, redMaxCorner.z()));
 				editSession.setBlocks(red, BukkitAdapter.adapt(redMaterial.createBlockData()));
 			}
+
+			if (x - 1 > blueMinCorner.x() - 1 && x - 1 < redMaxCorner.x() + 1) {
+				CuboidRegion spacer = new CuboidRegion(BlockVector3.at(x - 1, 67, blueMinCorner.z()),
+						BlockVector3.at(x - 1, 67, redMaxCorner.z()));
+				editSession.setBlocks(spacer, BukkitAdapter.adapt(Material.WHITE_CONCRETE_POWDER.createBlockData()));
+			}
+
+			if (x - 1 > blueMinCorner.x() - 1 && x + 1 < redMaxCorner.x() + 1) {
+				CuboidRegion spacer = new CuboidRegion(BlockVector3.at(x - 1, 68, blueMinCorner.z()),
+						BlockVector3.at(x + 1, 72, redMaxCorner.z()));
+				editSession.setBlocks(spacer, BukkitAdapter.adapt(Material.AIR.createBlockData()));
+			}
+
 
 			editSession.commit();
 		} catch (MaxChangedBlocksException e) {
@@ -280,7 +293,10 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 			Location loc = new Location(blueMinCorner.getWorld(), 15, 68, -3, 90, 0);
 			p.teleportAsync(loc);
 		});
-		Bukkit.getOnlinePlayers().forEach(p -> p.getInventory().clear());
+		Bukkit.getOnlinePlayers().forEach(p -> {
+			p.getInventory().clear();
+			p.setGameMode(GameMode.SURVIVAL);
+		});
 		BukkitRunnable gameplayTask = new BukkitRunnable() {
 			final int buildTime = 20;
 			final int fightTime = 60;
@@ -345,6 +361,8 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 			p.getInventory().clear();
 			ItemStack blocks = new ItemStack(isRed ? redBuildMaterial : blueBuildMaterial, 20);
 			p.getInventory().addItem(blocks);
+			if (redPlayers.contains(p)) setTunic(p, Color.RED);
+			if (bluePlayers.contains(p)) setTunic(p, Color.BLUE);
 		}
 	}
 
@@ -355,6 +373,8 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 			ItemStack arrow = new ItemStack(Material.ARROW, 1);
 			p.getInventory().addItem(bow);
 			p.getInventory().addItem(arrow);
+			if (redPlayers.contains(p)) setTunic(p, Color.RED);
+			if (bluePlayers.contains(p)) setTunic(p, Color.BLUE);
 		}
 	}
 
@@ -400,6 +420,9 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 	public void victory(boolean isRed) {
 		tasks.forEach(BukkitTask::cancel);
 		tasks.forEach(t -> Bukkit.getScheduler().cancelTask(t.getTaskId()));
+
+		clearBlocks();
+		Bukkit.getOnlinePlayers().forEach(p -> p.getInventory().clear());
 
 		System.out.println(isRed);
 		List<Location> launchBlocks = new ArrayList<>(40);
@@ -593,8 +616,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerLaunchProjectile(EntityShootBowEvent event) {
-		((Arrow) event.getProjectile()).setDamage(Double.MAX_VALUE);
-		new BukkitRunnable() {
+		BukkitTask replenishTask = new BukkitRunnable() {
 			@Override
 			public void run() {
 				((Player) event.getEntity()).getInventory().addItem(new ItemStack(Material.ARROW, 1));
@@ -603,11 +625,32 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 				updatePlayingField();
 			}
 		}.runTaskLater(plugin, 40L);
+		arrowReplenishTasks.add(replenishTask);
+		arrowsInFlightList.add(((Arrow) event.getProjectile()));
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onProjectileHit(ProjectileHitEvent event) {
-		if (event.getEntity() instanceof Arrow && event.getHitBlock() != null) {
+		if (event.getHitEntity() != null && event.getEntity() instanceof Arrow a) {
+			if (event.getHitEntity() instanceof Player p) {
+				if (bluePlayers.contains(p)) {
+					if (ratio - .1 <= -1) {
+						victory(true);
+					} else {
+						updateRatio(ratio - .1);
+					}
+					p.setHealth(0);
+				} else if (redPlayers.contains(p)) {
+					if (ratio + .1 >= 1) {
+						victory(false);
+					} else {
+						updateRatio(ratio + .1);
+					}
+					p.setHealth(0);
+				}
+				updatePlayingField();
+			}
+		} else if (event.getEntity() instanceof Arrow && event.getHitBlock() != null) {
 			if ((event.getHitBlock().getType() == redBuildMaterial) || (event.getHitBlock().getType() == blueBuildMaterial)) {
 				event.getHitBlock().setType(Material.AIR);
 				updatePlayingField();
@@ -623,33 +666,21 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player p && event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-			if (bluePlayers.contains(p)) {
-				if (ratio - .1 <= -1) {
-					victory(false);
-				} else {
-					updateRatio(ratio - .1);
-				}
-			} else if (redPlayers.contains(p)) {
-				if (ratio + .1 >= 1) {
-					victory(true);
-				} else {
-					updateRatio(ratio + .1);
-				}
-			}
-			updatePlayingField();
-		} else if (event.getEntity() instanceof Player) {
+		if (!event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			event.setCancelled(true);
 		}
 	}
+
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPostRespawn(PlayerPostRespawnEvent event) {
 		Player p = event.getPlayer();
 		if (bluePlayers.contains(p)) {
 			p.teleportAsync(new Location(blueMinCorner.getWorld(), -37, 68, -3, -90, 0));
+			setTunic(p, Color.BLUE);
 		} else if (redPlayers.contains(p)) {
 			p.teleportAsync(new Location(blueMinCorner.getWorld(), 15, 68, -3, 90, 0));
+			setTunic(p, Color.RED);
 		}
 	}
 
@@ -669,9 +700,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
-		System.out.println("Trigger");
 		if (!(event.getPlayer().isOp() && event.getPlayer().getGameMode().equals(GameMode.CREATIVE))) {
-			System.out.println("Cancel");
 			event.setCancelled(true);
 		}
 	}
@@ -682,5 +711,15 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener 
 		if (event.getTo().getWorld().getEnvironment().equals(World.Environment.THE_END)) {
 			event.getPlayer().teleportAsync(new Location(event.getFrom().getWorld(), 0, 86, 0));
 		}
+	}
+
+	public void setTunic(Player p, Color c) {
+		ItemStack redTunic = new ItemStack(Material.LEATHER_CHESTPLATE);
+		LeatherArmorMeta meta = (LeatherArmorMeta) redTunic.getItemMeta();
+
+		meta.setColor(c);
+
+		redTunic.setItemMeta(meta);
+		p.getInventory().setChestplate(redTunic);
 	}
 }
