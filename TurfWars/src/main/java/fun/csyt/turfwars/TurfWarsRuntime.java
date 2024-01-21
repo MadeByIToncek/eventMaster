@@ -13,6 +13,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import me.neznamy.tab.api.TabAPI;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -106,7 +107,10 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setExecutor(this);
 		plugin.getCommand("turf").setTabCompleter(this);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_redblocks%", 1000, () -> buildTabText(true));
+		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_blueblocks%", 1000, () -> buildTabText(false));
 	}
+
 
 	public static String convertToText(int i) {
 		return switch (i) {
@@ -385,6 +389,18 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	private void updateRatio(int remTimeLocal) {
 		Component c = buildActionBar(remTimeLocal);
 		Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(c));
+	}
+
+	private String buildTabText(boolean red) {
+		double internalRatio = (ratio + 1) / 2;
+		int blocks = (int) Math.round(internalRatio * 20);
+		int otherBlocks = 20 - blocks;
+
+		if (red) {
+			return "|".repeat(blocks);
+		} else {
+			return "|".repeat(otherBlocks);
+		}
 	}
 
 	private Component buildActionBar(int remTimeLocal) {

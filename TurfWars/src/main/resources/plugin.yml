@@ -2,6 +2,14 @@ name: TurfWars
 version: '${project.version}'
 main: fun.csyt.turfwars.TurfWars
 api-version: '1.19'
+depend:
+  - TAB
+  - WorldEdit
+  - Multiverse-Core
+loadbefore:
+  - Construction
+  - CP
+  - countdown
 commands:
   turfmanager:
     permission: minecraft.op
