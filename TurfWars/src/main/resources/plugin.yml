@@ -3,9 +3,10 @@ version: '${project.version}'
 main: fun.csyt.turfwars.TurfWars
 api-version: '1.19'
 depend:
-  - TAB
   - WorldEdit
+softdepend:
   - Multiverse-Core
+  - TAB
 loadbefore:
   - Construction
   - CP

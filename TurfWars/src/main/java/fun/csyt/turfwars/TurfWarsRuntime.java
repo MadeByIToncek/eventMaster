@@ -109,7 +109,9 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setExecutor(this);
 		plugin.getCommand("turf").setTabCompleter(this);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_progress%", 1000, this::buildTabText);
+		if (plugin.getServer().getPluginManager().getPlugin("TAB") != null) {
+			TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_progress%", 1000, this::buildTabText);
+		}
 	}
 
 
@@ -785,6 +787,9 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setExecutor(null);
 		plugin.getCommand("turf").setTabCompleter(null);
 		HandlerList.unregisterAll(this);
-		TabAPI.getInstance().getPlaceholderManager().unregisterPlaceholder("%turfwars_progress%");
+
+		if (plugin.getServer().getPluginManager().getPlugin("TAB") != null) {
+			TabAPI.getInstance().getPlaceholderManager().unregisterPlaceholder("%turfwars_progress%");
+		}
 	}
 }
