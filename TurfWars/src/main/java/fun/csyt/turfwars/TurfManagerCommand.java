@@ -30,9 +30,8 @@ public class TurfManagerCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.isOp()) {
             switch (args[0]) {
-                case "enable" -> {
-                    turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld(pl.getConfig().getString("world")), -34, 67, -18), new Location(Bukkit.getWorld(pl.getConfig().getString("world")), 12, 67, 12), pl);
-                }
+                case "enable" ->
+                        turfWars = new TurfWarsRuntime(new Location(Bukkit.getWorld(pl.getConfig().getString("world")), -34, 67, -18), new Location(Bukkit.getWorld(pl.getConfig().getString("world")), 12, 67, 12), pl);
                 case "disable" -> {
                     if (turfWars != null) {
                         turfWars.close();
