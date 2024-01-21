@@ -89,6 +89,8 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	private Material blueBuildMaterial = Material.LIGHT_BLUE_WOOL;
 	private final Color redColor = Color.RED;
 	private final Color blueColor = Color.BLUE;
+	private TextColor redChatColor = TextColor.color(208, 17, 17);
+	private TextColor blueChatColor = TextColor.color(29, 31, 222);
 
 	/**
 	 * Creates TurfWarsRuntime object to do stuff
@@ -107,8 +109,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setExecutor(this);
 		plugin.getCommand("turf").setTabCompleter(this);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_redblocks%", 1000, () -> buildTabText(true));
-		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_blueblocks%", 1000, () -> buildTabText(false));
+		TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_progress%", 1000, this::buildTabText);
 	}
 
 
@@ -391,17 +392,22 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(c));
 	}
 
-	private String buildTabText(boolean red) {
+	private String buildTabText() {
 		double internalRatio = (ratio + 1) / 2;
 		int blocks = (int) Math.round(internalRatio * 20);
 		int otherBlocks = 20 - blocks;
+		String sb = convertToText(TextColor.color(202, 144, 51)) + "[" +
+				convertToText(redChatColor) + "|".repeat(blocks) +
+				convertToText(blueChatColor) + "|".repeat(otherBlocks) +
+				convertToText(TextColor.color(202, 144, 51)) + "]";
 
-		if (red) {
-			return "|".repeat(blocks);
-		} else {
-			return "|".repeat(otherBlocks);
-		}
+		return sb;
 	}
+
+	private String convertToText(TextColor c) {
+		return "<#" + Integer.toHexString(c.red()) + Integer.toHexString(c.green()) + Integer.toHexString(c.blue()) + ">";
+	}
+
 
 	private Component buildActionBar(int remTimeLocal) {
 		List<Component> components = new ArrayList<>();
@@ -416,7 +422,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 
 		int remOther = (state == PVP ? 60 : 20) - remTimeLocal;
 		components.add(Component.text("[").style(Style.style().color(TextColor.color(202, 144, 51)).build()));
-		components.add(Component.text("|".repeat(Math.max(0, remTimeLocal))).style(Style.style().color(TextColor.color(114, 255, 102)).build()));
+		components.add(Component.text("|".repeat(Math.max(0, remTimeLocal))).style(Style.style().color(TextColor.color(70, 255, 70)).build()));
 		components.add(Component.text("|".repeat(Math.max(0, remOther))).style(Style.style().color(TextColor.color(255, 255, 255)).build()));
 		components.add(Component.text("]").style(Style.style().color(TextColor.color(172, 122, 44)).build()));
 		return Component.join(JoinConfiguration.noSeparators(), components);
@@ -544,6 +550,17 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 					updateState = true;
 				}
 				case "forceWin" -> victory(Boolean.parseBoolean(args[1]));
+				case "setRedCC", "setBlueCC" -> {
+					int r = Integer.parseInt(args[1]);
+					int g = Integer.parseInt(args[2]);
+					int b = Integer.parseInt(args[3]);
+					TextColor color = TextColor.color(r, g, b);
+					if (args[0].equals("setRedCC")) {
+						redChatColor = color;
+					} else {
+						blueChatColor = color;
+					}
+				}
 				default -> sender.sendMessage(Component.text("Not a valid argument!", TextColor.color(255, 0, 0)));
 			}
 		}
@@ -582,13 +599,20 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 		if (sender.isOp()) {
 			if (args.length == 1) {
-				return List.of("setTeamRed", "setTeamBlue", "setRedBlock", "setBlueBlock", "setBlueBuildBlock", "setRedBuildBlock", "setup", "verify", "start", "terminate", "forceTogglePVP", "forceWin");
+				return List.of("setTeamRed", "setTeamBlue", "setRedBlock", "setBlueBlock", "setBlueBuildBlock", "setRedBuildBlock", "setRedCC", "setBlueCC", "setup", "verify", "start", "terminate", "forceTogglePVP", "forceWin");
 			} else if (args[0].equals("setTeamRed") || args[0].equals("setTeamBlue")) {
 				return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
 			} else if (args.length == 2 && (args[0].equals("setRedBlock") || args[0].equals("setBlueBlock") || args[0].equals("setRedBuildBlock") || args[0].equals("setBlueBuildBlock"))) {
 				return Arrays.stream(Material.values()).map(Material::name).toList();
 			} else if (args[0].equals("forceWin") && args.length == 2) {
 				return Stream.of(true, false).map(b -> b + "").toList();
+			} else if (args[0].equals("setRedCC") || args[0].equals("setBlueCC")) {
+				return switch (args.length) {
+					case 2 -> List.of("<red>");
+					case 3 -> List.of("<green>");
+					case 4 -> List.of("<blue>");
+					default -> List.of();
+				};
 			}
 		}
 		return List.of();
@@ -761,5 +785,6 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setExecutor(null);
 		plugin.getCommand("turf").setTabCompleter(null);
 		HandlerList.unregisterAll(this);
+		TabAPI.getInstance().getPlaceholderManager().unregisterPlaceholder("%turfwars_progress%");
 	}
 }
