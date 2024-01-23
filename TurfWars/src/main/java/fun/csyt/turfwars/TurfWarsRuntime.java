@@ -83,12 +83,10 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	/** List of all runnables associated with this class */
 	private final List<BukkitTask> tasks = new ArrayList<>();
 	private final List<BukkitTask> arrowReplenishTasks = new ArrayList<>();
-	private final HashMap<Arrow, Boolean> arrowsInFlightList = new HashMap<>();
+	private final HashMap<Arrow, Player> arrowsInFlightList = new HashMap<>();
 	/** Is pvp active */
 	boolean pvp = false;
 	private Material blueBuildMaterial = Material.LIGHT_BLUE_WOOL;
-	private final Color redColor = Color.RED;
-	private final Color blueColor = Color.BLUE;
 	private TextColor redChatColor = TextColor.color(208, 17, 17);
 	private TextColor blueChatColor = TextColor.color(29, 31, 222);
 
@@ -329,6 +327,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 							switchToPVP();
 						}
 						updatePlayingField();
+						Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1));
 					}
 				}
 			}
@@ -379,6 +378,10 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 
 	private void switchToPVP() {
 		for (Player p : Stream.concat(redPlayers.stream(), bluePlayers.stream()).toList()) {
+			arrowReplenishTasks.stream().map(t -> {
+				t.cancel();
+				return "";
+			});
 			p.getInventory().clear();
 			ItemStack bow = new ItemStack(Material.BOW, 1);
 			ItemStack arrow = new ItemStack(Material.ARROW, 1);
@@ -468,7 +471,13 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 				runs--;
 				if (runs < 0) {
 					this.cancel();
-					resetPlayingField();
+					Bukkit.getOnlinePlayers().forEach(p -> teleportToSpawn(p));
+					tasks.add(new BukkitRunnable() {
+						@Override
+						public void run() {
+							resetPlayingField();
+						}
+					}.runTaskLater(plugin, 5L));
 				}
 			}
 		}.runTaskTimer(plugin, 0L, 8L);
@@ -482,11 +491,15 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 			Firework fw = (Firework) b.getWorld().spawnEntity(b, EntityType.FIREWORK);
 			FireworkMeta fwm = fw.getFireworkMeta();
 			fwm.setPower(r.nextInt(2) + 1);
-			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? redColor : blueColor).withFade(isRed ? blueColor : redColor).with(FireworkEffect.Type.BALL_LARGE).build());
-			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? redColor : blueColor).withFade(isRed ? blueColor : redColor).with(FireworkEffect.Type.BURST).build());
-			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? redColor : blueColor).withFade(isRed ? blueColor : redColor).with(FireworkEffect.Type.BALL).build());
+			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? c(redChatColor) : c(blueChatColor)).withFade(isRed ? c(blueChatColor) : c(redChatColor)).with(FireworkEffect.Type.BALL_LARGE).build());
+			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? c(redChatColor) : c(blueChatColor)).withFade(isRed ? c(blueChatColor) : c(redChatColor)).with(FireworkEffect.Type.BURST).build());
+			fwm.addEffect(FireworkEffect.builder().withColor(isRed ? c(redChatColor) : c(blueChatColor)).withFade(isRed ? c(blueChatColor) : c(redChatColor)).with(FireworkEffect.Type.BALL).build());
 			fw.setFireworkMeta(fwm);
 		}
+	}
+
+	private Color c(TextColor color) {
+		return Color.fromRGB(color.red(), color.green(), color.blue());
 	}
 
 	/**
@@ -670,14 +683,14 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 			@Override
 			public void run() {
 				((Player) event.getEntity()).getInventory().addItem(new ItemStack(Material.ARROW, 1));
-				((Player) event.getEntity()).playSound(event.getEntity().getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+				((Player) event.getEntity()).playSound(event.getEntity().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
 
 				updatePlayingField();
 			}
 		}.runTaskLater(plugin, 40L);
 		arrowReplenishTasks.add(replenishTask);
 		Player p = (Player) event.getEntity();
-		arrowsInFlightList.put(((Arrow) event.getProjectile()), redPlayers.contains(p));
+		arrowsInFlightList.put((Arrow) event.getProjectile(), p);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -685,22 +698,25 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		if (event.getHitEntity() != null && event.getEntity() instanceof Arrow a) {
 			if (event.getEntity().getWorld() != blueMinCorner.getWorld()) return;
 			if (event.getHitEntity() instanceof Player p) {
-				Boolean isRedArrow = arrowsInFlightList.get(a);
-				if (bluePlayers.contains(p) && isRedArrow) {
+				Player originPlayer = arrowsInFlightList.get(a);
+				if (bluePlayers.contains(p) && redPlayers.contains(originPlayer)) {
 					if (ratio - .1 <= -1) {
 						victory(true);
 					} else {
 						updateRatio(ratio - .1);
+						originPlayer.playSound(originPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
 					}
 					p.setHealth(0);
-				} else if (redPlayers.contains(p) && !isRedArrow) {
+				} else if (redPlayers.contains(p) && bluePlayers.contains(originPlayer)) {
 					if (ratio + .1 >= 1) {
 						victory(false);
 					} else {
 						updateRatio(ratio + .1);
+						originPlayer.playSound(originPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
 					}
 					p.setHealth(0);
 				}
+				arrowsInFlightList.remove(a);
 				updatePlayingField();
 			}
 		} else if (event.getEntity() instanceof Arrow && event.getHitBlock() != null) {
@@ -768,8 +784,12 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	public void onPlayerPortal(PlayerPortalEvent event) {
 		if (event.getFrom().getWorld() != blueMinCorner.getWorld()) return;
 		if (event.getTo().getWorld().getEnvironment().equals(World.Environment.THE_END)) {
-			event.getPlayer().teleportAsync(new Location(event.getFrom().getWorld(), 0, 86, 0));
+			teleportToSpawn(event.getPlayer());
 		}
+	}
+
+	public void teleportToSpawn(Player p) {
+		p.teleportAsync(new Location(p.getWorld(), 0, 86, 0));
 	}
 
 	public void setTunic(Player p, Color c) {
@@ -790,6 +810,23 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 
 		if (plugin.getServer().getPluginManager().getPlugin("TAB") != null) {
 			TabAPI.getInstance().getPlaceholderManager().unregisterPlaceholder("%turfwars_progress%");
+		}
+	}
+
+	public void loadTeam(boolean isRed, String data, CommandSender sender) {
+		try {
+			Team team = Team.valueOf(data);
+			if (isRed) {
+				redChatColor = team.color;
+				redMaterial = team.ground;
+				redBuildMaterial = team.build;
+			} else {
+				blueChatColor = team.color;
+				blueMaterial = team.ground;
+				blueBuildMaterial = team.build;
+			}
+		} catch (IllegalArgumentException e) {
+			sender.sendMessage(Component.text("Unable to parse value of '" + data + "'", TextColor.color(255, 0, 0)));
 		}
 	}
 }
