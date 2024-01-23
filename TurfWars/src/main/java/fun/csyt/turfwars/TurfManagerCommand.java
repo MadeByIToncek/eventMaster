@@ -60,12 +60,12 @@ public class TurfManagerCommand implements CommandExecutor, TabCompleter {
             return switch (args.length) {
                 case 1 -> List.of("enable", "disable", "loadPreset");
                 case 2 -> {
-                    if (args[1].equals("loadPreset")) {
+                    if (args[0].equals("loadPreset")) {
                         yield List.of("red", "blue");
                     } else yield List.of();
                 }
                 case 3 -> {
-                    if (args[1].equals("loadPreset")) {
+                    if (args[0].equals("loadPreset")) {
                         yield List.of("coal", "copper", "iron", "redstone", "lapis", "diamond", "emerald", "gold", "netherite", "quartz");
                     } else yield List.of();
                 }

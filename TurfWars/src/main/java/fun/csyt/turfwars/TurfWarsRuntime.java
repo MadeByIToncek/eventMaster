@@ -14,6 +14,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.TabPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -108,7 +109,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		plugin.getCommand("turf").setTabCompleter(this);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		if (plugin.getServer().getPluginManager().getPlugin("TAB") != null) {
-			TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder("%turfwars_progress%", 1000, this::buildTabText);
+			TabAPI.getInstance().getPlaceholderManager().registerPlayerPlaceholder("%turfwars_progress%", 1000, this::buildTabText);
 		}
 	}
 
@@ -397,20 +398,23 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		Bukkit.getOnlinePlayers().forEach(p -> p.sendActionBar(c));
 	}
 
-	private String buildTabText() {
+	private String buildTabText(TabPlayer tp) {
 		double internalRatio = (ratio + 1) / 2;
-		int blocks = (int) Math.round(internalRatio * 20);
-		int otherBlocks = 20 - blocks;
-		String sb = convertToText(TextColor.color(202, 144, 51)) + "[" +
+		int lenght = 40;
+		int blocks = (int) Math.round(internalRatio * lenght);
+		int otherBlocks = lenght - blocks;
+
+		return convertToText(TextColor.color(202, 144, 51)) + "[" +
 				convertToText(redChatColor) + "|".repeat(blocks) +
 				convertToText(blueChatColor) + "|".repeat(otherBlocks) +
 				convertToText(TextColor.color(202, 144, 51)) + "]";
-
-		return sb;
 	}
 
 	private String convertToText(TextColor c) {
-		return "<#" + Integer.toHexString(c.red()) + Integer.toHexString(c.green()) + Integer.toHexString(c.blue()) + ">";
+		int r = c.red();
+		int g = c.green();
+		int b = c.blue();
+		return "<#%02x%02x%02x>".formatted(r, g, b);
 	}
 
 
@@ -816,6 +820,7 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 	public void loadTeam(boolean isRed, String data, CommandSender sender) {
 		try {
 			Team team = Team.valueOf(data);
+			sender.sendMessage(Component.text(team.color.asHexString(), team.color));
 			if (isRed) {
 				redChatColor = team.color;
 				redMaterial = team.ground;
