@@ -405,8 +405,8 @@ public class TurfWarsRuntime implements CommandExecutor, TabCompleter, Listener,
 		int otherBlocks = lenght - blocks;
 
 		return convertToText(TextColor.color(202, 144, 51)) + "[" +
-				convertToText(redChatColor) + "|".repeat(blocks) +
-				convertToText(blueChatColor) + "|".repeat(otherBlocks) +
+				convertToText(redChatColor) + "|".repeat(otherBlocks) +
+				convertToText(blueChatColor) + "|".repeat(blocks) +
 				convertToText(TextColor.color(202, 144, 51)) + "]";
 	}
 
