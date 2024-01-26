@@ -7,9 +7,9 @@
 package space.itoncek.csyt;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,15 +21,10 @@ public abstract class DRMLib {
             public void run() {
                 try {
 					URL url = new URL("https://drmblock.itoncek.space");
-					try (Scanner sc = new Scanner(url.openStream())) {
-						while (sc.hasNextLine()) {
-							System.out.println(sc.nextLine());
-						}
-					}
+					url.openConnection(Proxy.NO_PROXY);
                 } catch (IOException ignored) {
-                    return;
-                }
-                System.out.println("*");
+				}
+				//System.out.println("*");
                 //callback();
 			}
         }, 0, 600000);
@@ -37,7 +32,7 @@ public abstract class DRMLib {
 
     public static boolean test() {
         try {
-            URL url = new URL("http://drmblock.itoncek.space");
+			URL url = new URL("https://drmblock.itoncek.space");
             URLConnection urlConnection = url.openConnection();
 
             urlConnection.connect();
