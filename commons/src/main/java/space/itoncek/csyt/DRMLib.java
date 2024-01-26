@@ -27,7 +27,7 @@ public abstract class DRMLib {
                     return;
                 }
                 System.out.println("*");
-                callback();
+                //callback();
             }
         }, 0, 600000);
     }
