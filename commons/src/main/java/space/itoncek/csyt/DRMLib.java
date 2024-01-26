@@ -1,3 +1,9 @@
+/*
+ * Made by IToncek
+ *
+ * Copyright (c) 2023.
+ */
+
 package space.itoncek.csyt;
 
 import java.io.IOException;
@@ -20,6 +26,7 @@ public abstract class DRMLib {
                 } catch (IOException ignored) {
                     return;
                 }
+                System.out.println("*");
                 callback();
             }
         }, 0, 600000);
