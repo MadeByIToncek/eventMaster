@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import space.itoncek.csyt.DRMLib;
 import space.itoncek.csyt.UpdateLib;
 
 import java.util.Arrays;
@@ -24,8 +23,8 @@ import java.util.HashSet;
 
 public final class Backup extends JavaPlugin implements @NotNull PluginMessageListener {
     public static Backup pl;
-    public static String title = "Server má problémy";
-    public static String subtitle = "Snažíme se to opravit, vyčkejte";
+    public static String title = "Záložní server";
+    public static String subtitle = "Hlavní server není dostpuný";
     public static HashSet<String> servers = new HashSet<>();
     public static BukkitRunnable serversManager = new BukkitRunnable() {
         @Override
@@ -52,12 +51,6 @@ public final class Backup extends JavaPlugin implements @NotNull PluginMessageLi
     @Override
     public void onEnable() {
         // Plugin startup logic
-        new DRMLib() {
-            @Override
-            public void callback() {
-                Bukkit.shutdown();
-            }
-        };
         UpdateLib.downloadCommitID(this.getDataFolder());
         pl = this;
         getServer().getPluginManager().registerEvents(new PlayerInteractionHandler(), this);
