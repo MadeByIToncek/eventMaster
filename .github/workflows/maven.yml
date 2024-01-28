@@ -29,7 +29,7 @@ jobs:
       # Set the date time
       - name: Retrieve current Date Time in Singapore TimeZone
         shell: bash
-        run: echo "START_TIME=$(TZ=":Europe/Prague" date -R|sed 's/.....$//')" >> $GITHUB_ENV
+        run: echo "START_TIME=$(TZ=":Europe/Prague" date -R|sed 's/:/./g)" >> $GITHUB_ENV
       # Fetch the date time as Github ENV variable
       - name: print date
         run: echo ${{ env.START_TIME }}
@@ -48,7 +48,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Maven
-        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$NOW
+        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$START_TIME
       - run: |
           rm ChunkLockPrototype/target/original-*.jar
           rm Construction/target/original-*.jar
