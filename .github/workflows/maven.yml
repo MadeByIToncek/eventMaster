@@ -25,14 +25,17 @@ jobs:
       contents: write
       security-events: write
     steps:
-      - run: echo "NOW=$${{ steps.version.outputs.builddate }}" | sed 's/:/./g' >> $GITHUB_ENV
-      # Set the date time
-      - name: Retrieve current Date Time in Singapore TimeZone
-        shell: bash
-        run: echo "START_TIME=$(TZ=":Europe/Prague" date -R|sed 's/:/./g)" >> $GITHUB_ENV
-      # Fetch the date time as Github ENV variable
-      - name: print date
-        run: echo ${{ env.START_TIME }}
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@master
+        with:
+          timeZone: UTC+8
+          format: 'YYYY-MM-DDTHH.mm.ssZ'
+      - name: Usage
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
+        run: |
+          echo $TIME
       - name: Checkout repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Cache local Maven repository
@@ -48,7 +51,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Maven
-        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$START_TIME
+        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$TIME
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
       - run: |
           rm ChunkLockPrototype/target/original-*.jar
           rm Construction/target/original-*.jar
