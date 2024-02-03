@@ -1,0 +1,6 @@
+name: DanceFloor
+version: '${project.version}'
+main: fun.csyt.dancefloor.DanceFloor
+api-version: '1.19'
+commands:
+  test:

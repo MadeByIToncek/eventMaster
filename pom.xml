@@ -35,5 +35,6 @@
         <module>DataPackToolBox</module>
         <module>PapikSquared</module>
         <module>TurfWars</module>
+        <module>DanceFloor</module>
     </modules>
 </project>
