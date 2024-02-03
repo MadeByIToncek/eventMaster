@@ -25,7 +25,17 @@ jobs:
       contents: write
       security-events: write
     steps:
-      - run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@master
+        with:
+          timeZone: UTC+8
+          format: 'YYYY-MM-DDTHH.mm.ssZ'
+      - name: Usage
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
+        run: |
+          echo $TIME
       - name: Checkout repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Cache local Maven repository
@@ -41,7 +51,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Maven
-        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$NOW
+        run: mvn clean package --settings=./.mvn/settings.xml -Drevision=$TIME
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
       - run: |
           rm ChunkLockPrototype/target/original-*.jar
           rm Construction/target/original-*.jar
