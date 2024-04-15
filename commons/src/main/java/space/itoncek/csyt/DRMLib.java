@@ -15,13 +15,18 @@ import java.util.TimerTask;
 
 public abstract class DRMLib {
     public DRMLib() {
-        callback();
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                callback();
-	    }
+                try {
+					URL url = new URL("https://drmblock.itoncek.space");
+					url.openConnection(Proxy.NO_PROXY);
+                } catch (IOException ignored) {
+				}
+				//System.out.println("*");
+                //callback();
+			}
         }, 0, 600000);
     }
 
