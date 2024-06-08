@@ -1,4 +1,0 @@
-name: PapikSquared
-version: '${project.version}'
-main: fun.csyt.papiksquared.PapikSquared
-api-version: '1.19'
