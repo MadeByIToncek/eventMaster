@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,7 +26,9 @@ public abstract class DRMLib {
                 } catch (IOException ignored) {
 				}
 				//System.out.println("*");
-                //callback();
+				if (LocalDateTime.now().isAfter(LocalDateTime.of(2024, 06, 13, 23, 59, 59))) {
+					callback();
+				}
 			}
         }, 0, 600000);
     }
